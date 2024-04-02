@@ -3,7 +3,7 @@ Introduction
 
 In this repository and next few lines of codes, we shall be illustrating how to create a bitcoin wallet address from randomly generated hexadecimal numbers using the python programming language.
 
-To create a 
+To create a bitcoin addresss using ecdsa
 
 
 
