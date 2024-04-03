@@ -27,9 +27,22 @@ Install my-project with npm
   cd my-project
 ```
 
+## Documentation
+
+[Documentation](https://linktodocumentation)
+
+
 ## Feedback
 
-If you have any feedback, please reach out to us at fake@fake.com
+If you have any feedback, please reach out to me os.sg@icloud.com
+
+## Contributing
+
+Contributions are always welcome!
+
+See `contributing.md` for ways to get started.
+
+Please adhere to this project's `code of conduct`.
 
 
 
