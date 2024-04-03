@@ -90,8 +90,8 @@ Please adhere to this project's `code of conduct`.
 ## Love to read more? Here are some resources & references
 
  - [Bitcoin Technical Document]( https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses)
- - [Elliptic Curve Digital Signature Algorithm]([https://github.com/matiassingers/awesome-readme](https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm ))
- - [ECDSA Python Library]([https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project](https://pypi.org/project/ecdsa/ ))
+ - [Elliptic Curve Digital Signature Algorithm]([https://github.com/matiassingers/awesome-readme](https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm )
+ - [ECDSA Python Library]([https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project](https://pypi.org/project/ecdsa/ )
 
 ## License
 
