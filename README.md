@@ -34,8 +34,6 @@ This option is considered for this report as it is important to ascertain that t
 An example is https://www.browserling.com/tools/random-hex - which 
 can be used to generate hexadecimal digits that can serve as the private key and only the creator will know these details. Take note to ensure the bitcoin private key criteria are met which is a 64-digit Hexadecimal number. 
 
-For technical documentation, please see the `NeMo Framework User Guide <https://>`_.
-
 
 ## Python Libraries & Dependencies
 
@@ -90,6 +88,7 @@ Please adhere to this project's `code of conduct`.
 ## Love to read more? Here are some resources & references
 
  - [Bitcoin Technical Document]( https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses)
+ - [List of Addresses Prefixes]([[https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project](https://pypi.org/project/ecdsa/](https://en.bitcoin.it/wiki/List_of_address_prefixes)
  - [Elliptic Curve Digital Signature Algorithm]([https://github.com/matiassingers/awesome-readme](https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm )
  - [ECDSA Python Library]([https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project](https://pypi.org/project/ecdsa/ )
 
