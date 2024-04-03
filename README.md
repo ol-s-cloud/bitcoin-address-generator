@@ -18,48 +18,7 @@ With ECDSA, Alice will sign a message with her private key, and then Bob will us
 ![ecdsa](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/e062bc0a-fc16-4203-a0fa-c0844cb995df)
 
 
-Alice signs the message with the following:
-
-Create a hash of the message e=HASH(m)
-.
-Let h
- be the Ln
- be the leftmost bits of e
-, Ln
- has a bit length of the group order N
-.
-Create a random number k
- which is between 1 and N−1
-.
-Calculate a point on the curve as (x1,y1)=k×G
-.
-Calculate r=x1(modN)
-. If r=0
-, go back to Step 3.
-Calculate s=k−1(h+rdA)(modN)
-. If s=0
-, go back to Step 3.
-The signature is the pair (r,s)
-.
-Bob will check with:
-
-Create a hash of the message e=HASH(m)
-.
-Let h
- be the Ln
- leftmost bits of e
-.
-Calculate c=s−1(modN)
-Calculate u1=h⋅c(modN)
- and u2=r⋅c(modN)
-.
-Calculate the curve point (x1,y1)=u1×G+u2×QA
-. If (x1,y1)=O
- then the signature is invalid.
-The signature is valid if r≡x1(modn)
-, invalid otherwise.
-(x1,y1)=u1×G+u2×QA=h⋅c⋅G+r⋅c⋅QA=c(hG+rQA)=hG+rQAk−1(h+rdA)=hG+rdAGk−1(h+rdA)=(h+rdA)Gk−1(h+rdA)=kG
-.
+I have uploaded a document here that explains the process further to serve as a technical documentation and user guide `here <https://>`_.
 
 Diagram below illustrates the architecture and how the Bitcoin wallet addresses are created.
 
@@ -68,14 +27,29 @@ Diagram below illustrates the architecture and how the Bitcoin wallet addresses 
 
 Setting Up Our Environment
 ------------
+To achieve desired outcome, first we need to set-up the environment. For the purpose of this report, we shall be working with the Google Collab environment - https://colab.research.google.com/ which allows the creation of digital notebooks that write executable python codes through a web browser while for getting our randomly generated private keys, we shall be working with private keys available from wallet address details randomly created via - https://www.bitaddress.org - Open-Source JavaScript Client-Side Bitcoin Wallet Generator. 
+ 
+This option is considered for this report as it is important to ascertain that the written codes and followed procedures are correct, can produce a verifiable bitcoin address & illustrate how the wallet addresses were created in addition to the private key provider 
+(bitaddress.org) being an open source & peer reviewed software as recommended by the bitcoin technical document. However, in the event where only the required hexadecimal numbers are required to create a new bitcoin address, other online generators of hexadecimal private keys can be considered.  
+An example is https://www.browserling.com/tools/random-hex - which 
+can be used to generate hexadecimal digits that can serve as the private key and only the creator will know these details. Take note to ensure the bitcoin private key criteria are met which is a 64-digit Hexadecimal number. 
+
+For technical documentation, please see the `NeMo Framework User Guide <https://>`_.
 
 
 ## Python Libraries & Dependencies
 
-- Light/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform
+•	ECDSA Python Library10: An easy-to-use implementation of the Elliptic Curve 
+Cryptography that allows us to perform the first operation in illustrated in Fig 1 
+(Conversion of Private private key to public key). The ECDSA (Elliptic Curve Digital 
+Signature Algorithm) library is used to implement the functionality that allows bitcoin addresses create key pairs (signing key and verifying key), sign messages, and verify the signatures. We install this by typing the following line of codes in the digital notebook environment – pip install ecdsa  
+ 
+•	Hashlib11 – This module contains the hash algorithm and libraries required to perform SHA256, RIPEMD160 and other hashing functions as contained in fig 2. By typing the commands – import hashlib on the next line, this feature gets imported into the notebook environment. It is installed on the python environment by default. 
+ 
+•	Codecs12 – Codecs are python modules that defines base classes and allows for the encoding and decoding within the python environment. Typing import codecs on the next line, this module gets imported into the digital notebook environment. 
+ 
+•	Base5813 – This implementation is used in the bitcoin address and bitcoin network for converting the byte -string format address to a Base58 string using the Base58Check encoding which has become the globally known standard of bitcoin addresses. As this is not a default module of the python environment, it is installed by typing pip install base58 into the next line. 
+
 
 ## Requirements
 
