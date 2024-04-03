@@ -53,12 +53,20 @@ Signature Algorithm) library is used to implement the functionality that allows 
 
 ## Requirements
 
-Install my-project with npm
+Ensure the notebook environment is running and all dependencies are fully set up and installed 
 
-```bash
-  npm install my-project
-  cd my-project
 ```
+pip install ecdsa
+import hashlib
+import codecs
+pip install base58
+import ecdsa 
+import base 58 
+
+```
+
+To go through my lines of codes please see my `jupyter notebook here  <https://colab.research.google.com/drive/1d26u6FgGqRcBdL1_Bc6FwLfKJ2c6lWJ3#scrollTo=nqHM84fk7s2b>`_.
+
 
 ## Documentation
 
