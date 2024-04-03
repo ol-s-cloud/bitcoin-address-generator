@@ -65,7 +65,7 @@ import base 58
 
 ```
 
-To go through my lines of codes please see my `jupyter notebook here  <https://colab.research.google.com/drive/1d26u6FgGqRcBdL1_Bc6FwLfKJ2c6lWJ3#scrollTo=nqHM84fk7s2b>`_.
+To go through my lines of codes please see my `jupyter notebook here  <https://colab.research.google.com/drive/1d26u6FgGqRcBdL1_Bc6FwLfKJ2c6lWJ3#scrollTo=nqHM84fk7s2b/>`
 
 
 ## Documentation
@@ -90,8 +90,8 @@ Please adhere to this project's `code of conduct`.
 ## Love to read more? Here are some resources & references
 
  - [Bitcoin Technical Document]( https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+ - [Elliptic Curve Digital Signature Algorithm]([https://github.com/matiassingers/awesome-readme](https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm ))
+ - [ECDSA Python Library]([https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project](https://pypi.org/project/ecdsa/ ))
 
 ## License
 
