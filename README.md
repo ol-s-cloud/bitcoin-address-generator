@@ -92,6 +92,11 @@ Please adhere to this project's `code of conduct`.
  - [Elliptic Curve Digital Signature Algorithm]([https://github.com/matiassingers/awesome-readme](https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm )
  - [ECDSA Python Library]([https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project](https://pypi.org/project/ecdsa/ )
 
+
+## Jupyter Notebook
+
+[Technical Step By Step Guide](https://linktodocumentation)
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
