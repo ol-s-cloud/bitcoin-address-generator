@@ -39,16 +39,16 @@ For technical documentation, please see the `NeMo Framework User Guide <https://
 
 ## Python Libraries & Dependencies
 
-•	ECDSA Python Library10: An easy-to-use implementation of the Elliptic Curve 
+•	**ECDSA Python Library** -  An easy-to-use implementation of the Elliptic Curve 
 Cryptography that allows us to perform the first operation in illustrated in Fig 1 
 (Conversion of Private private key to public key). The ECDSA (Elliptic Curve Digital 
 Signature Algorithm) library is used to implement the functionality that allows bitcoin addresses create key pairs (signing key and verifying key), sign messages, and verify the signatures. We install this by typing the following line of codes in the digital notebook environment – pip install ecdsa  
  
-•	Hashlib11 – This module contains the hash algorithm and libraries required to perform SHA256, RIPEMD160 and other hashing functions as contained in fig 2. By typing the commands – import hashlib on the next line, this feature gets imported into the notebook environment. It is installed on the python environment by default. 
+•	**Hashlib** – This module contains the hash algorithm and libraries required to perform SHA256, RIPEMD160 and other hashing functions as contained in fig 2. By typing the commands – import hashlib on the next line, this feature gets imported into the notebook environment. It is installed on the python environment by default. 
  
-•	Codecs12 – Codecs are python modules that defines base classes and allows for the encoding and decoding within the python environment. Typing import codecs on the next line, this module gets imported into the digital notebook environment. 
+•	**Codecs** – Codecs are python modules that defines base classes and allows for the encoding and decoding within the python environment. Typing import codecs on the next line, this module gets imported into the digital notebook environment. 
  
-•	Base5813 – This implementation is used in the bitcoin address and bitcoin network for converting the byte -string format address to a Base58 string using the Base58Check encoding which has become the globally known standard of bitcoin addresses. As this is not a default module of the python environment, it is installed by typing pip install base58 into the next line. 
+•	**Base58** – This implementation is used in the bitcoin address and bitcoin network for converting the byte -string format address to a Base58 string using the Base58Check encoding which has become the globally known standard of bitcoin addresses. As this is not a default module of the python environment, it is installed by typing pip install base58 into the next line. 
 
 
 ## Requirements
