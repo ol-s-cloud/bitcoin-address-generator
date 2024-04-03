@@ -8,6 +8,15 @@ In cryptography, the Elliptic Curve Digital Signature Algorithm (ECDSA) offers a
 
 ## Method
 
+Bob signs a hash of a message with his private key, and then then Alice proves with his public key. Bob also uses a random nonce value for the signature (K)
+
+![ecdsa_new](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/3311cd8a-cebb-465e-bea8-91fcf7ffb39d)
+
+With ECDSA, Alice will sign a message with her private key, and then Bob will use her public key to verify that she signed the message (and that the message has now changed)
+![ecdsa](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/e062bc0a-fc16-4203-a0fa-c0844cb995df)
+
+
+
 
 Diagram below illustrates the architecture and how the Bitcoin wallet addresses are created.
 
@@ -35,7 +44,7 @@ Install my-project with npm
 
 ## Documentation
 
-[Documentation](https://linktodocumentation)
+[Step By Step Guide](https://linktodocumentation)
 
 
 ## Feedback
