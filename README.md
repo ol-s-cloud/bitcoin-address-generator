@@ -6,6 +6,8 @@ Supposing Alice wants to buy a book from Bob. After all has been agreed and done
 
 In cryptography, the Elliptic Curve Digital Signature Algorithm (ECDSA) offers a variant of the Digital Signature Algorithm (DSA) which uses elliptic-curve cryptography.
 
+
+
 ## Method
 
 Bob signs a hash of a message with his private key, and then then Alice proves with his public key. Bob also uses a random nonce value for the signature (K)
@@ -23,7 +25,8 @@ Diagram below illustrates the architecture and how the Bitcoin wallet addresses 
   ![Screenshot 2024-04-02 235506](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/5c530686-c50a-4a00-bce7-3d1be3462d99)
 
 
-
+Setting Up Our Environment
+------------
 
 
 ## Python Libraries & Dependencies
