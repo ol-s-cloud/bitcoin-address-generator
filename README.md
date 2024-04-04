@@ -32,7 +32,7 @@ To achieve desired outcome, first we need to set-up the environment. For the pur
 This option is considered for this report as it is important to ascertain that the written codes and followed procedures are correct, can produce a verifiable bitcoin address & illustrate how the wallet addresses were created in addition to the private key provider 
 (bitaddress.org) being an open source & peer reviewed software as recommended by the bitcoin technical document. However, in the event where only the required hexadecimal numbers are required to create a new bitcoin address, other online generators of hexadecimal private keys can be considered.  
 An example is https://www.browserling.com/tools/random-hex - which 
-can be used to generate hexadecimal digits that can serve as the private key and only the creator will know these details. Take note to ensure the bitcoin private key criteria are met which is a 64-digit Hexadecimal number. 
+can be used to generate hexadecimal digits that can serve as the private key and only the creator will know these details. Take note to ensure the bitcoin private key criteria are met which is a 64-digit Hexadecimal number. Also you dont have to use any of these generators, you could come up with random numbers off your head by yourself for this experiment as long as it matches the criterias that define what a 64-digit hexadecimal number is. 
 
 
 ## Python Libraries & Dependencies
