@@ -5,39 +5,42 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Introduction
-This repository explores the use of randomly generated hexadecimal numbers to create a bitcoin wallet address using the Elliptic Curve Digital Signature Algorithm (ECDSA). When Alice wants to buy a book from Bob, after all has been agreed upon, Bob needs to provide Alice with a bitcoin wallet address where the payments will be deposited. The transaction will be done on the blockchain, so Bob needs a bitcoin wallet address to receive payments. This repository covers how a bitcoin wallet address can be created from randomly generated private keys.
+
+This repository explores the use of randomly generated hexadecimal numbers to create a bitcoin wallet address using the Elliptic Curve Digital Signature Algorithm (ECDSA). When Alice wants to buy a book from Bob, after all has been agreed upon, Bob needs to provide Alice with a bitcoin wallet address where the payments will be deposited. The transaction will be done on the blockchain, so Bob needs a bitcoin wallet address to receive payments.
 
 In cryptography, the Elliptic Curve Digital Signature Algorithm (ECDSA) offers a variant of the Digital Signature Algorithm (DSA) which uses elliptic-curve cryptography.
 
 ## Method
-Bob signs a hash of a message with his private key, and then Alice proves with his public key. Bob also uses a random nonce value for the signature (K)
+
+Bob signs a hash of a message with his private key, and then then Alice proves with his public key. Bob also uses a random nonce value for the signature (K)
 
 ![ecdsa_new](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/3311cd8a-cebb-465e-bea8-91fcf7ffb39d)
 
 With ECDSA, Alice will sign a message with her private key, and then Bob will use her public key to verify that she signed the message (and that the message has not changed)
 ![ecdsa](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/e062bc0a-fc16-4203-a0fa-c0844cb995df)
 
-The diagram below illustrates the architecture and how the Bitcoin wallet addresses are created:
+Diagram below illustrates the architecture and how the Bitcoin wallet addresses are created.
 
-![Architecture](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/5c530686-c50a-4a00-bce7-3d1be3462d99)
+![Screenshot 2024-04-02 235506](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/5c530686-c50a-4a00-bce7-3d1be3462d99)
 
 ## Features
+
 - Generate random private keys
 - Convert private keys to public keys using ECDSA
 - Create valid Bitcoin addresses
 - Comprehensive validation and error handling
 - Command-line interface
 - Well-documented API
-- Easy integration into other projects
 
 ## Setting Up Environment
+
 To achieve the desired outcome, first we need to set up the environment. For development purposes, you can use:
-1. Install via pip (recommended)
-2. Google Colab environment - https://colab.research.google.com/
-3. Local Python environment
+1. Google Colab environment - https://colab.research.google.com/
+2. Local Python environment
+3. Package installation via pip (see Installation section)
 
 For getting randomly generated private keys, you can use:
-- Built-in secure random generation
+- Random generation within the package
 - Private keys from wallet addresses created via https://www.bitaddress.org
 - Other hex generators like https://www.browserling.com/tools/random-hex
 
@@ -52,21 +55,20 @@ Note: For production use, always ensure secure methods of private key generation
 
 ## Installation
 
-Simple installation via pip:
+### Via pip
 ```bash
 pip install bitcoin-address-generator
 ```
 
-Or install from source:
+### From source
 ```bash
 git clone https://github.com/ol-s-cloud/bitcoin-address-generator.git
 cd bitcoin-address-generator
-pip install -e .
+pip install -r requirements.txt
 ```
 
 ## Quick Start
 
-### Python Usage
 ```python
 from bitcoin_address_generator import generate_wallet
 
@@ -78,7 +80,8 @@ print(f"Bitcoin Address: {address}")
 address = generate_wallet(private_key="your-private-key")
 ```
 
-### Command Line Usage
+## Command Line Usage
+
 ```bash
 # Generate new address
 bitcoin-address-generator generate
@@ -96,12 +99,6 @@ bitcoin-address-generator generate --output wallet.txt
 - [Security Considerations](docs/SECURITY.md)
 - [Contributing Guide](CONTRIBUTING.md)
 - [Jupyter Notebook Tutorial](https://colab.research.google.com/drive/1d26u6FgGqRcBdL1_Bc6FwLfKJ2c6lWJ3)
-
-## Requirements
-- Python 3.7+
-- ecdsa>=0.18.0
-- base58>=2.1.1
-- click>=8.0.0
 
 ## Roadmap
 
@@ -145,11 +142,7 @@ bitcoin-address-generator generate --output wallet.txt
 If you have any feedback, please reach out to me at gs_wl889@icloud.com
 
 ## Contributing
-Contributions are always welcome!
-
-See `CONTRIBUTING.md` for ways to get started.
-
-Please adhere to this project's `CODE_OF_CONDUCT.md`.
+Contributions are always welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## Love to read more? Here are some resources & references
 - [Bitcoin Technical Document](https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses)
