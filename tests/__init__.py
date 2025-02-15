@@ -1,0 +1,1 @@
+"""Test suite for Bitcoin Address Generator package."""
