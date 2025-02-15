@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="bitcoin-address-generator",
+    name="bitcoin_address_generator",  # Changed from hyphen to underscore
     version="0.1.0",
     author="ol-s-cloud",
     author_email="gs_wl889@icloud.com",
@@ -19,13 +19,13 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Security :: Cryptography",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=[
         "ecdsa>=0.18.0",
         "base58>=2.1.1",
