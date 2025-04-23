@@ -5,6 +5,10 @@ Key generation and management module.
 import codecs
 import os
 import ecdsa
+import base64
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 def generate_private_key():
     """Generate a random private key."""
@@ -56,3 +60,89 @@ def get_compressed_public_key(public_key: str) -> str:
         return '03' + public_key[2:66]
     except Exception as e:
         raise ValueError(f"Invalid public key: {str(e)}")
+
+def _derive_key(password: str, salt: bytes = None) -> tuple:
+    """Derive a key from a password using PBKDF2.
+    
+    Args:
+        password (str): Password to derive key from
+        salt (bytes, optional): Salt for key derivation
+        
+    Returns:
+        tuple: (key, salt)
+    """
+    if salt is None:
+        salt = os.urandom(16)
+        
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=100000,
+    )
+    
+    key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
+    return key, salt
+
+def encrypt_private_key(private_key: str, password: str) -> dict:
+    """Encrypt a private key with a password.
+    
+    Args:
+        private_key (str): Private key to encrypt
+        password (str): Password to encrypt with
+        
+    Returns:
+        dict: Dictionary containing:
+            - encrypted_key (str): Base64-encoded encrypted private key
+            - salt (str): Base64-encoded salt used for encryption
+    """
+    try:
+        # Derive key from password
+        key, salt = _derive_key(password)
+        
+        # Create a Fernet instance
+        fernet = Fernet(key)
+        
+        # Encrypt the private key
+        encrypted_data = fernet.encrypt(private_key.encode())
+        
+        # Return encrypted data and salt as base64
+        return {
+            'encrypted_key': base64.b64encode(encrypted_data).decode(),
+            'salt': base64.b64encode(salt).decode()
+        }
+    except Exception as e:
+        raise ValueError(f"Error encrypting private key: {str(e)}")
+
+def decrypt_private_key(encrypted_data: dict, password: str) -> str:
+    """Decrypt a private key with a password.
+    
+    Args:
+        encrypted_data (dict): Dictionary containing:
+            - encrypted_key (str): Base64-encoded encrypted private key
+            - salt (str): Base64-encoded salt used for encryption
+        password (str): Password to decrypt with
+        
+    Returns:
+        str: Decrypted private key
+        
+    Raises:
+        ValueError: If decryption fails
+    """
+    try:
+        # Decode encrypted data and salt
+        encrypted_key = base64.b64decode(encrypted_data['encrypted_key'])
+        salt = base64.b64decode(encrypted_data['salt'])
+        
+        # Derive key from password and salt
+        key, _ = _derive_key(password, salt)
+        
+        # Create a Fernet instance
+        fernet = Fernet(key)
+        
+        # Decrypt the private key
+        decrypted_data = fernet.decrypt(encrypted_key).decode()
+        
+        return decrypted_data
+    except Exception as e:
+        raise ValueError(f"Error decrypting private key: {str(e)}")
