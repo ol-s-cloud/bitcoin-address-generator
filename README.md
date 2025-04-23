@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## ⚠️ Educational and Development Use Only
-This package is intended for educational and development purposes. Do not use for production or with real Bitcoin transactions.
+**This package is intended for educational and development purposes. Do not use for production or with real Bitcoin transactions.**
 
 ## Introduction
 This repository explores the use of randomly generated hexadecimal numbers to create a bitcoin wallet address using the Elliptic Curve Digital Signature Algorithm. When Alice wants to buy a book from Bob, after all has been agreed upon, Bob needs to provide Alice with a bitcoin wallet address where the payments will be deposited. The transaction will be done on the blockchain, so Bob needs a bitcoin wallet address to receive payments. This repository covers how a bitcoin wallet address can be created from randomly generated private keys.
