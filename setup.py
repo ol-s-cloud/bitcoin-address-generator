@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="bitcoin_address_generator",  # Changed from hyphen to underscore
-    version="0.1.0",
+    version="0.2.0",
     author="ol-s-cloud",
     author_email="gs_wl889@icloud.com",
     description="A Python package for generating Bitcoin addresses using ECDSA",
@@ -30,10 +30,12 @@ setup(
         "ecdsa>=0.18.0",
         "base58>=2.1.1",
         "click>=8.0.0",
+        "qrcode>=7.3.1",  # Added for QR code generation
+        "cryptography>=37.0.0",  # Added for key encryption
     ],
     entry_points={
         "console_scripts": [
-            "bitcoin-address-generator=bitcoin_address_generator.cli.main:generate_address",
+            "bitcoin-address-generator=bitcoin_address_generator.cli.main:cli",  # Updated to use cli group
         ],
     },
 )
