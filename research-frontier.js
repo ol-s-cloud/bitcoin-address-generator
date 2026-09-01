@@ -19,16 +19,18 @@ if(research){
   research.insertAdjacentElement('afterend',frontier);
 }
 
-const news=document.querySelector('.news-pulse');
-if(news){
-  const tracked=document.createElement('a');
-  tracked.className='protocol-watch';
-  tracked.href='https://eips.ethereum.org/EIPS/eip-7943';
-  tracked.target='_blank';tracked.rel='noopener noreferrer';
-  tracked.innerHTML=`<span class="protocol-label">PROTOCOL WATCH · ERC-7943</span><strong>uRWA — Universal Real World Asset Interface</strong><small>Final standard covering common RWA compliance checks, transfer controls, freezing and enforcement hooks. Track alongside COBRA's sovereignty and programmable-compliance research. ↗</small>`;
-  const head=news.querySelector('.news-head');
-  if(head)head.insertAdjacentElement('afterend',tracked);
-}
+setTimeout(()=>{
+  const news=document.querySelector('.news-pulse');
+  if(news&&!news.querySelector('.protocol-watch')){
+    const tracked=document.createElement('a');
+    tracked.className='protocol-watch';
+    tracked.href='https://eips.ethereum.org/EIPS/eip-7943';
+    tracked.target='_blank';tracked.rel='noopener noreferrer';
+    tracked.innerHTML=`<span class="protocol-label">PROTOCOL WATCH · ERC-7943</span><strong>uRWA — Universal Real World Asset Interface</strong><small>Final standard covering common RWA compliance checks, transfer controls, freezing and enforcement hooks. Track alongside COBRA's sovereignty and programmable-compliance research. ↗</small>`;
+    const head=news.querySelector('.news-head');
+    if(head)head.insertAdjacentElement('afterend',tracked);
+  }
+},0);
 
 const style=document.createElement('link');
 style.rel='stylesheet';style.href='/research-frontier.css';document.head.appendChild(style);
