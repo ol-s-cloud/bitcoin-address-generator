@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free browser-based random number generator and educational Bitcoin address lab. Local-first, no sign-up." />
+  <meta name="theme-color" content="#0d1117" />
+  <meta property="og:title" content="Entropy Lab — Random Generator & Bitcoin Address Lab" />
+  <meta property="og:description" content="Generate cryptographically strong random values and explore how a Bitcoin address is derived from a private key." />
+  <meta property="og:type" content="website" />
+  <title>Entropy Lab — Random Generator & Bitcoin Address Lab</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Entropy Lab home"><span class="mark">01</span><span>Entropy Lab</span></a>
+    <nav>
+      <a href="#tools">Tools</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">FREE · BROWSER-BASED · OPEN SOURCE</div>
+      <h1>Randomness,<br><span>made visible.</span></h1>
+      <p>Generate secure random values and explore, step by step, how random 256-bit numbers can become Bitcoin addresses.</p>
+      <div class="chips"><span>Web Crypto API</span><span>Local processing</span><span>No account</span><span>No tracking required</span></div>
+    </section>
+
+    <section class="warning" role="note">
+      <strong>Educational use only.</strong>
+      <span>The Bitcoin tool is a learning aid, not a production wallet. Do not send funds to addresses generated here.</span>
+    </section>
+
+    <section class="tool-shell" id="tools">
+      <div class="tabs" role="tablist" aria-label="Tools">
+        <button class="tab active" data-tab="random" role="tab" aria-selected="true">Random Generator</button>
+        <button class="tab" data-tab="bitcoin" role="tab" aria-selected="false">Bitcoin Address Lab</button>
+      </div>
+
+      <div class="panel active" id="panel-random" role="tabpanel">
+        <div class="panel-copy">
+          <div class="eyebrow">TOOL 01</div>
+          <h2>Cryptographic random generator</h2>
+          <p>Create integers, hexadecimal strings, raw bytes and UUIDs using your browser's cryptographically secure random source.</p>
+        </div>
+
+        <div class="form-grid">
+          <label>
+            Output type
+            <select id="randomType">
+              <option value="integer">Integer</option>
+              <option value="hex" selected>Hexadecimal</option>
+              <option value="bytes">Bytes</option>
+              <option value="uuid">UUID v4</option>
+            </select>
+          </label>
+
+          <label id="lengthField">
+            Length in bytes
+            <input id="byteLength" type="number" min="1" max="4096" value="32" />
+          </label>
+
+          <div class="integer-fields" id="integerFields" hidden>
+            <label>Minimum<input id="minValue" type="number" value="1" /></label>
+            <label>Maximum<input id="maxValue" type="number" value="1000000" /></label>
+          </div>
+        </div>
+
+        <button class="primary" id="generateRandom">Generate random value</button>
+        <div class="output-block">
+          <div class="output-head"><span>OUTPUT</span><button class="copy" data-copy="randomOutput">Copy</button></div>
+          <pre id="randomOutput">Click “Generate random value”.</pre>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-bitcoin" role="tabpanel" hidden>
+        <div class="panel-copy">
+          <div class="eyebrow">TOOL 02</div>
+          <h2>Bitcoin address lab</h2>
+          <p>Generate a random 256-bit private key locally, derive its compressed secp256k1 public key, hash it and encode the result as a legacy P2PKH Bitcoin address.</p>
+        </div>
+
+        <div class="lab-actions">
+          <button class="primary" id="generateBitcoin">Generate educational example</button>
+          <button class="secondary" id="useRandomAsKey">Use last 32-byte random hex</button>
+        </div>
+
+        <label class="wide-label">Private key (64 hex characters)
+          <div class="input-action"><input id="privateKeyInput" spellcheck="false" maxlength="64" placeholder="Generate or paste a 32-byte hexadecimal value" /><button id="deriveAddress">Derive</button></div>
+        </label>
+
+        <div class="pipeline" aria-label="Bitcoin address derivation steps">
+          <article><span>01</span><h3>Private key</h3><code id="privateKeyOut">—</code></article>
+          <article><span>02</span><h3>Compressed public key</h3><code id="publicKeyOut">—</code></article>
+          <article><span>03</span><h3>HASH160</h3><code id="hash160Out">—</code></article>
+          <article class="address-card"><span>04</span><h3>Legacy P2PKH address</h3><code id="addressOut">—</code><button class="copy" data-copy="addressOut">Copy address</button></article>
+        </div>
+
+        <p class="micro-warning">Do not treat generated private keys as wallet backups. This tool intentionally prioritizes transparency and education over production wallet security.</p>
+      </div>
+    </section>
+
+    <section class="explain" id="about">
+      <div>
+        <div class="eyebrow">THE IDEA</div>
+        <h2>A Bitcoin private key is, at its core, a very large number.</h2>
+      </div>
+      <div class="explain-copy">
+        <p>The original project began by exploring how randomly generated hexadecimal values can be transformed through elliptic-curve cryptography, hashing and Base58Check encoding into Bitcoin addresses.</p>
+        <p>This browser interface makes that chain visible without replacing the original Python package or research notebook in the repository.</p>
+      </div>
+    </section>
+
+    <section class="community">
+      <div><div class="eyebrow">OPEN SOURCE</div><h2>Learn from it. Fork it. Improve it.</h2><p>The original Python implementation, documentation and historical notebook remain available in the repository.</p></div>
+      <div class="community-actions"><a class="primary-link" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a><button class="secondary" id="shareButton">Recommend to a friend</button></div>
+    </section>
+  </main>
+
+  <footer><span>Entropy Lab</span><span>An open-source educational project by ol-s-cloud.</span></footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
