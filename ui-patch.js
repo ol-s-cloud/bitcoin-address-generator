@@ -42,4 +42,4 @@ function escapeAttr(v=''){return escapeHtml(v)}
 function relative(value){const t=new Date(value).getTime();if(!Number.isFinite(t))return'latest';const s=Math.max(0,Math.floor((Date.now()-t)/1000));if(s<60)return`${Math.max(1,s)}s ago`;const m=Math.floor(s/60);if(m<60)return`${m}m ago`;const h=Math.floor(m/60);if(h<24)return`${h}h ago`;return`${Math.floor(h/24)}d ago`}
 
 const footer=document.querySelector('footer');
-if(footer){footer.innerHTML=`<span>© 2023 COBRA</span><span><a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">by ol-s-cloud ↗</a> · Cryptographic Oracle for Bytes, Randomness & Addresses</span>`;}
+if(footer){footer.innerHTML=`<span>First rollout 2023 · Last updated 2026</span><span><a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ol-s-cloud ↗</a></span>`;}
