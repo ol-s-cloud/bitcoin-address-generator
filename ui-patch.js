@@ -37,12 +37,28 @@ if(desert){
   desert.insertAdjacentElement('afterend',trust);
 }
 
+const terminalBar=document.querySelector('.terminal-bar');
+if(terminalBar&&!terminalBar.querySelector('.terminal-status')){
+  const status=document.createElement('span');
+  status.className='terminal-status';
+  status.innerHTML='<i></i> ONLINE · LOCAL ENGINE';
+  terminalBar.appendChild(status);
+}
+
+const recovery=document.querySelector('.recovery');
+if(recovery){
+  const privacy=document.createElement('section');
+  privacy.className='privacy-research';
+  privacy.innerHTML=`<div class="privacy-copy"><div class="eyebrow">COBRA RESEARCH // PRIVACY</div><h2>Privacy-preserving blockchain tools are coming later.</h2><p>COBRA currently works with public Bitcoin addresses exactly as the Bitcoin network does. Ongoing research is exploring privacy-preserving cryptographic patterns such as reducing address reuse, improving unlinkability, selective disclosure and other ways public-chain activity can reveal less unnecessary metadata.</p><p class="privacy-note"><strong>Research status:</strong> not deployed. COBRA does not currently promise anonymity, transaction obfuscation or untraceable payments. Any future privacy work will be documented openly with its assumptions, limitations and security model.</p></div><div class="privacy-mark"><span>RESEARCH</span><strong>PRIVACY</strong><small>COMING LATER</small></div>`;
+  recovery.insertAdjacentElement('afterend',privacy);
+}
+
 const toolLayout=document.querySelector('.tool-layout');
 if(toolLayout){
   const news=document.createElement('section');
   news.className='news-pulse';
   news.id='news';
-  news.innerHTML=`<div class="news-head"><div><div class="eyebrow">GLOBAL CRYPTO PULSE</div><h2>Bitcoin, blockchain & cryptography — now.</h2><p>Headlines are pulled from independent news providers and link directly to the original publisher.</p></div><div class="news-status"><span class="live-dot"></span><span id="newsUpdated">Loading live feed…</span></div></div><div id="newsGrid" class="news-grid"><div class="news-loading">Fetching latest headlines…</div></div><div class="news-foot">COBRA does not edit or endorse third-party headlines. Sources remain responsible for their reporting.</div>`;
+  news.innerHTML=`<div class="news-head"><div><div class="eyebrow">GLOBAL CRYPTO PULSE</div><h2>Bitcoin, blockchain & cryptography — now.</h2><p>Headlines are aggregated from multiple independent publishers and always link to the original source.</p></div><div class="news-status"><span class="live-dot"></span><span id="newsUpdated">Loading live feed…</span></div></div><div id="newsSources" class="news-sources">Loading sources…</div><div id="newsGrid" class="news-grid"><div class="news-loading">Fetching latest headlines…</div></div><div class="news-foot">COBRA does not edit or endorse third-party headlines. Sources remain responsible for their reporting.</div>`;
   toolLayout.insertAdjacentElement('afterend',news);
   loadNews();
 }
@@ -58,15 +74,18 @@ if(community){
 async function loadNews(){
   const grid=document.getElementById('newsGrid');
   const updated=document.getElementById('newsUpdated');
+  const sources=document.getElementById('newsSources');
   try{
     const response=await fetch('/api/news',{headers:{Accept:'application/json'}});
     if(!response.ok)throw new Error('News unavailable');
     const data=await response.json();
     if(!data.items?.length)throw new Error('No headlines');
-    grid.innerHTML=data.items.slice(0,8).map(item=>`<a class="news-card" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer"><div class="news-meta"><span>${escapeHtml(item.source)}</span><time>${relative(item.published)}</time></div><h3>${escapeHtml(item.title)}</h3><span class="news-open">Read original ↗</span></a>`).join('');
+    grid.innerHTML=data.items.slice(0,12).map(item=>`<a class="news-card" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer"><div class="news-meta"><span>${escapeHtml(item.source)}</span><time>${relative(item.published)}</time></div><h3>${escapeHtml(item.title)}</h3><span class="news-open">Read original ↗</span></a>`).join('');
+    sources.innerHTML=(data.sources||[]).map(source=>`<span>${escapeHtml(source)}</span>`).join('');
     updated.textContent=`Updated ${relative(data.updatedAt)}`;
   }catch(error){
     grid.innerHTML=`<div class="news-loading">Live headlines are temporarily unavailable. <a href="https://www.coindesk.com/latest-crypto-news" target="_blank" rel="noopener noreferrer">Open CoinDesk ↗</a></div>`;
+    sources.textContent='Multiple RSS sources configured';
     updated.textContent='Feed temporarily unavailable';
   }
 }
@@ -75,4 +94,4 @@ function escapeAttr(v=''){return escapeHtml(v)}
 function relative(value){const t=new Date(value).getTime();if(!Number.isFinite(t))return'latest';const s=Math.max(0,Math.floor((Date.now()-t)/1000));if(s<60)return`${Math.max(1,s)}s ago`;const m=Math.floor(s/60);if(m<60)return`${m}m ago`;const h=Math.floor(m/60);if(h<24)return`${h}h ago`;return`${Math.floor(h/24)}d ago`}
 
 const footer=document.querySelector('footer');
-if(footer){footer.innerHTML=`<span>First rollout 2023 · Last updated 2026</span><span>COBRA <a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">by ol-s-cloud ↗</a></span>`;}
+if(footer){footer.innerHTML=`<span>First rollout 2023 · Last updated 2026</span><span>COBRA <a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">by ol-s-cloud ↗</a> · <strong>For educational purposes only</strong></span>`;}
