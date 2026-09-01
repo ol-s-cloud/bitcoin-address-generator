@@ -1,3 +1,4 @@
+import './research-frontier.js';
 import './ui-patch.js';
 import { getPublicKey } from 'https://esm.sh/@noble/secp256k1@1.7.1';
 import { sha256 } from 'https://esm.sh/@noble/hashes@1.3.3/sha256';
