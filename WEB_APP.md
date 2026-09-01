@@ -21,15 +21,23 @@ Educational P2PKH derivation:
 
 COBRA also produces a downloadable recovery kit containing the user's current address and secret material. This file is created in the browser; COBRA does not retain a server-side recovery copy.
 
+## Live activity and social proof
+
+The website includes a real-time activity rail beside the tools. Each newly generated public address appears immediately with a relative timestamp such as `just now`, `6s ago`, or `2m ago`, plus a direct Blockchain.com Explorer link.
+
+The rail also displays generated-address metrics for this browser and current session. It is intentionally labelled **Activity on this device** because v1 has no shared persistence backend and must not imply that local activity represents all COBRA users.
+
+A future cross-user COBRA live feed can be added using a small persistent backend. That registry should be opt-in and store only public addresses, timestamps, derivation metadata and public explorer/on-chain status. It must never store private keys or WIF values.
+
+Social controls include GitHub repository/star links, Share on X, and native recommend/share functionality.
+
 ## Secret handling
 
 Private keys and WIF values are controlling secrets. COBRA's browser implementation keeps derivation local and does not intentionally transmit or store them. The public activity log stores only Bitcoin addresses, timestamps and address type in the user's browser localStorage.
 
 ## Explorer and logs
 
-Each derived public address links directly to `https://mempool.space/address/<address>` for independent Bitcoin-network inspection.
-
-The current generation log is local to the user's browser. A future public COBRA registry may be introduced as an opt-in service containing only public addresses, timestamps, derivation metadata and explorer/on-chain status. Private keys and WIF values must never be included in that registry.
+Each derived public address links directly to `https://www.blockchain.com/explorer/addresses/btc/<address>` for public Bitcoin-network inspection.
 
 Generating an address is not an on-chain transaction. An address becomes observable through Bitcoin transaction data only when it participates in a transaction/output.
 
@@ -58,7 +66,7 @@ Contact: `gs_wl889@icloud.com`
 - Bitcoin Developer Guide — Wallets: https://developer.bitcoin.org/devguide/wallets.html
 - Bitcoin Developer Reference — Transactions: https://developer.bitcoin.org/reference/transactions.html
 - Bitcoin Wiki — Wallet Import Format: https://en.bitcoin.it/wiki/Wallet_import_format
-- mempool.space Bitcoin explorer: https://mempool.space
+- Blockchain.com Explorer: https://www.blockchain.com/explorer
 - Original notebook: `How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb`
 
 ## Safety
