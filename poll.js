@@ -1,13 +1,13 @@
 setTimeout(()=>{
 const heroBg=document.querySelector('.hero-bg-image');
 if(heroBg){
-  heroBg.src='/assets/cobra-lunar-network.svg';
+  heroBg.src='https://www.nasa.gov/wp-content/uploads/2023/03/iss068e011296_alt.jpg?w=1920';
   heroBg.style.objectPosition='center center';
 }
 const heroCredit=document.querySelector('.nasa-credit');
 if(heroCredit){
-  heroCredit.href='https://github.com/ol-s-cloud/bitcoin-address-generator';
-  heroCredit.textContent='COBRA lunar-network artwork · by ol-s-cloud';
+  heroCredit.href='https://www.nasa.gov/image-article/astronaut-bob-hines-pictured-looking-earth-below/';
+  heroCredit.textContent='Astronaut Bob Hines above Earth · NASA · 2022';
 }
 
 const existing=document.querySelector('.next-chain');
