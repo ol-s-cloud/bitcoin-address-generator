@@ -10,8 +10,7 @@ if(hero){
   hero.appendChild(credit);
 }
 
-const style=document.createElement('link');
-style.rel='stylesheet';style.href='ui-patch.css';document.head.appendChild(style);
+for(const href of ['ui-patch.css','fluid.css']){const style=document.createElement('link');style.rel='stylesheet';style.href=href;document.head.appendChild(style);}
 
 const toolLayout=document.querySelector('.tool-layout');
 if(toolLayout){
