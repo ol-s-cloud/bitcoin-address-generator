@@ -1,3 +1,4 @@
+import './news-visuals.js';
 setTimeout(()=>{
   const community=document.querySelector('.community');
   if(community){
