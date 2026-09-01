@@ -1,0 +1,1 @@
+(()=>{const s=document.createElement('script');s.src='/legal-links.js';s.defer=true;document.body.appendChild(s);})();
