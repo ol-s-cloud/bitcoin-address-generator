@@ -2,7 +2,7 @@
 
 **Cryptographic Oracle for Bytes, Randomness & Addresses**
 
-COBRA is a free, open-source Bitcoin cryptography micro-product built on the existing Bitcoin Address Generator research repository.
+**COBRA by ol-s-cloud** is a free, open-source Bitcoin cryptography micro-product built directly on the existing [Bitcoin Address Generator](https://github.com/ol-s-cloud/bitcoin-address-generator) research repository.
 
 ## Current product
 
@@ -20,6 +20,19 @@ Educational P2PKH derivation:
 7. compressed-mainnet Wallet Import Format (WIF)
 
 COBRA also produces a downloadable recovery kit containing the user's current address and secret material. This file is created in the browser; COBRA does not retain a server-side recovery copy.
+
+## Research presentation
+
+The website deliberately exposes the technical lineage behind the tool rather than presenting address generation as a black box. It includes:
+
+- a terminal-style view of the original Python package usage and derivation chain
+- a secp256k1 elliptic-curve explainer and schematic
+- ECDSA and address-architecture diagrams already present in the repository README
+- explicit links back to the original source repository
+- technical and academic references including SEC 2 elliptic-curve parameters, ECDSA documentation, Bitcoin technical references, the ECDSA Python library, and an ECDSA survey paper
+- visible attribution throughout the interface as **COBRA by ol-s-cloud**
+
+The hero uses the original repository address-architecture visual as a darkened background treatment so the product presentation remains visibly connected to the original work.
 
 ## Live activity and social proof
 
@@ -51,7 +64,7 @@ The repository's Python package and original Google Colab notebook implement the
 
 ## Historical provenance
 
-`How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb` is deliberately preserved untouched. Its Git history records original authorship in August 2023. COBRA is a modern interface and product layer around that research lineage, not a replacement for the notebook.
+`How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb` is deliberately preserved untouched. COBRA is a modern interface and product layer around that research lineage, not a replacement for the notebook.
 
 The project originated during postgraduate study in Finance & Data Analytics as an exploration of blockchain technologies, cryptographic keys and Bitcoin address construction. This statement is not intended to imply university endorsement of COBRA.
 
@@ -63,6 +76,11 @@ Contact: `gs_wl889@icloud.com`
 
 ## References
 
+- Bitcoin technical background for version 1 addresses: https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses
+- Bitcoin ECDSA: https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm
+- SEC 2 recommended elliptic curve domain parameters: https://www.secg.org/sec2-v2.pdf
+- ECDSA Python library: https://pypi.org/project/ecdsa/
+- ECDSA survey: https://www.researchgate.net/publication/331397446_Efficient_and_Secure_ECDSA_Algorithm_and_its_Applications_A_Survey
 - Bitcoin Developer Guide — Wallets: https://developer.bitcoin.org/devguide/wallets.html
 - Bitcoin Developer Reference — Transactions: https://developer.bitcoin.org/reference/transactions.html
 - Bitcoin Wiki — Wallet Import Format: https://en.bitcoin.it/wiki/Wallet_import_format
@@ -79,4 +97,4 @@ COBRA is Bitcoin-only in v1. Additional networks and cryptographic utilities may
 
 ## Deployment
 
-The current web layer is static HTML, CSS and JavaScript and can be deployed directly to Vercel. No database, authentication or environment variables are required for this version.
+The current web layer is static HTML, CSS and JavaScript and can be deployed directly to Vercel using the **Other** framework preset. The repository also contains the original Python package, so Vercel may otherwise auto-detect Python. No database, authentication or environment variables are required for this version.
