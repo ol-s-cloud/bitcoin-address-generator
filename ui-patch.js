@@ -1,3 +1,4 @@
+import './poll.js';
 const hero=document.querySelector('.hero');
 if(hero){
   hero.classList.add('hero-black-marble');
