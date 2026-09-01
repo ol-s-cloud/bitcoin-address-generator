@@ -22,13 +22,13 @@ if(research){
 setTimeout(()=>{
   const news=document.querySelector('.news-pulse');
   if(news&&!news.querySelector('.protocol-watch')){
-    const tracked=document.createElement('a');
-    tracked.className='protocol-watch';
-    tracked.href='https://eips.ethereum.org/EIPS/eip-7943';
-    tracked.target='_blank';tracked.rel='noopener noreferrer';
-    tracked.innerHTML=`<span class="protocol-label">PROTOCOL WATCH · ERC-7943</span><strong>uRWA — Universal Real World Asset Interface</strong><small>Final standard covering common RWA compliance checks, transfer controls, freezing and enforcement hooks. Track alongside COBRA's sovereignty and programmable-compliance research. ↗</small>`;
+    const watch=document.createElement('div');
+    watch.className='protocol-watch-stack';
+    watch.innerHTML=`
+      <a class="protocol-watch" href="https://eips.ethereum.org/EIPS/eip-7943" target="_blank" rel="noopener noreferrer"><span class="protocol-label">PROTOCOL WATCH · ERC-7943</span><strong>uRWA — Universal Real World Asset Interface</strong><small>Final standard covering common RWA compliance checks, transfer controls, freezing and enforcement hooks. Track alongside COBRA's sovereignty and programmable-compliance research. ↗</small></a>
+      <a class="protocol-watch" href="https://www.justice.gov/opa/speech/acting-assistant-attorney-general-matthew-r-galeotti-delivers-remarks-american" target="_blank" rel="noopener noreferrer"><span class="protocol-label">POLICY WATCH · OPEN-SOURCE CRYPTO DEVELOPMENT</span><strong>U.S. DOJ: merely writing code without ill intent is not a crime</strong><small>DOJ guidance says neutral-tool developers should generally not be held responsible for third-party misuse where they lack criminal intent, while preserving prosecution for fraud, laundering, sanctions evasion and intentional criminal assistance. Primary source ↗</small></a>`;
     const head=news.querySelector('.news-head');
-    if(head)head.insertAdjacentElement('afterend',tracked);
+    if(head)head.insertAdjacentElement('afterend',watch);
   }
 },0);
 
