@@ -1,3 +1,4 @@
+import './alive.js';
 setTimeout(()=>{
 const heroBg=document.querySelector('.hero-bg-image');
 if(heroBg){
