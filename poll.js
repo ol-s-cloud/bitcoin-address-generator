@@ -1,3 +1,4 @@
+setTimeout(()=>{
 const heroBg=document.querySelector('.hero-bg-image');
 if(heroBg){
   heroBg.src='/assets/cobra-lunar-network.svg';
@@ -80,5 +81,6 @@ if(existing){
 
 const stylesheet=document.createElement('link');
 stylesheet.rel='stylesheet';stylesheet.href='/poll.css';document.head.appendChild(stylesheet);
+},0);
 function escapeHtml(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function escapeAttr(v=''){return escapeHtml(v)}
