@@ -2,51 +2,73 @@
 
 **Cryptographic Oracle for Bytes, Randomness & Addresses**
 
-COBRA is a free, open-source browser micro-product layered on top of the existing Bitcoin Address Generator repository.
+COBRA is a free, open-source Bitcoin cryptography micro-product built on the existing Bitcoin Address Generator research repository.
 
-## Current tools
+## Current product
 
 ### Random Generator
-Uses the browser Web Crypto API to generate cryptographically strong hexadecimal values, random bytes, unbiased integers and UUID v4 values.
+Browser-local generation of cryptographically strong hexadecimal values, random bytes, unbiased integers and UUID v4 values.
 
 ### Bitcoin Address Generator
-An educational visualization of the path from a 256-bit private key to a legacy Bitcoin P2PKH address:
+Educational P2PKH derivation:
+1. valid 256-bit private key
+2. compressed secp256k1 public key
+3. SHA-256 + RIPEMD-160 (HASH160)
+4. Bitcoin mainnet version byte
+5. double-SHA-256 checksum
+6. Base58Check P2PKH address
+7. compressed-mainnet Wallet Import Format (WIF)
 
-1. Generate or provide a valid 32-byte private key.
-2. Derive the compressed secp256k1 public key.
-3. Apply SHA-256 followed by RIPEMD-160 (HASH160).
-4. Add the Bitcoin mainnet version byte.
-5. Add the Base58Check checksum.
-6. Encode the payload as a legacy P2PKH address.
-7. Represent the same private key as compressed-mainnet Wallet Import Format (WIF) for educational recovery/import demonstrations.
+COBRA also produces a downloadable recovery kit containing the user's current address and secret material. This file is created in the browser; COBRA does not retain a server-side recovery copy.
 
-## Where an address exists
+## Secret handling
 
-Creating an address does not create an account on a COBRA server or register the address with Bitcoin. An address is derived from cryptographic material. If bitcoin is later sent to that address, the transaction/output becomes part of Bitcoin's distributed ledger. Spending authority depends on possession of the corresponding private key.
+Private keys and WIF values are controlling secrets. COBRA's browser implementation keeps derivation local and does not intentionally transmit or store them. The public activity log stores only Bitcoin addresses, timestamps and address type in the user's browser localStorage.
 
-Compatible wallet software may import or sweep a private key, commonly represented as WIF. COBRA does not retain recovery copies.
+## Explorer and logs
+
+Each derived public address links directly to `https://mempool.space/address/<address>` for independent Bitcoin-network inspection.
+
+The current generation log is local to the user's browser. A future public COBRA registry may be introduced as an opt-in service containing only public addresses, timestamps, derivation metadata and explorer/on-chain status. Private keys and WIF values must never be included in that registry.
+
+Generating an address is not an on-chain transaction. An address becomes observable through Bitcoin transaction data only when it participates in a transaction/output.
+
+## Implementations
+
+### Browser engine — live
+JavaScript/Web Crypto plus pinned Noble cryptography packages. This is the currently deployed interactive engine and keeps private-key operations client-side.
+
+### Original Python lineage — preserved
+The repository's Python package and original Google Colab notebook implement the same core methodology using Python, ECDSA, hashlib and Base58. They remain source/research artifacts rather than a server-side private-key service.
 
 ## Historical provenance
 
-The project originated as the Python/Google Colab notebook `How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb`. The notebook is deliberately preserved untouched. Its Git history records original authorship in August 2023. The modern web interface is an additional implementation and presentation layer around that research lineage.
+`How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb` is deliberately preserved untouched. Its Git history records original authorship in August 2023. COBRA is a modern interface and product layer around that research lineage, not a replacement for the notebook.
 
-The original notebook explores hexadecimal private keys, ECDSA/secp256k1, public-key compression, SHA-256, RIPEMD-160 and Base58 encoding. The repository later evolved into a Python package. COBRA exposes the same core ideas interactively in the browser.
+The project originated during postgraduate study in Finance & Data Analytics as an exploration of blockchain technologies, cryptographic keys and Bitcoin address construction. This statement is not intended to imply university endorsement of COBRA.
+
+## Developer access
+
+COBRA does not yet expose a public production API. Developers, researchers and teams can contact the project to discuss future API/SDK access, integrations, licensing or research collaboration. Keeping access enquiry-based initially leaves room to design authentication, rate limits, safe cryptographic boundaries and commercial licensing before opening the API broadly.
+
+Contact: `gs_wl889@icloud.com`
 
 ## References
 
 - Bitcoin Developer Guide — Wallets: https://developer.bitcoin.org/devguide/wallets.html
-- Bitcoin Developer Reference — Transactions / address conversion: https://developer.bitcoin.org/reference/transactions.html
+- Bitcoin Developer Reference — Transactions: https://developer.bitcoin.org/reference/transactions.html
 - Bitcoin Wiki — Wallet Import Format: https://en.bitcoin.it/wiki/Wallet_import_format
-- Original COBRA research notebook: `How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb`
+- mempool.space Bitcoin explorer: https://mempool.space
+- Original notebook: `How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb`
 
 ## Safety
 
-COBRA is an educational cryptography tool, not a production wallet. Human-selected numbers should not be treated as secure entropy. Do not paste real private keys into web tools or fund demonstration addresses.
+COBRA is educational and experimental software. It may derive mathematically valid Bitcoin addresses, but it is not a production wallet, custodian, exchange, recovery service or financial service. Human-selected numbers should not be treated as secure entropy, and demonstration keys should not be used for material funds.
 
 ## Scope
 
-COBRA currently ships randomness utilities and Bitcoin address derivation. Other cryptographic or blockchain utilities may be added later, but are intentionally not advertised as current functionality.
+COBRA is Bitcoin-only in v1. Additional networks and cryptographic utilities may be added later when they actually exist.
 
 ## Deployment
 
-The web layer is static HTML, CSS and JavaScript and can be deployed directly to Vercel. No database, authentication or environment variables are required for the current browser implementation.
+The current web layer is static HTML, CSS and JavaScript and can be deployed directly to Vercel. No database, authentication or environment variables are required for this version.
