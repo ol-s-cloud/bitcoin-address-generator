@@ -22,16 +22,15 @@ if(existing){
       <h2>What blockchain would you like to see next?</h2>
       <p>Bitcoin is first. Vote for the next address lab, or suggest another network on GitHub.</p>
     </div>
-    <div class="poll-meta"><span>Community signal</span><strong id="pollTotal">0 votes on this device</strong></div>
+    <div class="poll-meta"><span>Community signal</span><strong id="pollTotal">0 votes</strong></div>
     <div class="poll-options" id="pollOptions"></div>
     <div class="poll-actions">
       <form id="addNetworkForm" class="add-network-form">
         <input id="newNetworkName" maxlength="40" placeholder="Add another network…" aria-label="Network name" />
-        <button type="submit">Add to my poll</button>
+        <button type="submit">Add network</button>
       </form>
       <a class="poll-issue" href="https://github.com/ol-s-cloud/bitcoin-address-generator/issues/new?title=COBRA%20next%20network%20request&body=Network%3A%20%0A%0AWhy%20COBRA%20should%20support%20it%3A%20" target="_blank" rel="noopener noreferrer">Open a network request on GitHub ↗</a>
-    </div>
-    <p class="poll-note">Current v1 votes are stored locally in your browser. A shared global tally will require COBRA's planned public backend; GitHub requests are already public.</p>`;
+    </div>`;
   existing.replaceWith(poll);
 
   const KEY='cobra-next-network-poll-v1';
@@ -70,7 +69,7 @@ if(existing){
     const options=document.getElementById('pollOptions');
     const entries=Object.entries(state.options).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
     const total=entries.reduce((sum,[,count])=>sum+count,0);
-    document.getElementById('pollTotal').textContent=`${total} vote${total===1?'':'s'} on this device`;
+    document.getElementById('pollTotal').textContent=`${total} vote${total===1?'':'s'}`;
     options.innerHTML=entries.map(([name,count])=>{
       const pct=total?Math.round((count/total)*100):0;
       const active=state.voted===name;
