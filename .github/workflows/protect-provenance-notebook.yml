@@ -1,0 +1,20 @@
+name: Protect provenance notebook
+
+on:
+  pull_request:
+    paths:
+      - 'How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb'
+  push:
+    branches:
+      - main
+    paths:
+      - 'How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb'
+
+jobs:
+  block-notebook-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if historical provenance notebook is modified
+        run: |
+          echo "The historical 2023 notebook is a protected provenance artifact and must remain unchanged."
+          exit 1
