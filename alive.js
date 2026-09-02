@@ -1,5 +1,6 @@
 import './news-visuals.js';
 import './agents-home.js';
+import './cli-status.js';
 setTimeout(()=>{
   const community=document.querySelector('.community');
   if(community){
