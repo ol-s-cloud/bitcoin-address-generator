@@ -23,7 +23,9 @@ PRIMARY_ROUTES = (
     "/cli.html",
 )
 PROVENANCE_HASHES = {
-    "notebook": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "notebook": (
+        "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    ),
     "How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb": (
         "46b834d022edb425ee68b0a8196595a7cd24db4448f14aab11977615ec89eb6b"
     ),
@@ -40,7 +42,9 @@ def test_every_public_page_uses_shared_navigation_theme_and_language():
         assert 'class="brand"' in source
         assert ">COBRA</a>" in source
         assert 'class="mark"' not in source
-        assert 'href="/site-ui.css"' in source or 'href="site-ui.css"' in source
+        assert (
+            'href="/site-ui.css"' in source or 'href="site-ui.css"' in source
+        )
         assert 'src="/site-ui.js"' in source or 'src="site-ui.js"' in source
         assert 'src="/surface-i18n.js"' in source
         assert 'saved === "dark" ? "dark" : "light"' in source
@@ -159,6 +163,66 @@ def test_explorer_is_a_live_mainnet_surface():
     assert 'id="cobraaddresscount"' in explorer
     assert 'fetch("/api/bitcoin"' in script
     assert "api.blockchain.info" in api
+
+
+def test_shared_registry_accepts_only_public_or_aggregate_state():
+    schema = page_source("database/schema.sql").lower()
+    registry_api = page_source("api/registry.js")
+    app = page_source("app.js")
+    assert "cobra_public_addresses" in schema
+    assert "cobra_creation_events" in schema
+    assert "is_public boolean" in schema
+    assert "cobra_contacts" not in schema
+    assert 'visibility: isPublic ? "public" : "private"' in app
+    assert "if (isPublic) payload.address = address" in app
+    assert "private_event_must_not_include_address" in registry_api
+    assert "isMainnetP2pkhAddress" in registry_api
+    for secret in ("privateHex", "privateKey", "wif", "seedPhrase", "entropy"):
+        assert f"payload.{secret}" not in app
+
+
+def test_both_polls_use_global_persistent_voting():
+    schema = page_source("database/schema.sql")
+    poll_api = page_source("api/polls.js")
+    home_script = page_source("home-live.js")
+    assert "cobra_poll_votes" in schema
+    assert "unique (poll_id, anonymous_voter_hash)" in schema
+    assert 'fetch("/api/polls"' in home_script
+    assert 'poll: slug' in home_script
+    assert "cobra-global-voter-id-v1" in home_script
+    assert "createHash(\"sha256\")" in poll_api
+    assert "on conflict (poll_id, anonymous_voter_hash) do update" in poll_api
+
+
+def test_explorer_includes_persistent_and_live_intelligence():
+    explorer = page_source("explorer.html")
+    script = page_source("explorer.js")
+    api = page_source("api/bitcoin.js")
+    for element_id in (
+        "high24h",
+        "low24h",
+        "circulatingSupply",
+        "difficulty",
+        "blockReward",
+        "hashRateChart",
+        "volumeChart",
+        "latestBlocks",
+        "latestTransactions",
+        "cobraVoteCount",
+    ):
+        assert f'id="{element_id}"' in explorer
+    assert 'fetch("/api/registry?limit=12"' in script
+    assert "mempool.space/api" in api
+    assert "estimated-transaction-volume-usd" in api
+    assert "cobraPublicCount" in script
+
+
+def test_database_health_endpoint_never_returns_credentials():
+    health = page_source("api/health.js")
+    assert 'database: "connected"' in health
+    assert 'schema: "ready"' in health
+    assert "connectionString" not in health
+    assert "DATABASE_URL" not in health
 
 
 def test_requested_footer_is_consistent():

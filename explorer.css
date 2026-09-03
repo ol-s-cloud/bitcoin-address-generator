@@ -55,7 +55,12 @@
 
 .price-lockup span {
   color: var(--muted);
-  font: 800 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font:
+    800 10px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
   letter-spacing: 0.12em;
 }
 
@@ -121,7 +126,8 @@
 
 .market-metrics {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 
@@ -130,7 +136,7 @@
   padding: 24px 20px;
 }
 
-.market-metrics article:first-child {
+.market-metrics article:nth-child(4n + 1) {
   padding-left: 0;
 }
 
@@ -138,15 +144,36 @@
   border-left: 1px solid var(--line);
 }
 
+.market-metrics article:nth-child(4n + 1) {
+  border-left: 0;
+}
+
+.market-metrics article:nth-child(n + 5) {
+  border-top: 1px solid var(--line);
+}
+
 .market-metrics span,
 .market-metrics strong {
   display: block;
 }
 
+.market-metrics strong.positive {
+  color: var(--accent);
+}
+
+.market-metrics strong.negative {
+  color: #d47c65;
+}
+
 .market-metrics span,
 .cobra-metric-grid span {
   color: var(--muted);
-  font: 800 9px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font:
+    800 9px/1.4 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
   letter-spacing: 0.1em;
 }
 
@@ -182,7 +209,12 @@
 
 .chart-heading span {
   color: var(--muted);
-  font: 800 9px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font:
+    800 9px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
   letter-spacing: 0.12em;
 }
 
@@ -225,6 +257,11 @@
   vector-effect: non-scaling-stroke;
 }
 
+.chart-hit {
+  fill: transparent;
+  pointer-events: all;
+}
+
 .chart-labels {
   display: flex;
   justify-content: space-between;
@@ -242,10 +279,118 @@
   font-size: 12px;
 }
 
+.network-streams,
 .cobra-metrics,
 .ecosystem-links {
   padding: 72px 0;
   border-top: 1px solid var(--line);
+}
+
+.stream-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.stream-heading p {
+  max-width: 420px;
+  margin: 0 0 34px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.stream-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.stream-panel {
+  min-width: 0;
+  padding: 0 24px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel);
+}
+
+.stream-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 70px;
+  border-bottom: 1px solid var(--line);
+}
+
+.stream-panel-head h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.stream-panel-head span {
+  color: var(--accent);
+  font:
+    800 9px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
+  letter-spacing: 0.1em;
+}
+
+.stream-list .chart-loading {
+  min-height: 260px;
+}
+
+.stream-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  min-height: 70px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.stream-row:last-child {
+  border-bottom: 0;
+}
+
+.stream-row strong,
+.stream-row small,
+.stream-row > span {
+  display: block;
+}
+
+.stream-row strong {
+  overflow: hidden;
+  font:
+    750 12px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stream-row small,
+.stream-row > span {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.stream-row small {
+  margin-top: 5px;
+}
+
+.stream-row > span {
+  text-align: right;
 }
 
 .section-heading h2 {
@@ -256,7 +401,7 @@
 
 .cobra-metric-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
@@ -326,7 +471,12 @@
 
 .address-row strong {
   overflow: hidden;
-  font: 700 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font:
+    700 12px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -378,7 +528,12 @@
 
 .ecosystem-grid span {
   color: var(--accent);
-  font: 800 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font:
+    800 10px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
 }
 
 .ecosystem-grid strong {
@@ -404,11 +559,13 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .market-metrics article:first-child {
+  .market-metrics article,
+  .market-metrics article:nth-child(4n + 1) {
     padding-left: 20px;
   }
 
-  .market-metrics article:nth-child(4) {
+  .market-metrics article:nth-child(3n + 1) {
+    padding-left: 0;
     border-left: 0;
   }
 
@@ -416,18 +573,24 @@
     border-top: 1px solid var(--line);
   }
 
-  .cobra-metric-grid,
+  .cobra-metric-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cobra-metric-grid article:nth-child(4) {
+    border-left: 0;
+  }
+
+  .cobra-metric-grid article:nth-child(n + 4) {
+    border-top: 1px solid var(--line);
+  }
+
   .ecosystem-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .cobra-metric-grid article:nth-child(3),
   .ecosystem-grid a:nth-child(3) {
     border-left: 0;
-  }
-
-  .cobra-metric-grid article:nth-child(n + 3) {
-    border-top: 1px solid var(--line);
   }
 
   .ecosystem-grid a:nth-child(3),
@@ -446,8 +609,18 @@
   }
 
   .explorer-hero-grid,
-  .chart-grid {
+  .chart-grid,
+  .stream-grid {
     grid-template-columns: 1fr;
+  }
+
+  .stream-heading {
+    display: block;
+  }
+
+  .stream-heading p {
+    margin: -18px 0 28px;
+    text-align: left;
   }
 
   .price-lockup {

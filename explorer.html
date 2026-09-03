@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="COBRA Explorer combines live Bitcoin mainnet market and network data with address activity created on this device."
+      content="COBRA Explorer combines live Bitcoin mainnet intelligence with persistent, opt-in public COBRA address activity."
     />
     <meta name="theme-color" content="#f7f9f7" />
     <title>COBRA Explorer — Bitcoin Mainnet</title>
@@ -42,13 +42,15 @@
 
     <main class="explorer-page">
       <section class="explorer-hero">
-        <div class="eyebrow"><span class="live-dot"></span> BITCOIN MAINNET</div>
+        <div class="eyebrow">
+          <span class="live-dot"></span> BITCOIN MAINNET
+        </div>
         <div class="explorer-hero-grid">
           <div>
             <h1>Network intelligence.<br /><span>Local authority.</span></h1>
             <p>
-              Follow Bitcoin market and network activity, then inspect the
-              public addresses created by COBRA on this device.
+              Follow Bitcoin market, mining, block and transaction activity,
+              then inspect public addresses voluntarily shared with COBRA.
             </p>
           </div>
           <div class="price-lockup">
@@ -74,48 +76,167 @@
       </section>
 
       <section class="market-metrics" aria-label="Live Bitcoin mainnet metrics">
-        <article><span>MARKET CAP</span><strong id="marketCap">—</strong></article>
-        <article><span>LATEST BLOCK</span><strong id="blockHeight">—</strong></article>
-        <article><span>TRANSACTIONS · 24H</span><strong id="transactions24h">—</strong></article>
-        <article><span>HASH RATE</span><strong id="hashRate">—</strong></article>
-        <article><span>AVERAGE BLOCK TIME</span><strong id="blockTime">—</strong></article>
+        <article><span>24H HIGH</span><strong id="high24h">—</strong></article>
+        <article><span>24H LOW</span><strong id="low24h">—</strong></article>
+        <article>
+          <span>24H CHANGE</span><strong id="change24h">—</strong>
+        </article>
+        <article>
+          <span>MARKET CAP</span><strong id="marketCap">—</strong>
+        </article>
+        <article>
+          <span>CIRCULATING SUPPLY</span
+          ><strong id="circulatingSupply">—</strong>
+        </article>
+        <article>
+          <span>ALGORITHM</span><strong id="algorithm">SHA-256</strong>
+        </article>
+        <article>
+          <span>LATEST HEIGHT</span><strong id="blockHeight">—</strong>
+        </article>
+        <article>
+          <span>BLOCK REWARD</span><strong id="blockReward">—</strong>
+        </article>
+        <article>
+          <span>DIFFICULTY</span><strong id="difficulty">—</strong>
+        </article>
+        <article>
+          <span>HASH RATE</span><strong id="hashRate">—</strong>
+        </article>
+        <article>
+          <span>AVERAGE BLOCK TIME</span><strong id="blockTime">—</strong>
+        </article>
+        <article>
+          <span>TRANSACTIONS · 24H</span><strong id="transactions24h">—</strong>
+        </article>
       </section>
 
       <section class="chart-grid" aria-label="Bitcoin charts">
         <article class="chart-panel">
           <div class="chart-heading">
-            <div><span>30 DAYS</span><h2>BTC market price</h2></div>
+            <div>
+              <span>30 DAYS</span>
+              <h2>BTC market price</h2>
+            </div>
             <strong id="priceChange">—</strong>
           </div>
-          <div class="chart-frame" id="priceChart" aria-label="30-day Bitcoin market price chart">
+          <div
+            class="chart-frame"
+            id="priceChart"
+            aria-label="30-day Bitcoin market price chart"
+          >
             <div class="chart-loading">Loading price history…</div>
           </div>
         </article>
         <article class="chart-panel">
           <div class="chart-heading">
-            <div><span>30 DAYS</span><h2>Confirmed transactions</h2></div>
+            <div>
+              <span>30 DAYS</span>
+              <h2>Confirmed transactions</h2>
+            </div>
             <strong id="txAverage">—</strong>
           </div>
-          <div class="chart-frame" id="txChart" aria-label="30-day confirmed Bitcoin transactions chart">
+          <div
+            class="chart-frame"
+            id="txChart"
+            aria-label="30-day confirmed Bitcoin transactions chart"
+          >
             <div class="chart-loading">Loading network activity…</div>
+          </div>
+        </article>
+        <article class="chart-panel">
+          <div class="chart-heading">
+            <div>
+              <span>30 DAYS</span>
+              <h2>Network hash rate</h2>
+            </div>
+            <strong id="hashAverage">—</strong>
+          </div>
+          <div
+            class="chart-frame"
+            id="hashRateChart"
+            aria-label="30-day Bitcoin network hash-rate chart"
+          >
+            <div class="chart-loading">Loading mining activity…</div>
+          </div>
+        </article>
+        <article class="chart-panel">
+          <div class="chart-heading">
+            <div>
+              <span>30 DAYS</span>
+              <h2>Transaction volume</h2>
+            </div>
+            <strong id="volumeAverage">—</strong>
+          </div>
+          <div
+            class="chart-frame"
+            id="volumeChart"
+            aria-label="30-day estimated Bitcoin transaction-volume chart"
+          >
+            <div class="chart-loading">Loading value movement…</div>
           </div>
         </article>
       </section>
 
+      <section class="network-streams" aria-labelledby="network-streams-title">
+        <div class="section-heading stream-heading">
+          <div>
+            <div class="eyebrow">LIVE MAINNET</div>
+            <h2 id="network-streams-title">Latest blocks and transactions.</h2>
+          </div>
+          <p id="mempoolSummary">Connecting to the Bitcoin mempool…</p>
+        </div>
+        <div class="stream-grid">
+          <article class="stream-panel">
+            <div class="stream-panel-head">
+              <h3>Latest blocks</h3>
+              <span>CONFIRMED</span>
+            </div>
+            <div id="latestBlocks" class="stream-list">
+              <div class="chart-loading">Loading blocks…</div>
+            </div>
+          </article>
+          <article class="stream-panel">
+            <div class="stream-panel-head">
+              <h3>Latest transactions</h3>
+              <span>MEMPOOL</span>
+            </div>
+            <div id="latestTransactions" class="stream-list">
+              <div class="chart-loading">Loading transactions…</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="cobra-metrics" aria-labelledby="cobra-metrics-title">
         <div class="section-heading">
-          <div class="eyebrow">COBRA METRICS</div>
-          <h2 id="cobra-metrics-title">Activity on this device.</h2>
+          <div class="eyebrow" id="registryStatus">
+            COBRA METRICS · CONNECTING
+          </div>
+          <h2 id="cobra-metrics-title">Global COBRA activity.</h2>
         </div>
         <div class="cobra-metric-grid">
-          <article><span>COBRA ADDRESSES CREATED</span><strong id="cobraAddressCount">0</strong></article>
-          <article><span>PRIVATE / DEVICE-ONLY</span><strong id="cobraPrivateCount">0</strong></article>
-          <article><span>SHARED PUBLICLY</span><strong id="cobraPublicCount">0</strong></article>
-          <article><span>LAST CREATED</span><strong id="cobraLastCreated">—</strong></article>
+          <article>
+            <span>COBRA ADDRESSES CREATED</span
+            ><strong id="cobraAddressCount">0</strong>
+          </article>
+          <article>
+            <span>PRIVATE / DEVICE-ONLY</span
+            ><strong id="cobraPrivateCount">0</strong>
+          </article>
+          <article>
+            <span>SHARED PUBLICLY</span><strong id="cobraPublicCount">0</strong>
+          </article>
+          <article>
+            <span>GLOBAL POLL VOTES</span><strong id="cobraVoteCount">0</strong>
+          </article>
+          <article>
+            <span>LAST CREATED</span><strong id="cobraLastCreated">—</strong>
+          </article>
         </div>
         <div class="local-addresses">
           <div class="local-addresses-head">
-            <h3>Recent COBRA addresses</h3>
+            <h3>Recently shared COBRA addresses</h3>
             <a href="/#tools">Create an address →</a>
           </div>
           <div id="cobraAddressList" class="address-list"></div>
@@ -128,23 +249,58 @@
           <h2 id="ecosystem-title">Explore the system.</h2>
         </div>
         <div class="ecosystem-grid">
-          <a href="/offline.html"><span>01</span><strong>Offline</strong><small>Operate beyond a continuous network connection.</small></a>
-          <a href="/cli.html"><span>02</span><strong>CLI</strong><small>Run COBRA from a Python command line.</small></a>
-          <a href="/research.html"><span>03</span><strong>Research</strong><small>Cryptography, resilience, privacy and value.</small></a>
-          <a href="/#developers"><span>04</span><strong>Build on COBRA</strong><small>Bring a blockchain or cryptographic project.</small></a>
+          <a href="/offline.html"
+            ><span>01</span><strong>Offline</strong
+            ><small>Operate beyond a continuous network connection.</small></a
+          >
+          <a href="/cli.html"
+            ><span>02</span><strong>CLI</strong
+            ><small>Run COBRA from a Python command line.</small></a
+          >
+          <a href="/research.html"
+            ><span>03</span><strong>Research</strong
+            ><small>Cryptography, resilience, privacy and value.</small></a
+          >
+          <a href="/#developers"
+            ><span>04</span><strong>Build on COBRA</strong
+            ><small>Bring a blockchain or cryptographic project.</small></a
+          >
         </div>
       </section>
 
       <p class="data-credit">
         Bitcoin market and network data from
-        <a href="https://www.blockchain.com/explorer/assets/btc" target="_blank" rel="noopener noreferrer">Blockchain.com Explorer ↗</a>
+        <a
+          href="https://www.blockchain.com/explorer/assets/btc"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Blockchain.com Explorer ↗</a
+        >
+        and
+        <a
+          href="https://mempool.space/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >mempool.space ↗</a
+        >
       </p>
     </main>
 
     <footer>
-      <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
-      <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
-      <div class="footer-meta">First roll out 2023.<br />Last Updated 2026<br />v1.0.0.1</div>
+      <a
+        class="footer-brand"
+        href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+        target="_blank"
+        rel="noopener noreferrer"
+        >COBRA by ols-cloud</a
+      >
+      <div class="footer-sovereignty">
+        <strong>Cryptographic sovereignty.</strong
+        ><span>Your keys. Your mathematics. Your authority.</span>
+      </div>
+      <div class="footer-meta">
+        First roll out 2023.<br />Last Updated 2026<br />v1.0.0.1
+      </div>
     </footer>
     <script src="/site-ui.js" defer></script>
     <script src="/surface-i18n.js" defer></script>

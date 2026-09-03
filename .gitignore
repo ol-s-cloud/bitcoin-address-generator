@@ -44,5 +44,8 @@ htmlcov/
 .tox/
 .pytest_cache/
 
+# Node dependencies
+node_modules/
+
 # Logs
 *.log

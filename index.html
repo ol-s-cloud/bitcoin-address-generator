@@ -64,10 +64,10 @@
           <h1>Create randomness.<br /><span>Derive addresses.</span></h1>
           <p>
             COBRA is open-source cryptographic infrastructure for creating
-            secure random values and deriving Bitcoin mainnet addresses
-            locally. Use the browser engine or Python toolkit to build address
-            creation into payment and autonomous-system workflows without
-            surrendering key authority.
+            secure random values and deriving Bitcoin mainnet addresses locally.
+            Use the browser engine or Python toolkit to build address creation
+            into payment and autonomous-system workflows without surrendering
+            key authority.
           </p>
           <div class="chips">
             <span>Local-first secrets</span><span>secp256k1</span
@@ -118,19 +118,30 @@
           account, custodian or central key issuer. Connect compatible wallet
           software when you need to inspect or move onchain value.
         </p>
-        <a class="inline-action" href="/offline.html">Explore COBRA Offline →</a>
+        <a class="inline-action" href="/offline.html"
+          >Explore COBRA Offline →</a
+        >
       </section>
-      <section class="sovereignty" id="cobra-plus" aria-labelledby="sovereignty-title">
+      <section
+        class="sovereignty"
+        id="cobra-plus"
+        aria-labelledby="sovereignty-title"
+      >
         <div>
           <div class="eyebrow">COBRA+</div>
-          <h2 id="sovereignty-title">Your numbers. Your addresses. Your authority.</h2>
+          <h2 id="sovereignty-title">
+            Your numbers. Your addresses. Your authority.
+          </h2>
           <p>
             No KYC. No COBRA account. No custodian. No centralized key issuer.
             Address creation stays on your device, and Explorer visibility is
             your choice.
           </p>
         </div>
-        <div class="sovereignty-points" aria-label="COBRA sovereignty principles">
+        <div
+          class="sovereignty-points"
+          aria-label="COBRA sovereignty principles"
+        >
           <span>LOCAL CREATION</span><span>PRIVATE BY DEFAULT</span
           ><span>OPT-IN EXPLORER</span><span>USER-CONTROLLED KEYS</span>
         </div>
@@ -243,7 +254,7 @@
             <label class="explorer-choice" for="publishToExplorer">
               <input id="publishToExplorer" type="checkbox" />
               <span>
-                <strong>Add this public address to my local COBRA Explorer</strong>
+                <strong>Add this public address to COBRA Explorer</strong>
                 <small
                   >Off by default. Private keys and WIFs never enter
                   Explorer.</small
@@ -314,13 +325,17 @@
           <div class="live-title">
             <span class="live-dot"></span>
             <div>
-              <strong>COBRA LIVE</strong><small>Activity on this device</small>
+              <strong>COBRA LIVE</strong
+              ><small id="liveScope">Connecting to the public registry</small>
             </div>
           </div>
           <div class="metric-grid">
-            <div><strong id="metricTotal">0</strong><span>in Explorer</span></div>
             <div>
-              <strong id="metricSession">0</strong><span>added this session</span>
+              <strong id="metricTotal">0</strong><span>public addresses</span>
+            </div>
+            <div>
+              <strong id="metricSession">0</strong
+              ><span>created this session</span>
             </div>
           </div>
           <div id="liveActivity" class="live-activity">
@@ -359,8 +374,8 @@
         </div>
         <div class="explain-copy">
           <p>
-            COBRA follows the Bitcoin derivation method: valid 256-bit scalar
-            → secp256k1 public key → SHA-256 → RIPEMD-160 → Bitcoin mainnet
+            COBRA follows the Bitcoin derivation method: valid 256-bit scalar →
+            secp256k1 public key → SHA-256 → RIPEMD-160 → Bitcoin mainnet
             version byte → double-SHA-256 checksum → Base58Check address.
           </p>
           <p>
@@ -475,7 +490,9 @@ SHA-256 → RIPEMD-160 → version byte
       </section>
       <section class="research-frontier" aria-labelledby="frontier-title">
         <div class="eyebrow">COBRA RESEARCH FRONTIER</div>
-        <h2 id="frontier-title">Cryptography, intelligent systems and the future of value.</h2>
+        <h2 id="frontier-title">
+          Cryptography, intelligent systems and the future of value.
+        </h2>
         <p class="frontier-intro">
           COBRA is an open research surface for developers and researchers
           working on cryptographic sovereignty, resilient infrastructure and
@@ -485,25 +502,39 @@ SHA-256 → RIPEMD-160 → version byte
           <article>
             <span>01</span>
             <h3>Post-quantum security</h3>
-            <p>Signature agility and migration paths for assets that must survive cryptographic change.</p>
+            <p>
+              Signature agility and migration paths for assets that must survive
+              cryptographic change.
+            </p>
           </article>
           <article>
             <span>02</span>
             <h3>Privacy and sovereignty</h3>
-            <p>Address reuse, metadata exposure, selective disclosure and user-controlled authorization.</p>
+            <p>
+              Address reuse, metadata exposure, selective disclosure and
+              user-controlled authorization.
+            </p>
           </article>
           <article>
             <span>03</span>
             <h3>Autonomous systems</h3>
-            <p>Machines that can observe and prepare actions while keys remain inside a trusted boundary.</p>
+            <p>
+              Machines that can observe and prepare actions while keys remain
+              inside a trusted boundary.
+            </p>
           </article>
           <article>
             <span>04</span>
             <h3>Resilient value</h3>
-            <p>Offline operation, recovery architecture and the preservation of digital claims across time.</p>
+            <p>
+              Offline operation, recovery architecture and the preservation of
+              digital claims across time.
+            </p>
           </article>
         </div>
-        <a class="inline-action" href="/research.html">Open the Research Hub →</a>
+        <a class="inline-action" href="/research.html"
+          >Open the Research Hub →</a
+        >
       </section>
       <section class="comparison">
         <div class="eyebrow">TWO INTERFACES, ONE METHOD</div>
@@ -590,8 +621,8 @@ SHA-256 → RIPEMD-160 → version byte
             </div>
             <h3>DOJ: Won’t pursue coders merely for writing code</h3>
             <p class="news-summary">
-              The Criminal Division says writing code without criminal intent
-              is not a crime, drawing an important boundary for developers of
+              The Criminal Division says writing code without criminal intent is
+              not a crime, drawing an important boundary for developers of
               neutral tools.
             </p>
             <span class="news-open">Read the DOJ statement ↗</span>
@@ -615,34 +646,48 @@ SHA-256 → RIPEMD-160 → version byte
           </a>
         </div>
         <div class="news-live-head">
-          <div><span class="live-dot"></span><strong>LIVE ECOSYSTEM FEED</strong></div>
+          <div>
+            <span class="live-dot"></span><strong>LIVE ECOSYSTEM FEED</strong>
+          </div>
           <span id="newsUpdated">Loading RSS…</span>
         </div>
         <div id="newsLatest" class="news-latest" aria-live="polite">
           <div class="news-loading">Fetching the latest headline…</div>
         </div>
         <details class="news-more">
-          <summary>More live headlines from across the ecosystem <span aria-hidden="true">↓</span></summary>
+          <summary>
+            More live headlines from across the ecosystem
+            <span aria-hidden="true">↓</span>
+          </summary>
           <div class="news-rail-controls" aria-label="News navigation">
-            <button type="button" id="newsPrev" aria-label="Previous headlines">←</button>
-            <button type="button" id="newsNext" aria-label="Next headlines">→</button>
+            <button type="button" id="newsPrev" aria-label="Previous headlines">
+              ←
+            </button>
+            <button type="button" id="newsNext" aria-label="Next headlines">
+              →
+            </button>
           </div>
           <div id="newsRail" class="news-rail"></div>
         </details>
       </section>
-      <section class="network-poll" id="network-poll" aria-labelledby="network-poll-title">
+      <section
+        class="network-poll"
+        id="network-poll"
+        aria-labelledby="network-poll-title"
+      >
         <div class="poll-copy">
           <div class="eyebrow">COBRA // NEXT NETWORK</div>
           <h2 id="network-poll-title">What blockchain would you like next?</h2>
           <p>Vote, request or suggest the next blockchain integration.</p>
         </div>
         <div class="poll-meta">
-          <span>Your choice</span><strong id="networkPollState">No selection</strong>
+          <span>Global participation</span
+          ><strong id="networkPollState">Connecting…</strong>
         </div>
         <div class="poll-options network-options" id="networkPollOptions"></div>
         <div class="poll-foot">
           <p class="poll-note" id="networkPollNote">
-            Select one network. Your preference is saved on this device.
+            Connecting to global voting…
           </p>
           <a
             href="https://github.com/ol-s-cloud/bitcoin-address-generator/issues/new?title=COBRA%20next%20network%20request&body=Network%3A%20%0A%0AWhy%20COBRA%20should%20support%20it%3A%20"
@@ -655,23 +700,26 @@ SHA-256 → RIPEMD-160 → version byte
       <section class="activity" id="log">
         <div class="activity-head">
           <div>
-            <div class="eyebrow">YOUR COBRA GENERATION LOG</div>
+            <div class="eyebrow">YOUR COBRA CREATION LOG</div>
             <h2>Your chosen public addresses. Private secrets stay private.</h2>
             <p>
-              When you opt in, this browser keeps a local log of the public
-              address and links it to Blockchain.com Explorer. Private keys and
-              WIFs are never placed in the log.
+              When you opt in, COBRA publishes only the Bitcoin address to the
+              shared Explorer and keeps a copy in this browser. Private keys,
+              WIFs and randomness never enter the registry.
             </p>
           </div>
-          <button class="secondary" id="clearLog">Clear local log</button>
+          <button class="secondary" id="clearLog">
+            Clear this device’s log
+          </button>
         </div>
         <div id="activityList" class="activity-list">
           <div class="empty-state">
-            No addresses have been added to your local Explorer.
+            No public addresses have been added from this device.
           </div>
         </div>
         <a class="registry-note" href="/explorer.html">
-          Open COBRA Explorer for live Bitcoin network data and your device activity →
+          Open COBRA Explorer for live Bitcoin network data and your device
+          activity →
         </a>
       </section>
       <section class="references">
@@ -746,7 +794,9 @@ SHA-256 → RIPEMD-160 → version byte
             where COBRA could support their work.
           </p>
         </div>
-        <pre class="developer-terminal"><code><span>$</span> pip install git+https://github.com/ol-s-cloud/bitcoin-address-generator.git
+        <pre
+          class="developer-terminal"
+        ><code><span>$</span> pip install git+https://github.com/ol-s-cloud/bitcoin-address-generator.git
 <span>$</span> cobra status
 <span>$</span> cobra generate --network mainnet</code></pre>
         <div class="developer-actions">
@@ -766,7 +816,9 @@ SHA-256 → RIPEMD-160 → version byte
       <section class="agent-systems" id="agents" aria-labelledby="agents-title">
         <div class="agent-copy">
           <div class="eyebrow">COBRA × AI AGENTS</div>
-          <h2 id="agents-title">Machine-speed workflows. Controlled authority.</h2>
+          <h2 id="agents-title">
+            Machine-speed workflows. Controlled authority.
+          </h2>
           <p>
             COBRA’s local randomness and address-derivation primitives can be
             integrated into AI agents, robots and physical-intelligence systems
@@ -798,15 +850,19 @@ SHA-256 → RIPEMD-160 → version byte
         <div class="poll-copy">
           <div class="eyebrow">SHAPE COBRA</div>
           <h2 id="feature-poll-title">What should COBRA roll out next?</h2>
-          <p>Choose the capability that would create the most value for your work.</p>
+          <p>
+            Choose the capability that would create the most value for your
+            work.
+          </p>
         </div>
         <div class="poll-meta">
-          <span>Your choice</span><strong id="featurePollState">No selection</strong>
+          <span>Global participation</span
+          ><strong id="featurePollState">Connecting…</strong>
         </div>
         <div class="poll-options feature-options" id="featurePollOptions"></div>
         <div class="poll-foot">
           <p class="poll-note" id="featurePollNote">
-            Select one feature. Your preference is saved on this device.
+            Connecting to global voting…
           </p>
           <a
             href="https://github.com/ol-s-cloud/bitcoin-address-generator/issues/new?title=COBRA%20feature%20request&body=Feature%3A%20%0A%0AHow%20you%20would%20use%20it%3A%20"
@@ -844,9 +900,20 @@ SHA-256 → RIPEMD-160 → version byte
       </section>
     </main>
     <footer>
-      <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
-      <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
-      <div class="footer-meta">First roll out 2023.<br />Last Updated 2026<br />v1.0.0.1</div>
+      <a
+        class="footer-brand"
+        href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+        target="_blank"
+        rel="noopener noreferrer"
+        >COBRA by ols-cloud</a
+      >
+      <div class="footer-sovereignty">
+        <strong>Cryptographic sovereignty.</strong
+        ><span>Your keys. Your mathematics. Your authority.</span>
+      </div>
+      <div class="footer-meta">
+        First roll out 2023.<br />Last Updated 2026<br />v1.0.0.1
+      </div>
     </footer>
     <script src="/site-ui.js" defer></script>
     <script src="/surface-i18n.js" defer></script>

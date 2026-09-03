@@ -22,11 +22,13 @@ const randomType = $("randomType"),
   liveActivity = $("liveActivity"),
   metricTotal = $("metricTotal"),
   metricSession = $("metricSession"),
+  liveScope = $("liveScope"),
   publishToExplorer = $("publishToExplorer"),
   explorerChoiceStatus = $("explorerChoiceStatus");
 let lastRandomHex = "",
   currentWallet = null,
-  sessionGenerated = 0;
+  sessionGenerated = 0,
+  registryConnected = false;
 const CURVE_N = BigInt(
     "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141",
   ),
@@ -51,19 +53,17 @@ for (const tab of tabs)
 randomType.addEventListener("change", syncRandomFields);
 $("generateRandom").addEventListener("click", generateRandom);
 $("generateBitcoin").addEventListener("click", () =>
-  deriveAndRender(generateValidPrivateKey(), true),
+  deriveAndRender(generateValidPrivateKey(), true, "created"),
 );
 $("deriveAddress").addEventListener("click", () =>
-  deriveAndRender(normalizePrivateKey(privateKeyInput.value), true),
+  deriveAndRender(normalizePrivateKey(privateKeyInput.value), true, "derived"),
 );
 $("useRandomAsKey").addEventListener("click", () => {
   if (!lastRandomHex || lastRandomHex.length !== 64) {
-    alert(
-      "Create a 32-byte hexadecimal value in Create Randomness first.",
-    );
+    alert("Create a 32-byte hexadecimal value in Create Randomness first.");
     return;
   }
-  deriveAndRender(normalizePrivateKey(lastRandomHex), true);
+  deriveAndRender(normalizePrivateKey(lastRandomHex), true, "random-derived");
 });
 $("downloadRecovery").addEventListener("click", downloadRecoveryKit);
 if (publishToExplorer) {
@@ -124,6 +124,7 @@ $("shareButton").addEventListener("click", async () => {
 });
 syncRandomFields();
 renderLog();
+loadRegistryState();
 setInterval(renderRelativeTimes, 1000);
 function syncRandomFields() {
   const type = randomType.value;
@@ -201,7 +202,11 @@ function normalizePrivateKey(value) {
   }
   return clean;
 }
-function deriveAndRender(privateHex, logAddress = false) {
+function deriveAndRender(
+  privateHex,
+  logAddress = false,
+  creationType = "derived",
+) {
   if (!privateHex) return;
   try {
     const privateBytes = hexToBytes(privateHex),
@@ -235,15 +240,23 @@ function deriveAndRender(privateHex, logAddress = false) {
     explorerLink.classList.remove("disabled");
     if (logAddress && publishToExplorer?.checked) {
       const added = addPublicLog(address);
-      if (added) sessionGenerated++;
       if (explorerChoiceStatus) {
         explorerChoiceStatus.textContent = added
-          ? "Public address added to your local COBRA Explorer."
-          : "This public address is already in your local COBRA Explorer.";
+          ? "Address created. Adding its public address to COBRA Explorer…"
+          : "Address created. Confirming its COBRA Explorer listing…";
       }
     } else if (logAddress && explorerChoiceStatus) {
       explorerChoiceStatus.textContent =
-        "Address created locally and kept out of your COBRA Explorer.";
+        "Address created locally and kept out of COBRA Explorer.";
+    }
+    if (logAddress) {
+      sessionGenerated++;
+      metricSession.textContent = String(sessionGenerated);
+      recordCreation({
+        address,
+        creationType,
+        isPublic: Boolean(publishToExplorer?.checked),
+      });
     }
     renderLog();
   } catch (error) {
@@ -274,18 +287,15 @@ function getLog() {
 function syncExplorerPreference() {
   if (!publishToExplorer || !explorerChoiceStatus) return;
   explorerChoiceStatus.textContent = publishToExplorer.checked
-    ? "Explorer listing is on for the next address you create or derive."
+    ? "Explorer listing is on for the next public address you create or derive."
     : "Explorer listing is off.";
 }
 function renderLog() {
   const log = getLog();
-  metricTotal.textContent = String(log.length);
-  metricSession.textContent = String(sessionGenerated);
   if (!log.length) {
     activityList.innerHTML =
-      '<div class="empty-state">No addresses have been added to your local Explorer.</div>';
-    liveActivity.innerHTML =
-      '<div class="empty-state">Opt in when creating an address to see it here.</div>';
+      '<div class="empty-state">No public addresses have been added from this device.</div>';
+    if (!registryConnected) renderRegistryFallback();
     return;
   }
   activityList.innerHTML = log
@@ -294,6 +304,87 @@ function renderLog() {
         `<article><div><strong>${shorten(item.address)}</strong><span><time data-time="${item.createdAt}">${relativeTime(item.createdAt)}</time> · ${item.type}</span></div><a href="${explorerUrl(item.address)}" target="_blank" rel="noopener noreferrer">Blockchain.com ↗</a></article>`,
     )
     .join("");
+  if (!registryConnected) renderRegistryFallback();
+}
+async function loadRegistryState() {
+  try {
+    const response = await fetch("/api/registry?limit=8", {
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
+    });
+    if (!response.ok) throw new Error("Registry unavailable");
+    renderRegistryState(await response.json());
+  } catch {
+    renderRegistryFallback();
+  }
+}
+async function recordCreation({ address, creationType, isPublic }) {
+  const payload = {
+    visibility: isPublic ? "public" : "private",
+    creationType,
+    addressType: "p2pkh",
+    sourceType: "browser",
+    cobraVersion: "v1.0.0.1",
+  };
+  if (isPublic) payload.address = address;
+
+  try {
+    const response = await fetch("/api/registry", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error("Registry unavailable");
+    const state = await response.json();
+    renderRegistryState(state);
+    if (explorerChoiceStatus) {
+      explorerChoiceStatus.textContent = isPublic
+        ? "Public address added to the global COBRA Explorer."
+        : "Address kept private. The global creation total was updated without the address.";
+    }
+  } catch {
+    if (explorerChoiceStatus) {
+      explorerChoiceStatus.textContent = isPublic
+        ? "Address created locally; Explorer sync is temporarily unavailable."
+        : "Address created locally; global metrics are temporarily unavailable.";
+    }
+  }
+}
+function renderRegistryState(state) {
+  registryConnected = true;
+  const publicCount = Number(state?.metrics?.publicAddresses || 0);
+  metricTotal.textContent = publicCount.toLocaleString();
+  if (liveScope) liveScope.textContent = "Global public registry";
+  const recent = Array.isArray(state?.recentAddresses)
+    ? state.recentAddresses
+    : [];
+  if (!recent.length) {
+    liveActivity.innerHTML =
+      '<div class="empty-state">No public addresses have been added yet.</div>';
+    return;
+  }
+  liveActivity.innerHTML = recent
+    .slice(0, 8)
+    .map(
+      (item) =>
+        `<article><span class="pulse"></span><div><strong>${shorten(item.address)}</strong><small>shared <time data-time="${item.published_at}">${relativeTime(item.published_at)}</time></small></div><a href="${explorerUrl(item.address)}" target="_blank" rel="noopener noreferrer" aria-label="Open address on Blockchain.com Explorer">↗</a></article>`,
+    )
+    .join("");
+}
+function renderRegistryFallback() {
+  registryConnected = false;
+  const log = getLog();
+  metricTotal.textContent = String(log.length);
+  if (liveScope) liveScope.textContent = "Activity on this device";
+  if (!log.length) {
+    liveActivity.innerHTML =
+      '<div class="empty-state">Opt in when creating an address to see it here.</div>';
+    return;
+  }
   liveActivity.innerHTML = log
     .slice(0, 8)
     .map(
