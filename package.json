@@ -1,0 +1,25 @@
+{
+  "name": "bitcoin-address-generator",
+  "version": "1.0.0",
+  "description": "COBRA — Cryptographic Oracle for Bytes, Randomness & Addresses",
+  "type": "module",
+  "scripts": {
+    "test": "python -m pytest tests/",
+    "lint": "echo 'No linter configured for HTML/JS project'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ol-s-cloud/bitcoin-address-generator"
+  },
+  "keywords": [
+    "bitcoin",
+    "cryptocurrency",
+    "address-generator",
+    "cryptography"
+  ],
+  "author": "ol-s-cloud",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}
