@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Install and use COBRA CLI 0.3.0 for local randomness, testnet-first P2PKH generation, derivation and validation."
+      content="Install and use COBRA CLI 0.3.0 for local randomness, testnet-first P2PKH address creation, derivation and validation."
     />
     <meta name="theme-color" content="#f7f9f7" />
     <title>COBRA CLI — Experimental Developer Guide</title>
@@ -46,7 +46,7 @@
         <h1>COBRA from<br />your terminal.</h1>
         <p>
           The CLI provides local randomness, compressed secp256k1 public-key
-          derivation, legacy P2PKH address generation and checksum validation.
+          derivation, legacy P2PKH address creation and checksum validation.
           Testnet is the default network.
         </p>
         <nav class="content-toc" aria-label="On this page">
@@ -115,7 +115,7 @@ cobra generate --network mainnet</code></pre>
         </div>
         <div class="doc-body">
           <p>
-            Generated private keys are hidden by default. Reveal or save one
+            New private keys are hidden by default. Reveal or save one
             only in a trusted local environment.
           </p>
           <pre class="term"><code>cobra generate --network testnet --show-secret

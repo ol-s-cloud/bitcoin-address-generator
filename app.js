@@ -59,7 +59,7 @@ $("deriveAddress").addEventListener("click", () =>
 $("useRandomAsKey").addEventListener("click", () => {
   if (!lastRandomHex || lastRandomHex.length !== 64) {
     alert(
-      "Generate a 32-byte hexadecimal value in the Random Generator first.",
+      "Create a 32-byte hexadecimal value in Create Randomness first.",
     );
     return;
   }
@@ -298,7 +298,7 @@ function renderLog() {
     .slice(0, 8)
     .map(
       (item) =>
-        `<article><span class="pulse"></span><div><strong>${shorten(item.address)}</strong><small>generated <time data-time="${item.createdAt}">${relativeTime(item.createdAt)}</time></small></div><a href="${explorerUrl(item.address)}" target="_blank" rel="noopener noreferrer" aria-label="Open address on Blockchain.com Explorer">↗</a></article>`,
+        `<article><span class="pulse"></span><div><strong>${shorten(item.address)}</strong><small>created <time data-time="${item.createdAt}">${relativeTime(item.createdAt)}</time></small></div><a href="${explorerUrl(item.address)}" target="_blank" rel="noopener noreferrer" aria-label="Open address on Blockchain.com Explorer">↗</a></article>`,
     )
     .join("");
 }
@@ -326,7 +326,7 @@ function shorten(v) {
 }
 function downloadRecoveryKit() {
   if (!currentWallet) {
-    alert("Generate or derive an address first.");
+    alert("Create or derive an address first.");
     return;
   }
   const text = `COBRA RECOVERY KIT\nSecret material — store securely\nCreated: ${currentWallet.createdAt}\nAddress type: ${currentWallet.type}\n\nBITCOIN ADDRESS\n${currentWallet.address}\n\nPRIVATE KEY — SECRET\n${currentWallet.privateKey}\n\nWIF — SECRET\n${currentWallet.wif}\n\nCOMPRESSED PUBLIC KEY\n${currentWallet.publicKey}\n\nHASH160\n${currentWallet.hash160}\n\nExplorer\n${explorerUrl(currentWallet.address)}\n\nWARNING\nAnyone with the private key or WIF can potentially control funds associated with this address. COBRA does not retain a backup. Store this file securely.\n`;

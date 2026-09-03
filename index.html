@@ -151,7 +151,7 @@
               role="tab"
               aria-selected="true"
             >
-              Random Generator</button
+              Create Randomness</button
             ><button
               class="tab"
               data-tab="bitcoin"
@@ -164,7 +164,7 @@
           <div class="panel active" id="panel-random" role="tabpanel">
             <div class="panel-copy">
               <div class="eyebrow">ORACLE 01</div>
-              <h2>Cryptographic random generator</h2>
+              <h2>Create cryptographic randomness</h2>
               <p>
                 Create integers, hexadecimal strings, raw bytes and UUIDs from
                 your browser's cryptographically secure random source.
@@ -195,22 +195,22 @@
               </div>
             </div>
             <button class="primary" id="generateRandom">
-              Generate random value
+              Create random value
             </button>
             <div class="output-block">
               <div class="output-head">
                 <span>OUTPUT</span
                 ><button class="copy" data-copy="randomOutput">Copy</button>
               </div>
-              <pre id="randomOutput">Click “Generate random value”.</pre>
+              <pre id="randomOutput">Click “Create random value”.</pre>
             </div>
           </div>
           <div class="panel" id="panel-bitcoin" role="tabpanel" hidden>
             <div class="panel-copy">
               <div class="eyebrow">ORACLE 02</div>
-              <h2>Bitcoin address generator</h2>
+              <h2>Create Bitcoin address</h2>
               <p>
-                Generate a fresh 256-bit private key locally or supply a valid
+                Create a fresh 256-bit private key locally or supply a valid
                 hexadecimal key and inspect every stage of legacy P2PKH
                 derivation.
               </p>
@@ -224,7 +224,7 @@
             </div>
             <div class="lab-actions">
               <button class="primary" id="generateBitcoin">
-                Generate Bitcoin address</button
+                Create Bitcoin address</button
               ><button class="secondary" id="useRandomAsKey">
                 Use last 32-byte random hex
               </button>
@@ -236,7 +236,7 @@
                   id="privateKeyInput"
                   spellcheck="false"
                   maxlength="64"
-                  placeholder="Generate or paste a 32-byte hexadecimal value"
+                  placeholder="Create or paste a 32-byte hexadecimal value"
                 /><button id="deriveAddress">Derive</button>
               </div></label
             >
@@ -537,7 +537,7 @@ SHA-256 → RIPEMD-160 → version byte
         <div class="eyebrow">WHERE DOES THE ADDRESS GO?</div>
         <h2>Nowhere. Until someone pays it.</h2>
         <p>
-          Generating an address does not register an account with COBRA or
+          Creating an address does not register an account with COBRA or
           Bitcoin. If bitcoin is later sent to it, the transaction/output
           becomes visible on the Bitcoin network. Control comes from the
           corresponding private key.

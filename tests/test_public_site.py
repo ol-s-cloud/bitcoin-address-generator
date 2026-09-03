@@ -101,6 +101,11 @@ def test_home_restores_public_research_news_poll_and_build_surfaces():
     assert 'src="/assets/cobra-hero.jpg"' in home
     assert "Create randomness." in home
     assert "Derive addresses." in home
+    assert "Create cryptographic randomness" in home
+    assert "Create Bitcoin address" in home
+    assert "Cryptographic random generator" not in home
+    assert "Bitcoin address generator" not in home
+    assert "Generate random value" not in home
     assert "playground" not in home.lower()
     assert 'class="research-frontier"' in home
     assert 'id="newsFeatured"' in home

@@ -45,7 +45,7 @@
         <span class="status-label available">Documentation</span>
         <h1>Use COBRA.<br />Know the boundary.</h1>
         <p>
-          Generate cryptographic randomness, derive Bitcoin addresses, work
+          Create cryptographic randomness, derive Bitcoin addresses, work
           from the command line and prepare an offline COBRA environment.
         </p>
         <nav class="content-toc" aria-label="On this page">
@@ -111,14 +111,14 @@
           <h2>Browser tools</h2>
         </div>
         <div class="doc-body">
-          <h3>Generate a random value</h3>
+          <h3>Create cryptographic randomness</h3>
           <ol class="steps">
-            <li>Open <a href="/#tools">Home → Random Generator</a>.</li>
+            <li>Open <a href="/#tools">Home → Create Randomness</a>.</li>
             <li>
               Choose an integer, hexadecimal string, byte sequence or UUID.
             </li>
             <li>Set the requested length or numeric range.</li>
-            <li>Select <strong>Generate random value</strong>.</li>
+            <li>Select <strong>Create random value</strong>.</li>
           </ol>
           <p>
             The browser uses <code>crypto.getRandomValues</code>. Human-chosen
@@ -129,7 +129,7 @@
           <ol class="steps">
             <li>Open <a href="/#tools">Home → Bitcoin Address Lab</a>.</li>
             <li>
-              Generate a fresh address example, reuse the last 32-byte
+              Create a fresh address example, reuse the last 32-byte
               hexadecimal value, or enter a valid 64-character private key.
             </li>
             <li>
@@ -190,7 +190,7 @@ cobra validate &lt;address&gt; --network testnet</code></pre>
         </div>
         <div class="doc-body">
           <p>
-            The current Offline Lab generates a 256-bit random value using the
+            The current Offline Lab creates a 256-bit random value using the
             browser cryptographic API. It does not yet include a fully packaged,
             dependency-free Bitcoin derivation or signing engine.
           </p>
@@ -199,7 +199,7 @@ cobra validate &lt;address&gt; --network testnet</code></pre>
               Save a complete, verified COBRA offline release on the target
               machine.
             </li>
-            <li>Disconnect the machine before generating secret material.</li>
+            <li>Disconnect the machine before creating secret material.</li>
             <li>
               Keep secrets on the offline machine; move only public addresses or
               verified transaction data across the boundary.
@@ -217,7 +217,7 @@ cobra validate &lt;address&gt; --network testnet</code></pre>
         <div class="doc-body">
           <p>
             COBRA Explorer shows live Bitcoin mainnet price, market, block,
-            transaction and hash-rate data alongside addresses generated on
+            transaction and hash-rate data alongside addresses created on
             the current device.
           </p>
           <p><a href="/explorer.html">Open COBRA Explorer →</a></p>
