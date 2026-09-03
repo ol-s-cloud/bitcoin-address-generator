@@ -112,7 +112,12 @@ def test_home_restores_public_research_news_poll_and_build_surfaces():
     assert 'class="news-more"' in home
     assert 'id="network-poll"' in home
     assert "What blockchain would you like next?" in home
-    for network in ("Ethereum", "Solana", "Litecoin", "Other / Suggest"):
+    for network in (
+        "Ethereum (EVM Ecosystem)",
+        "Solana",
+        "Litecoin",
+        "Other / Suggest",
+    ):
         assert f'"{network}"' in home_script
     assert 'class="developer-terminal"' in home
     assert "Tell us about your project" in home
@@ -124,6 +129,7 @@ def test_home_restores_public_research_news_poll_and_build_surfaces():
         "COBRA cross-border payments",
         "Offline functionality",
         "Public API & SDK",
+        "COBRA Mining & Intelligence",
     ):
         assert f'"{feature}"' in home_script
     assert "COBRA × AI AGENTS" in home
@@ -158,6 +164,7 @@ def test_requested_footer_is_consistent():
         assert "Your keys. Your mathematics. Your authority." in source
         assert "First roll out 2023." in source
         assert "Last Updated 2026" in source
+        assert "v1.0.0.1" in source
 
 
 def test_language_switcher_supports_six_languages():

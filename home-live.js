@@ -127,7 +127,12 @@
 
   initialisePoll({
     key: "cobra-next-network-poll-v1",
-    options: ["Ethereum", "Solana", "Litecoin", "Other / Suggest"],
+    options: [
+      "Ethereum (EVM Ecosystem)",
+      "Solana",
+      "Litecoin",
+      "Other / Suggest",
+    ],
     targetId: "networkPollOptions",
     stateId: "networkPollState",
     noteId: "networkPollNote",
@@ -142,6 +147,7 @@
       "COBRA cross-border payments",
       "Offline functionality",
       "Public API & SDK",
+      "COBRA Mining & Intelligence",
     ],
     targetId: "featurePollOptions",
     stateId: "featurePollState",
