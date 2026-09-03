@@ -1,13 +1,323 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="COBRA documentation: cryptographic address derivation, offline operation, cold storage, PSBT offline signing and agent integration principles."><title>COBRA Docs — Offline, Cold Storage & Agents</title><link rel="stylesheet" href="styles.css"><style>body{background:#050706;color:#e8f0ea}.docs{max-width:1100px;margin:auto;padding:90px 28px 120px}.docs-nav{display:flex;gap:16px;flex-wrap:wrap;margin:24px 0 54px}.docs-nav a,.docs a{color:#55f58a}.docs h1{font-size:clamp(44px,7vw,86px);letter-spacing:-.055em;line-height:.92;margin:14px 0 22px}.docs h2{font-size:clamp(28px,4vw,46px);margin:58px 0 18px}.docs h3{margin-top:30px}.docs p,.docs li{color:#aab7ae;line-height:1.75}.docs section{border-top:1px solid rgba(145,160,152,.16);padding-top:18px}.flow{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#090d0b;border:1px solid rgba(85,245,138,.18);padding:20px;overflow:auto;white-space:pre}.callout{border-left:2px solid #55f58a;padding:14px 18px;background:rgba(85,245,138,.035);margin:24px 0}.badge{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;color:#55f58a}.docs code{color:#dfffe7}.back{display:inline-block;margin-bottom:30px;text-decoration:none}</style></head><body><main class="docs"><a class="back" href="/">← COBRA</a><div class="badge">COBRA // DOCUMENTATION</div><h1>Understand the system.<br>Online or offline.</h1><p>COBRA is a local-first cryptographic research tool. These docs explain the live browser engine, the original Python methodology, offline address generation, cold-storage architecture, offline transaction signing, and the boundary between public blockchain data and controlling secrets.</p><nav class="docs-nav"><a href="#method">Method</a><a href="#offline">Offline</a><a href="#cold">Cold storage</a><a href="#transactions">Offline transactions</a><a href="#terminal">Terminal</a><a href="#agents">Agents</a><a href="#future">Future</a></nav><section id="method"><h2>1. Address derivation</h2><div class="flow">entropy → private key → secp256k1 public key → SHA-256 → RIPEMD-160 → version/checksum → Base58Check → Bitcoin address</div><p>The public address may be shared. The private key/WIF is the controlling secret and must not be published, logged, sent to analytics, or disclosed to an agent.</p></section><section id="offline"><h2>2. COBRA Offline</h2><p>Bitcoin address derivation itself does not require an internet connection. An offline computer can generate entropy, derive a private key and public address, and retain the secret locally. Network access is required later to observe blockchain state or broadcast a transaction.</p><div class="callout"><strong>Design principle:</strong> the offline machine owns secrets; the online machine observes public state and broadcasts signed transactions.</div><p>COBRA's offline package is designed as a static, self-contained copy of the address lab. No API, account, KYC, remote database or server-side private-key processing is required.</p></section><section id="cold"><h2>3. Cold storage</h2><p>Cold storage means keeping signing keys away from network-connected systems. A practical architecture separates an offline signer from an online watch-only environment. The online side can monitor addresses and prepare transactions without possessing the private keys.</p><div class="flow">OFFLINE / COLD                     ONLINE / WATCH-ONLY
-private keys                         public descriptors/addresses
-signing                              blockchain monitoring
-transaction verification    ←PSBT→   transaction construction
-NO broadcast                         broadcast to Bitcoin network</div><p>Cold storage reduces network exposure; it does not eliminate risks from compromised software, weak entropy, physical theft, malicious removable media, incorrect backups, or signing the wrong transaction.</p></section><section id="transactions"><h2>4. Offline transactions with PSBT</h2><p>COBRA's planned transaction workflow uses Partially Signed Bitcoin Transactions (PSBT), the standard interchange format described by BIP 174. An online device constructs an unsigned PSBT. The PSBT is moved to the offline signer by QR code or removable media. The offline device verifies destination, amount and fee, signs locally, and returns the signed transaction. Only the online machine broadcasts it.</p><div class="flow">ONLINE: create unsigned PSBT
-        ↓ QR / removable media
-OFFLINE: inspect → verify → sign
-        ↓ signed PSBT / transaction
-ONLINE: broadcast → Bitcoin peer-to-peer network</div><div class="callout"><strong>Not yet a production wallet:</strong> COBRA should not present transaction signing as production-safe until the signer has deterministic test vectors, pinned dependencies, reproducible builds and independent security review.</div></section><section id="terminal"><h2>5. Terminal / Python</h2><p>The original repository contains the Python research lineage. COBRA already has a CLI skeleton with address generation and validation commands. The next maintained CLI layer can add explicit offline workflows, safer secret-handling defaults, PSBT inspection and eventually offline signing without modifying the historical notebook.</p><p>For a genuinely air-gapped machine, installation should also be possible from pre-downloaded, checksummed release artifacts rather than requiring live <code>pip</code> access.</p></section><section id="agents"><h2>6. Working with AI agents</h2><p>Agents can be useful around the cryptographic boundary without being entrusted with private keys. A COBRA-compatible agent could monitor public addresses, watch confirmations and fees, prepare unsigned PSBTs, explain transaction data, flag anomalies, manage research/news workflows, or coordinate developer APIs.</p><div class="callout"><strong>Agent boundary:</strong> agents should operate on public data and unsigned transaction intent. Private keys, seed phrases and WIF secrets should remain inside a trusted signer and should never be placed in prompts, model context, telemetry or remote agent tools.</div><div class="flow">AGENT / ONLINE LAYER
-observe → analyse → prepare unsigned intent → request human approval
-                                      ↓
-                           OFFLINE TRUST BOUNDARY
-                           verify → authorize → sign</div><p>This separation also creates a future research direction for policy-controlled autonomous finance: agents can propose actions while cryptographic authorization remains constrained by human approval, hardware policy, multisignature rules or other explicit controls.</p></section><section id="future"><h2>7. Storage of value & future hardware</h2><p>COBRA can evolve from an educational address laboratory toward an ecosystem of audited offline software, developer tooling and eventually dedicated signing hardware. Potential commercial layers include supported enterprise tooling, developer/API services, audited offline distributions, research partnerships and, only after substantial security engineering and certification work, dedicated hardware signing devices.</p><p>The objective is not to claim that the current website is a hardware wallet. The current product demonstrates and documents the cryptographic method; custody-grade products require a materially higher assurance standard.</p></section><section><h2>References</h2><p><a href="https://github.com/bitcoin/bitcoin/blob/master/doc/offline-signing-tutorial.md" target="_blank" rel="noopener noreferrer">Bitcoin Core — Offline Signing Tutorial ↗</a><br><a href="https://github.com/bitcoin/bitcoin/blob/master/doc/psbt.md" target="_blank" rel="noopener noreferrer">Bitcoin Core — PSBT Howto ↗</a><br><a href="https://bips.dev/174/" target="_blank" rel="noopener noreferrer">BIP 174 — Partially Signed Bitcoin Transaction Format ↗</a><br><a href="https://developer.bitcoin.org/devguide/wallets.html" target="_blank" rel="noopener noreferrer">Bitcoin Developer Guide — Wallets ↗</a></p></section><p class="callout"><strong>Educational and research software.</strong> Do not entrust material funds to experimental COBRA functionality without appropriate independent review and operational safeguards.</p></main><script src="/docs-i18n.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Use COBRA's browser tools, experimental CLI and Offline Lab safely, with clear capability and security boundaries."
+    />
+    <meta name="theme-color" content="#050706" />
+    <title>COBRA Docs — User & Developer Guide</title>
+    <script>
+      (() => {
+        try {
+          const saved = localStorage.getItem("cobra-theme");
+          const theme =
+            saved === "light" || saved === "dark"
+              ? saved
+              : matchMedia("(prefers-color-scheme: light)").matches
+                ? "light"
+                : "dark";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/content.css" />
+    <link rel="stylesheet" href="/site-ui.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="COBRA home">COBRA</a>
+      <nav aria-label="Primary navigation">
+        <a href="/">Home</a><a href="/docs.html">Docs</a
+        ><a href="/explorer.html">Explorer</a
+        ><a href="/research.html">Research</a><a href="/offline.html">Offline</a
+        ><a href="/cli.html">CLI</a
+        ><a
+          href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub ↗</a
+        >
+      </nav>
+    </header>
+
+    <main class="content-page">
+      <section class="content-intro">
+        <span class="status-label available">Documentation</span>
+        <h1>Use COBRA.<br />Know the boundary.</h1>
+        <p>
+          This guide covers what works today, how to use each surface and where
+          experimentation ends. COBRA is educational software for studying
+          cryptographic randomness and Bitcoin address construction; it is not a
+          production wallet or custody service.
+        </p>
+        <nav class="content-toc" aria-label="On this page">
+          <a href="#status">Capability status</a>
+          <a href="#browser">Browser tools</a>
+          <a href="#cli">CLI</a>
+          <a href="#offline">Offline Lab</a>
+          <a href="#explorer">Explorer</a>
+          <a href="#security">Security</a>
+          <a href="#provenance">Provenance</a>
+        </nav>
+      </section>
+
+      <section class="doc-section" id="status">
+        <div>
+          <span class="status-label available">Start here</span>
+          <h2>Capability status</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            Status labels describe the maturity of a feature, not its visual
+            completeness.
+          </p>
+          <table class="status-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Meaning</th>
+                <th>Current COBRA surfaces</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status-label available">Available</span></td>
+                <td>Works on the public site now.</td>
+                <td>
+                  Browser randomness, legacy P2PKH address derivation and the
+                  device-local public-address log.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="status-label experimental">Experimental</span>
+                </td>
+                <td>Implemented for controlled testing, not material funds.</td>
+                <td>Python CLI and the limited Offline Lab.</td>
+              </tr>
+              <tr>
+                <td><span class="status-label research">Research</span></td>
+                <td>A documented investigation, not a product capability.</td>
+                <td>
+                  Privacy, post-quantum migration, resilient signing and the
+                  preservation of digital value.
+                </td>
+              </tr>
+              <tr>
+                <td><span class="status-label roadmap">Roadmap</span></td>
+                <td>Not available yet.</td>
+                <td>
+                  Shared public registry, live Explorer data, PSBT signing,
+                  hosted APIs and dedicated signing hardware.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="doc-section" id="browser">
+        <div>
+          <span class="status-label available">Available</span>
+          <h2>Browser tools</h2>
+        </div>
+        <div class="doc-body">
+          <h3>Generate a random value</h3>
+          <ol class="steps">
+            <li>Open <a href="/#tools">Home → Random Generator</a>.</li>
+            <li>
+              Choose an integer, hexadecimal string, byte sequence or UUID.
+            </li>
+            <li>Set the requested length or numeric range.</li>
+            <li>Select <strong>Generate random value</strong>.</li>
+          </ol>
+          <p>
+            The browser uses <code>crypto.getRandomValues</code>. Human-chosen
+            numbers are not a safe substitute for cryptographic entropy.
+          </p>
+
+          <h3>Derive a legacy Bitcoin address</h3>
+          <ol class="steps">
+            <li>Open <a href="/#tools">Home → Bitcoin Address Lab</a>.</li>
+            <li>
+              Generate a fresh educational example, reuse the last 32-byte
+              hexadecimal value, or enter a valid 64-character private key.
+            </li>
+            <li>
+              Review the compressed public key, HASH160, WIF and legacy P2PKH
+              address.
+            </li>
+            <li>
+              Copy only the public address when sharing or checking it in a
+              block explorer.
+            </li>
+          </ol>
+          <div class="callout">
+            <strong>Keep secret:</strong> private key, WIF and recovery kit.
+            Anyone who obtains these values may control funds associated with
+            the address.
+          </div>
+
+          <h3>Address derivation</h3>
+          <div class="flow">
+            entropy → private key → secp256k1 public key → SHA-256 → RIPEMD-160
+            → version byte → double-SHA-256 checksum → Base58Check → P2PKH
+            address
+          </div>
+        </div>
+      </section>
+
+      <section class="doc-section" id="cli">
+        <div>
+          <span class="status-label experimental">Experimental</span>
+          <h2>Command line</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            Use the CLI for local development and testnet-first experiments.
+            Install from the source repository until a separately verified
+            package release is published.
+          </p>
+          <pre class="term"><code>python -m venv .venv
+source .venv/bin/activate
+pip install git+https://github.com/ol-s-cloud/bitcoin-address-generator.git
+
+cobra status
+cobra random --bytes 32
+cobra generate
+cobra validate &lt;address&gt; --network testnet</code></pre>
+          <p>
+            Private keys are hidden by default. See the
+            <a href="/cli.html">CLI guide</a> for explicit secret-output
+            commands, network selection and current limitations.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="offline">
+        <div>
+          <span class="status-label experimental">Experimental</span>
+          <h2>Offline Lab</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            The current Offline Lab generates a 256-bit random value using the
+            browser cryptographic API. It does not yet include a fully packaged,
+            dependency-free Bitcoin derivation or signing engine.
+          </p>
+          <ol class="steps">
+            <li>
+              Save a complete, verified COBRA offline release on the target
+              machine.
+            </li>
+            <li>Disconnect the machine before generating secret material.</li>
+            <li>
+              Keep secrets on the offline machine; move only public addresses or
+              verified transaction data across the boundary.
+            </li>
+          </ol>
+          <p><a href="/offline.html">Open the Offline Lab →</a></p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="explorer">
+        <div>
+          <span class="status-label roadmap">Roadmap</span>
+          <h2>Explorer</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            The Explorer currently shows a zero-state interface. It is not
+            connected to a shared COBRA database and does not display live
+            cross-user activity.
+          </p>
+          <p>
+            The proposed registry is opt-in and public-address-only. Private
+            keys, WIFs, seed phrases, entropy and recovery kits must never enter
+            it.
+          </p>
+          <p><a href="/explorer.html">View the Explorer status →</a></p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="security">
+        <div>
+          <span class="status-label available">Required practice</span>
+          <h2>Security boundary</h2>
+        </div>
+        <div class="doc-body">
+          <ul class="steps">
+            <li>Do not use demonstration keys for material funds.</li>
+            <li>
+              Never paste a private key, seed phrase or WIF into chat, support
+              messages, analytics, issue trackers or remote forms.
+            </li>
+            <li>
+              Confirm the Bitcoin network and address type before importing or
+              sweeping a key.
+            </li>
+            <li>
+              Treat browser extensions, clipboard managers, screen recording,
+              shell history and removable media as possible exposure paths.
+            </li>
+            <li>
+              Use independently reviewed wallet software or hardware for
+              real-world custody.
+            </li>
+          </ul>
+          <p>
+            Read the repository
+            <a
+              href="https://github.com/ol-s-cloud/bitcoin-address-generator/blob/main/SECURITY.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              >security policy ↗</a
+            >
+            before experimenting with key material.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="provenance">
+        <div>
+          <span class="status-label research">Provenance</span>
+          <h2>Original artifacts</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            COBRA grows from two repository artifacts created on 3 August 2023:
+            the root-level file <code>notebook</code> and
+            <code
+              >How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb</code
+            >. They are preserved unchanged as the project’s historical record.
+          </p>
+          <p>
+            Maintained browser, CLI, documentation and future registry work
+            lives in separate files.
+          </p>
+        </div>
+      </section>
+
+      <div class="callout">
+        <strong>Educational and experimental software.</strong> COBRA can
+        demonstrate mathematically valid address construction without providing
+        production-wallet assurances, custody or recovery.
+      </div>
+    </main>
+
+    <footer class="page-footer">
+      <span>COBRA</span>
+      <span
+        >User & developer documentation ·
+        <a href="/terms.html">Terms of Use</a></span
+      >
+      <span>First rollout 2023 · Educational software</span>
+    </footer>
+    <script src="/site-ui.js" defer></script>
+  </body>
+</html>

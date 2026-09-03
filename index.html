@@ -1,4 +1,372 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content="COBRA — Cryptographic Oracle for Bytes, Randomness & Addresses. Free Bitcoin cryptography, randomness and address research tools by ol-s-cloud."/><meta name="theme-color" content="#050706"/><meta property="og:title" content="COBRA — Cryptographic Oracle for Bytes, Randomness & Addresses"/><meta property="og:description" content="Generate cryptographic randomness, derive Bitcoin addresses, inspect recovery material and explore the research methodology behind the project."/><meta property="og:type" content="website"/><title>COBRA — by ol-s-cloud</title><link rel="stylesheet" href="styles.css"/></head><body><header class="site-header"><a class="brand" href="/" aria-label="COBRA home"><span class="mark">C</span><span>COBRA</span><small>by ol-s-cloud</small></a><nav><a href="#tools">Tools</a><a href="#method">Method</a><a href="#research">Research</a><a href="#log">Log</a><a href="#developers">Developers</a><a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></header><main><section class="hero"><div class="hero-overlay"></div><div class="hero-content"><div class="eyebrow">CRYPTOGRAPHIC ORACLE FOR BYTES, RANDOMNESS & ADDRESSES</div><h1>Numbers become<br><span>addresses.</span></h1><p>COBRA is a free, open-source Bitcoin cryptography playground for generating randomness and understanding how private keys become public addresses.</p><div class="hero-credit">Built from the <a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">Bitcoin Address Generator research repository</a> · <strong>by ol-s-cloud</strong></div><div class="chips"><span>Local-first secrets</span><span>secp256k1</span><span>ECDSA</span><span>SHA-256</span><span>RIPEMD-160</span><span>Base58Check</span><span>Open source</span></div></div></section><section class="desert-callout"><div class="eyebrow">THE DESERT / MARS TEST</div><h2>If you were stranded in a desert — or on another planet — Bitcoin would not need to issue you an account.</h2><p>In principle, a valid secret number plus the Bitcoin derivation rules is enough to reconstruct its corresponding address. Human-created “random” numbers are not secure enough for real funds, however. COBRA demonstrates the mathematics; secure wallet software uses cryptographically strong entropy.</p></section><section class="warning" role="note"><strong>Educational and experimental software.</strong><span>COBRA can derive mathematically valid Bitcoin addresses, but it is not a wallet provider, custodian, exchange, recovery service or financial service. Never use demonstration keys for material funds.</span></section><div class="tool-layout" id="tools"><section class="tool-shell"><div class="tabs" role="tablist" aria-label="COBRA tools"><button class="tab active" data-tab="random" role="tab" aria-selected="true">Random Generator</button><button class="tab" data-tab="bitcoin" role="tab" aria-selected="false">Bitcoin Address Lab</button></div><div class="panel active" id="panel-random" role="tabpanel"><div class="panel-copy"><div class="eyebrow">ORACLE 01</div><h2>Cryptographic random generator</h2><p>Create integers, hexadecimal strings, raw bytes and UUIDs from your browser's cryptographically secure random source.</p></div><div class="form-grid"><label>Output type<select id="randomType"><option value="integer">Integer</option><option value="hex" selected>Hexadecimal</option><option value="bytes">Bytes</option><option value="uuid">UUID v4</option></select></label><label id="lengthField">Length in bytes<input id="byteLength" type="number" min="1" max="4096" value="32"/></label><div class="integer-fields" id="integerFields" hidden><label>Minimum<input id="minValue" type="number" value="1"/></label><label>Maximum<input id="maxValue" type="number" value="1000000"/></label></div></div><button class="primary" id="generateRandom">Generate random value</button><div class="output-block"><div class="output-head"><span>OUTPUT</span><button class="copy" data-copy="randomOutput">Copy</button></div><pre id="randomOutput">Click “Generate random value”.</pre></div></div><div class="panel" id="panel-bitcoin" role="tabpanel" hidden><div class="panel-copy"><div class="eyebrow">ORACLE 02</div><h2>Bitcoin address generator</h2><p>Generate a fresh 256-bit private key locally or supply a valid hexadecimal key and inspect every stage of legacy P2PKH derivation.</p></div><div class="engine-note"><strong>Live engine:</strong> Browser JavaScript. <span>The original Python methodology remains preserved in the repository and notebook; COBRA does not send your private key to a Python server.</span></div><div class="lab-actions"><button class="primary" id="generateBitcoin">Generate educational example</button><button class="secondary" id="useRandomAsKey">Use last 32-byte random hex</button></div><label class="wide-label">Private key (64 hex characters)<div class="input-action"><input id="privateKeyInput" spellcheck="false" maxlength="64" placeholder="Generate or paste a 32-byte hexadecimal value"/><button id="deriveAddress">Derive</button></div></label><div class="pipeline"><article><span>01</span><h3>Private key</h3><code id="privateKeyOut">—</code></article><article><span>02</span><h3>Compressed public key</h3><code id="publicKeyOut">—</code></article><article><span>03</span><h3>HASH160</h3><code id="hash160Out">—</code></article><article><span>04</span><h3>WIF · compressed mainnet</h3><code id="wifOut">—</code><button class="copy" data-copy="wifOut">Copy WIF</button></article><article class="address-card"><span>05</span><h3>Legacy P2PKH address</h3><code id="addressOut">—</code><div class="address-actions"><button class="copy" data-copy="addressOut">Copy address</button><a id="explorerLink" class="mini-link disabled" href="#" target="_blank" rel="noopener noreferrer">Blockchain.com Explorer ↗</a></div></article></div><div class="lab-actions"><button class="secondary" id="downloadRecovery">Download recovery kit</button></div><p class="micro-warning">The private key/WIF is the controlling secret. COBRA does not upload or retain it. Anyone who obtains it can potentially spend funds controlled by the corresponding address.</p></div></section><aside class="live-rail"><div class="live-title"><span class="live-dot"></span><div><strong>COBRA LIVE</strong><small>Activity on this device</small></div></div><div class="metric-grid"><div><strong id="metricTotal">0</strong><span>generated</span></div><div><strong id="metricSession">0</strong><span>this session</span></div></div><div id="liveActivity" class="live-activity"><div class="empty-state">Generate an address to see live activity.</div></div><div class="rail-note">Only public Bitcoin addresses are shown here. Private keys and WIFs never enter the activity feed.</div><div class="social-stack"><a class="social-btn" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">★ Star on GitHub</a><a class="social-btn" id="shareX" href="#" target="_blank" rel="noopener noreferrer">Share on X ↗</a><button class="social-btn" id="shareButton">Recommend to a friend</button></div></aside></div><section class="explain" id="method"><div><div class="eyebrow">THE METHOD</div><h2>Private key → public key → hash → address.</h2></div><div class="explain-copy"><p>COBRA follows the original project methodology: valid 256-bit scalar → secp256k1 public key → SHA-256 → RIPEMD-160 → Bitcoin mainnet version byte → double-SHA-256 checksum → Base58Check address.</p><p>The current browser engine reimplements that method in JavaScript. The original Python implementation and historical Colab notebook remain separate and preserved as the project's research provenance.</p></div></section><section class="research-lab" id="research"><div class="research-heading"><div class="eyebrow">RESEARCH TERMINAL</div><h2>The code, curve and derivation chain behind COBRA.</h2><p>These visuals and references come from the original Bitcoin Address Generator repository. The web product exposes the underlying cryptographic method rather than hiding it behind a single button.</p></div><div class="terminal-window"><div class="terminal-bar"><span></span><span></span><span></span><strong>ol-s-cloud / bitcoin-address-generator</strong></div><pre><code>$ pip install bitcoin-address-generator
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="COBRA — Cryptographic Oracle for Bytes, Randomness & Addresses. Free Bitcoin cryptography, randomness and address research tools by ol-s-cloud."
+    />
+    <meta name="theme-color" content="#050706" />
+    <meta
+      property="og:title"
+      content="COBRA — Cryptographic Oracle for Bytes, Randomness & Addresses"
+    />
+    <meta
+      property="og:description"
+      content="Generate cryptographic randomness, derive Bitcoin addresses, inspect recovery material and explore the research methodology behind the project."
+    />
+    <meta property="og:type" content="website" />
+    <title>COBRA — by ol-s-cloud</title>
+    <script>
+      (() => {
+        try {
+          const saved = localStorage.getItem("cobra-theme");
+          const theme =
+            saved === "light" || saved === "dark"
+              ? saved
+              : matchMedia("(prefers-color-scheme: light)").matches
+                ? "light"
+                : "dark";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch {}
+      })();
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="site-ui.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="COBRA home">COBRA</a>
+      <nav aria-label="Primary navigation">
+        <a href="/">Home</a><a href="/docs.html">Docs</a
+        ><a href="/explorer.html">Explorer</a
+        ><a href="/research.html">Research</a><a href="/offline.html">Offline</a
+        ><a href="/cli.html">CLI</a
+        ><a
+          href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub ↗</a
+        >
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <img
+          class="hero-bg-image"
+          src="https://www.nasa.gov/wp-content/uploads/2023/03/iss068e011296_alt.jpg?w=1920"
+          alt=""
+          aria-hidden="true"
+        />
+        <div class="hero-bg-shade" aria-hidden="true"></div>
+        <div class="hero-content">
+          <div class="eyebrow">
+            CRYPTOGRAPHIC ORACLE FOR BYTES, RANDOMNESS & ADDRESSES
+          </div>
+          <h1>Numbers become<br /><span>addresses.</span></h1>
+          <p>
+            COBRA is a free, open-source Bitcoin cryptography playground for
+            generating randomness and understanding how private keys become
+            public addresses.
+          </p>
+          <div class="hero-credit">
+            Built from the
+            <a
+              href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Bitcoin Address Generator research repository</a
+            >
+            · <strong>by ol-s-cloud</strong>
+          </div>
+          <div class="chips">
+            <span>Local-first secrets</span><span>secp256k1</span
+            ><span>ECDSA</span><span>SHA-256</span><span>RIPEMD-160</span
+            ><span>Base58Check</span><span>Open source</span>
+          </div>
+        </div>
+        <a
+          class="nasa-credit"
+          href="https://www.nasa.gov/image-article/astronaut-bob-hines-pictured-looking-earth-below/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Astronaut Bob Hines above Earth · NASA · 2022</a
+        >
+      </section>
+      <section class="status-index" aria-label="COBRA capability status">
+        <a href="#tools">
+          <span class="status-label available">Available</span>
+          <strong>Browser tools</strong>
+          <small>Randomness and legacy P2PKH address derivation.</small>
+        </a>
+        <a href="/cli.html">
+          <span class="status-label experimental">Experimental</span>
+          <strong>CLI and Offline Lab</strong>
+          <small>Developer surfaces for controlled testing.</small>
+        </a>
+        <a href="/research.html">
+          <span class="status-label research">Research</span>
+          <strong>Open questions</strong>
+          <small>Security, privacy, resilience and cryptographic value.</small>
+        </a>
+        <a href="/explorer.html">
+          <span class="status-label roadmap">Roadmap</span>
+          <strong>Shared registry</strong>
+          <small>Opt-in public address activity; not yet connected.</small>
+        </a>
+      </section>
+      <section class="desert-callout">
+        <div class="eyebrow">THE DESERT / MARS TEST</div>
+        <h2>
+          If you were stranded in a desert — or on another planet — Bitcoin
+          would not need to issue you an account.
+        </h2>
+        <p>
+          In principle, a valid secret number plus the Bitcoin derivation rules
+          is enough to reconstruct its corresponding address. Human-created
+          “random” numbers are not secure enough for real funds, however. COBRA
+          demonstrates the mathematics; secure wallet software uses
+          cryptographically strong entropy.
+        </p>
+      </section>
+      <section class="warning" role="note">
+        <strong>Educational and experimental software.</strong
+        ><span
+          >COBRA can derive mathematically valid Bitcoin addresses, but it is
+          not a wallet provider, custodian, exchange, recovery service or
+          financial service. Never use demonstration keys for material
+          funds.</span
+        >
+      </section>
+      <div class="tool-layout" id="tools">
+        <section class="tool-shell">
+          <div class="tabs" role="tablist" aria-label="COBRA tools">
+            <button
+              class="tab active"
+              data-tab="random"
+              role="tab"
+              aria-selected="true"
+            >
+              Random Generator</button
+            ><button
+              class="tab"
+              data-tab="bitcoin"
+              role="tab"
+              aria-selected="false"
+            >
+              Bitcoin Address Lab
+            </button>
+          </div>
+          <div class="panel active" id="panel-random" role="tabpanel">
+            <div class="panel-copy">
+              <div class="eyebrow">ORACLE 01</div>
+              <h2>Cryptographic random generator</h2>
+              <p>
+                Create integers, hexadecimal strings, raw bytes and UUIDs from
+                your browser's cryptographically secure random source.
+              </p>
+            </div>
+            <div class="form-grid">
+              <label
+                >Output type<select id="randomType">
+                  <option value="integer">Integer</option>
+                  <option value="hex" selected>Hexadecimal</option>
+                  <option value="bytes">Bytes</option>
+                  <option value="uuid">UUID v4</option>
+                </select></label
+              ><label id="lengthField"
+                >Length in bytes<input
+                  id="byteLength"
+                  type="number"
+                  min="1"
+                  max="4096"
+                  value="32"
+              /></label>
+              <div class="integer-fields" id="integerFields" hidden>
+                <label
+                  >Minimum<input id="minValue" type="number" value="1" /></label
+                ><label
+                  >Maximum<input id="maxValue" type="number" value="1000000"
+                /></label>
+              </div>
+            </div>
+            <button class="primary" id="generateRandom">
+              Generate random value
+            </button>
+            <div class="output-block">
+              <div class="output-head">
+                <span>OUTPUT</span
+                ><button class="copy" data-copy="randomOutput">Copy</button>
+              </div>
+              <pre id="randomOutput">Click “Generate random value”.</pre>
+            </div>
+          </div>
+          <div class="panel" id="panel-bitcoin" role="tabpanel" hidden>
+            <div class="panel-copy">
+              <div class="eyebrow">ORACLE 02</div>
+              <h2>Bitcoin address generator</h2>
+              <p>
+                Generate a fresh 256-bit private key locally or supply a valid
+                hexadecimal key and inspect every stage of legacy P2PKH
+                derivation.
+              </p>
+            </div>
+            <div class="engine-note">
+              <strong>Live engine:</strong> Browser JavaScript.
+              <span
+                >The original Python methodology remains preserved in the
+                repository and notebook; COBRA does not send your private key to
+                a Python server.</span
+              >
+            </div>
+            <div class="lab-actions">
+              <button class="primary" id="generateBitcoin">
+                Generate educational example</button
+              ><button class="secondary" id="useRandomAsKey">
+                Use last 32-byte random hex
+              </button>
+            </div>
+            <label class="wide-label"
+              >Private key (64 hex characters)
+              <div class="input-action">
+                <input
+                  id="privateKeyInput"
+                  spellcheck="false"
+                  maxlength="64"
+                  placeholder="Generate or paste a 32-byte hexadecimal value"
+                /><button id="deriveAddress">Derive</button>
+              </div></label
+            >
+            <div class="pipeline">
+              <article>
+                <span>01</span>
+                <h3>Private key</h3>
+                <code id="privateKeyOut">—</code>
+              </article>
+              <article>
+                <span>02</span>
+                <h3>Compressed public key</h3>
+                <code id="publicKeyOut">—</code>
+              </article>
+              <article>
+                <span>03</span>
+                <h3>HASH160</h3>
+                <code id="hash160Out">—</code>
+              </article>
+              <article>
+                <span>04</span>
+                <h3>WIF · compressed mainnet</h3>
+                <code id="wifOut">—</code
+                ><button class="copy" data-copy="wifOut">Copy WIF</button>
+              </article>
+              <article class="address-card">
+                <span>05</span>
+                <h3>Legacy P2PKH address</h3>
+                <code id="addressOut">—</code>
+                <div class="address-actions">
+                  <button class="copy" data-copy="addressOut">
+                    Copy address</button
+                  ><a
+                    id="explorerLink"
+                    class="mini-link disabled"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Blockchain.com Explorer ↗</a
+                  >
+                </div>
+              </article>
+            </div>
+            <div class="lab-actions">
+              <button class="secondary" id="downloadRecovery">
+                Download recovery kit
+              </button>
+            </div>
+            <p class="micro-warning">
+              The private key/WIF is the controlling secret. COBRA does not
+              upload or retain it. Anyone who obtains it can potentially spend
+              funds controlled by the corresponding address.
+            </p>
+          </div>
+        </section>
+        <aside class="live-rail">
+          <div class="live-title">
+            <span class="live-dot"></span>
+            <div>
+              <strong>COBRA LIVE</strong><small>Activity on this device</small>
+            </div>
+          </div>
+          <div class="metric-grid">
+            <div><strong id="metricTotal">0</strong><span>generated</span></div>
+            <div>
+              <strong id="metricSession">0</strong><span>this session</span>
+            </div>
+          </div>
+          <div id="liveActivity" class="live-activity">
+            <div class="empty-state">
+              Generate an address to see live activity.
+            </div>
+          </div>
+          <div class="rail-note">
+            Only public Bitcoin addresses are shown here. Private keys and WIFs
+            never enter the activity feed.
+          </div>
+          <div class="social-stack">
+            <a
+              class="social-btn"
+              href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+              target="_blank"
+              rel="noopener noreferrer"
+              >★ Star on GitHub</a
+            ><a
+              class="social-btn"
+              id="shareX"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Share on X ↗</a
+            ><button class="social-btn" id="shareButton">
+              Recommend to a friend
+            </button>
+          </div>
+        </aside>
+      </div>
+      <section class="explain" id="method">
+        <div>
+          <div class="eyebrow">THE METHOD</div>
+          <h2>Private key → public key → hash → address.</h2>
+        </div>
+        <div class="explain-copy">
+          <p>
+            COBRA follows the original project methodology: valid 256-bit scalar
+            → secp256k1 public key → SHA-256 → RIPEMD-160 → Bitcoin mainnet
+            version byte → double-SHA-256 checksum → Base58Check address.
+          </p>
+          <p>
+            The current browser engine reimplements that method in JavaScript.
+            The original Python implementation and historical Colab notebook
+            remain separate and preserved as the project's research provenance.
+          </p>
+        </div>
+      </section>
+      <section class="research-lab" id="research">
+        <div class="research-heading">
+          <div class="eyebrow">RESEARCH TERMINAL</div>
+          <h2>The code, curve and derivation chain behind COBRA.</h2>
+          <p>
+            These visuals and references come from the original Bitcoin Address
+            Generator repository. The web product exposes the underlying
+            cryptographic method rather than hiding it behind a single button.
+          </p>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar">
+            <span></span><span></span><span></span
+            ><strong>ol-s-cloud / bitcoin-address-generator</strong>
+          </div>
+          <pre><code>$ pip install bitcoin-address-generator
 
 from bitcoin_address_generator import generate_wallet
 
@@ -9,4 +377,345 @@ print(f"Bitcoin Address: {address}")
 entropy → private key
 private key × secp256k1 generator point → public key
 SHA-256 → RIPEMD-160 → version byte
-→ double-SHA-256 checksum → Base58Check → P2PKH address</code></pre><a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">View the full source on GitHub ↗</a></div><div class="curve-card"><div><div class="eyebrow">ELLIPTIC CURVE CORE</div><h3>secp256k1</h3><p>The private key is a scalar. The corresponding public key is produced by elliptic-curve scalar multiplication on secp256k1 — the curve used by Bitcoin.</p><div class="formula">y² = x³ + 7 mod p</div><div class="formula-sub">Public key = private scalar × generator point G</div></div><div class="curve-visual"><svg viewBox="0 0 420 260" role="img" aria-label="Stylized elliptic curve diagram"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#55f58a"/><stop offset="1" stop-color="#b7ffc9"/></linearGradient></defs><path d="M34 210 C95 40 150 38 194 130 C232 210 286 212 386 42" fill="none" stroke="url(#g)" stroke-width="4"/><line x1="25" y1="220" x2="395" y2="220" stroke="#35503e"/><line x1="82" y1="235" x2="82" y2="25" stroke="#35503e"/><circle cx="194" cy="130" r="7" fill="#55f58a"/><circle cx="286" cy="212" r="7" fill="#b7ffc9"/><text x="205" y="118" fill="#d8e2db" font-size="12">G</text><text x="298" y="205" fill="#d8e2db" font-size="12">kG</text></svg></div></div><div class="repo-diagrams"><article><div class="diagram-label">ECDSA METHOD</div><img src="https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/3311cd8a-cebb-465e-bea8-91fcf7ffb39d" alt="ECDSA diagram from the original ol-s-cloud repository" loading="lazy"/><a href="https://github.com/ol-s-cloud/bitcoin-address-generator#method" target="_blank" rel="noopener noreferrer">Original repository diagram ↗</a></article><article><div class="diagram-label">ADDRESS ARCHITECTURE</div><img src="https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/5c530686-c50a-4a00-bce7-3d1be3462d99" alt="Bitcoin address generation architecture from the original ol-s-cloud repository" loading="lazy"/><a href="https://github.com/ol-s-cloud/bitcoin-address-generator#method" target="_blank" rel="noopener noreferrer">Original repository diagram ↗</a></article></div></section><section class="comparison"><div class="eyebrow">TWO IMPLEMENTATIONS, ONE METHOD</div><div class="comparison-grid"><article><span>LIVE</span><h3>Browser engine</h3><p>Runs locally in JavaScript using the browser cryptographic RNG and pinned cryptographic libraries. Private keys do not need to leave the device.</p></article><article><span>ORIGINAL</span><h3>Python research lineage</h3><p>The repository's Python package and 2023 notebook demonstrate the same address-construction chain using Python, ECDSA, hashlib and Base58.</p><a href="https://github.com/ol-s-cloud/bitcoin-address-generator/blob/main/How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb" target="_blank" rel="noopener noreferrer">Open original notebook ↗</a></article></div></section><section class="recovery"><div class="eyebrow">WHERE DOES THE ADDRESS GO?</div><h2>Nowhere. Until someone pays it.</h2><p>Generating an address does not register an account with COBRA or Bitcoin. If bitcoin is later sent to it, the transaction/output becomes visible on the Bitcoin network. Control comes from the corresponding private key.</p><div class="recovery-grid"><article><span>1</span><h3>Keep the secret</h3><p>The private key — often represented as WIF for import — enables spending.</p></article><article><span>2</span><h3>Recover with compatible wallet software</h3><p>A compatible wallet can import or sweep the private key/WIF and discover spendable outputs associated with it.</p></article><article><span>3</span><h3>Lose the key, lose control</h3><p>COBRA intentionally stores no recovery copy. There is no COBRA password reset for a standalone Bitcoin private key.</p></article></div></section><section class="activity" id="log"><div class="activity-head"><div><div class="eyebrow">YOUR COBRA GENERATION LOG</div><h2>Public addresses. Private secrets stay private.</h2><p>This browser keeps a local log of addresses generated on this device. Every record links directly to the corresponding Bitcoin address on Blockchain.com Explorer. Private keys and WIFs are never placed in the log.</p></div><button class="secondary" id="clearLog">Clear local log</button></div><div id="activityList" class="activity-list"><div class="empty-state">Generate a Bitcoin address to begin your local activity log.</div></div><div class="registry-note"><strong>Next layer:</strong> a true cross-user COBRA live feed requires a small persistent backend. That future registry should remain opt-in and store only public addresses, timestamps and derivation metadata — never private keys.</div></section><section class="origins" id="origins"><div><div class="eyebrow">ORIGINAL RESEARCH · 2023</div><h2>Built on the original notebook.</h2><p>The project originated during postgraduate study in Finance & Data Analytics as an exploration of blockchain technologies, cryptographic keys and Bitcoin address construction. The historical notebook remains untouched in the repository; COBRA does not imply university endorsement or custody of user funds.</p><p class="origin-credit"><strong>COBRA by ol-s-cloud</strong> · modern web interface built directly on the original <a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">Bitcoin Address Generator repository</a>.</p></div><div class="origin-actions"><a class="primary-link" href="https://github.com/ol-s-cloud/bitcoin-address-generator/blob/main/How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb" target="_blank" rel="noopener noreferrer">View original notebook ↗</a><a class="secondary-link" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">View source ↗</a></div></section><section class="references"><div class="eyebrow">TECHNICAL & ACADEMIC REFERENCES</div><h2>Built on documented cryptography.</h2><div class="reference-grid"><a href="https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses" target="_blank" rel="noopener noreferrer"><strong>Bitcoin Address Technical Background</strong><span>Version 1 address construction and Base58Check.</span></a><a href="https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm" target="_blank" rel="noopener noreferrer"><strong>ECDSA / Bitcoin Wiki</strong><span>Elliptic-curve signature methodology used in Bitcoin.</span></a><a href="https://www.secg.org/sec2-v2.pdf" target="_blank" rel="noopener noreferrer"><strong>SEC 2: Elliptic Curve Parameters</strong><span>Recommended domain parameters, including secp256k1.</span></a><a href="https://pypi.org/project/ecdsa/" target="_blank" rel="noopener noreferrer"><strong>ECDSA Python Library</strong><span>Python elliptic-curve implementation used by the original codebase.</span></a><a href="https://www.researchgate.net/publication/331397446_Efficient_and_Secure_ECDSA_Algorithm_and_its_Applications_A_Survey" target="_blank" rel="noopener noreferrer"><strong>ECDSA Survey</strong><span>Academic survey of ECDSA algorithms and applications.</span></a><a href="https://developer.bitcoin.org/devguide/wallets.html" target="_blank" rel="noopener noreferrer"><strong>Bitcoin Developer Guide</strong><span>Private keys and wallet architecture.</span></a><a href="https://developer.bitcoin.org/reference/transactions.html" target="_blank" rel="noopener noreferrer"><strong>Bitcoin Transaction Reference</strong><span>P2PKH and address conversion.</span></a><a href="https://www.blockchain.com/explorer" target="_blank" rel="noopener noreferrer"><strong>Blockchain.com Explorer</strong><span>Public Bitcoin address verification used by COBRA.</span></a></div></section><section class="developers" id="developers"><div><div class="eyebrow">BUILD WITH COBRA</div><h2>Building something brilliant on Bitcoin?</h2><p>The free web tools remain open. Developers, researchers and teams can reach out to discuss future COBRA API/SDK access, licensed integrations, cryptographic utilities or ways COBRA can contribute to your project.</p><p class="small">The API is not publicly launched yet. That is intentional: access, rate limits, licensing and safe handling of cryptographic operations should be designed before opening it broadly.</p></div><div class="developer-actions"><a class="primary-link" href="mailto:gs_wl889@icloud.com?subject=COBRA%20API%20%2F%20Developer%20Access">Discuss API access</a><a class="secondary-link" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">Build on GitHub ↗</a></div></section><section class="community"><div><div class="eyebrow">OPEN SOURCE · BY OL-S-CLOUD</div><h2>Learn from it. Fork it. Improve it.</h2><p>COBRA is an open-source evolution of the original Bitcoin Address Generator repository. The source, methodology, notebook history and contributions remain visible on GitHub.</p></div><div class="community-actions"><a class="primary-link" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">★ Star ol-s-cloud on GitHub</a><a class="secondary-link" id="shareXBottom" href="#" target="_blank" rel="noopener noreferrer">Share on X ↗</a></div></section></main><footer><span>COBRA <small>by ol-s-cloud</small></span><span><a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">github.com/ol-s-cloud/bitcoin-address-generator</a> · Cryptographic Oracle for Bytes, Randomness & Addresses</span></footer><script type="module" src="app.js"></script></body></html>
+→ double-SHA-256 checksum → Base58Check → P2PKH address</code></pre>
+          <a
+            href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+            target="_blank"
+            rel="noopener noreferrer"
+            >View the full source on GitHub ↗</a
+          >
+        </div>
+        <div class="curve-card">
+          <div>
+            <div class="eyebrow">ELLIPTIC CURVE CORE</div>
+            <h3>secp256k1</h3>
+            <p>
+              The private key is a scalar. The corresponding public key is
+              produced by elliptic-curve scalar multiplication on secp256k1 —
+              the curve used by Bitcoin.
+            </p>
+            <div class="formula">y² = x³ + 7 mod p</div>
+            <div class="formula-sub">
+              Public key = private scalar × generator point G
+            </div>
+          </div>
+          <div class="curve-visual">
+            <svg
+              viewBox="0 0 420 260"
+              role="img"
+              aria-label="Stylized elliptic curve diagram"
+            >
+              <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                  <stop offset="0" stop-color="#55f58a" />
+                  <stop offset="1" stop-color="#b7ffc9" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M34 210 C95 40 150 38 194 130 C232 210 286 212 386 42"
+                fill="none"
+                stroke="url(#g)"
+                stroke-width="4"
+              />
+              <line x1="25" y1="220" x2="395" y2="220" stroke="#35503e" />
+              <line x1="82" y1="235" x2="82" y2="25" stroke="#35503e" />
+              <circle cx="194" cy="130" r="7" fill="#55f58a" />
+              <circle cx="286" cy="212" r="7" fill="#b7ffc9" />
+              <text x="205" y="118" fill="#d8e2db" font-size="12">G</text>
+              <text x="298" y="205" fill="#d8e2db" font-size="12">kG</text>
+            </svg>
+          </div>
+        </div>
+        <div class="repo-diagrams">
+          <article>
+            <div class="diagram-label">ECDSA METHOD</div>
+            <img
+              src="https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/3311cd8a-cebb-465e-bea8-91fcf7ffb39d"
+              alt="ECDSA diagram from the original ol-s-cloud repository"
+              loading="lazy"
+            /><a
+              href="https://github.com/ol-s-cloud/bitcoin-address-generator#method"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Original repository diagram ↗</a
+            >
+          </article>
+          <article>
+            <div class="diagram-label">ADDRESS ARCHITECTURE</div>
+            <img
+              src="https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/5c530686-c50a-4a00-bce7-3d1be3462d99"
+              alt="Bitcoin address generation architecture from the original ol-s-cloud repository"
+              loading="lazy"
+            /><a
+              href="https://github.com/ol-s-cloud/bitcoin-address-generator#method"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Original repository diagram ↗</a
+            >
+          </article>
+        </div>
+      </section>
+      <section class="comparison">
+        <div class="eyebrow">TWO IMPLEMENTATIONS, ONE METHOD</div>
+        <div class="comparison-grid">
+          <article>
+            <span>LIVE</span>
+            <h3>Browser engine</h3>
+            <p>
+              Runs locally in JavaScript using the browser cryptographic RNG and
+              pinned cryptographic libraries. Private keys do not need to leave
+              the device.
+            </p>
+          </article>
+          <article>
+            <span>ORIGINAL</span>
+            <h3>Python research lineage</h3>
+            <p>
+              The repository's Python package and 2023 notebook demonstrate the
+              same address-construction chain using Python, ECDSA, hashlib and
+              Base58.
+            </p>
+            <a
+              href="https://github.com/ol-s-cloud/bitcoin-address-generator/blob/main/How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open original notebook ↗</a
+            >
+          </article>
+        </div>
+      </section>
+      <section class="recovery">
+        <div class="eyebrow">WHERE DOES THE ADDRESS GO?</div>
+        <h2>Nowhere. Until someone pays it.</h2>
+        <p>
+          Generating an address does not register an account with COBRA or
+          Bitcoin. If bitcoin is later sent to it, the transaction/output
+          becomes visible on the Bitcoin network. Control comes from the
+          corresponding private key.
+        </p>
+        <div class="recovery-grid">
+          <article>
+            <span>1</span>
+            <h3>Keep the secret</h3>
+            <p>
+              The private key — often represented as WIF for import — enables
+              spending.
+            </p>
+          </article>
+          <article>
+            <span>2</span>
+            <h3>Recover with compatible wallet software</h3>
+            <p>
+              A compatible wallet can import or sweep the private key/WIF and
+              discover spendable outputs associated with it.
+            </p>
+          </article>
+          <article>
+            <span>3</span>
+            <h3>Lose the key, lose control</h3>
+            <p>
+              COBRA intentionally stores no recovery copy. There is no COBRA
+              password reset for a standalone Bitcoin private key.
+            </p>
+          </article>
+        </div>
+      </section>
+      <section class="activity" id="log">
+        <div class="activity-head">
+          <div>
+            <div class="eyebrow">YOUR COBRA GENERATION LOG</div>
+            <h2>Public addresses. Private secrets stay private.</h2>
+            <p>
+              This browser keeps a local log of addresses generated on this
+              device. Every record links directly to the corresponding Bitcoin
+              address on Blockchain.com Explorer. Private keys and WIFs are
+              never placed in the log.
+            </p>
+          </div>
+          <button class="secondary" id="clearLog">Clear local log</button>
+        </div>
+        <div id="activityList" class="activity-list">
+          <div class="empty-state">
+            Generate a Bitcoin address to begin your local activity log.
+          </div>
+        </div>
+        <div class="registry-note">
+          <strong>Roadmap:</strong> the shared registry is not connected yet.
+          When introduced, participation will be opt-in and limited to public
+          addresses, timestamps and derivation metadata — never private keys.
+        </div>
+      </section>
+      <section class="origins" id="origins">
+        <div>
+          <div class="eyebrow">ORIGINAL RESEARCH · 2023</div>
+          <h2>Built on the original 2023 work.</h2>
+          <p>
+            The project originated during postgraduate study in Finance & Data
+            Analytics as an exploration of blockchain technologies,
+            cryptographic keys and Bitcoin address construction. The original
+            <code>notebook</code> file and Colab notebook remain untouched in
+            the repository. COBRA does not imply university endorsement or
+            custody of user funds.
+          </p>
+          <p class="origin-credit">
+            <strong>COBRA by ol-s-cloud</strong> · modern web interface built
+            directly on the original
+            <a
+              href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Bitcoin Address Generator repository</a
+            >.
+          </p>
+        </div>
+        <div class="origin-actions">
+          <a
+            class="primary-link"
+            href="https://github.com/ol-s-cloud/bitcoin-address-generator/blob/main/How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb"
+            target="_blank"
+            rel="noopener noreferrer"
+            >View original notebook ↗</a
+          ><a
+            class="secondary-link"
+            href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+            target="_blank"
+            rel="noopener noreferrer"
+            >View source ↗</a
+          >
+        </div>
+      </section>
+      <section class="references">
+        <div class="eyebrow">TECHNICAL & ACADEMIC REFERENCES</div>
+        <h2>Built on documented cryptography.</h2>
+        <div class="reference-grid">
+          <a
+            href="https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><strong>Bitcoin Address Technical Background</strong
+            ><span>Version 1 address construction and Base58Check.</span></a
+          ><a
+            href="https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><strong>ECDSA / Bitcoin Wiki</strong
+            ><span
+              >Elliptic-curve signature methodology used in Bitcoin.</span
+            ></a
+          ><a
+            href="https://www.secg.org/sec2-v2.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><strong>SEC 2: Elliptic Curve Parameters</strong
+            ><span>Recommended domain parameters, including secp256k1.</span></a
+          ><a
+            href="https://pypi.org/project/ecdsa/"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><strong>ECDSA Python Library</strong
+            ><span
+              >Python elliptic-curve implementation used by the original
+              codebase.</span
+            ></a
+          ><a
+            href="https://www.researchgate.net/publication/331397446_Efficient_and_Secure_ECDSA_Algorithm_and_its_Applications_A_Survey"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><strong>ECDSA Survey</strong
+            ><span
+              >Academic survey of ECDSA algorithms and applications.</span
+            ></a
+          ><a
+            href="https://developer.bitcoin.org/devguide/wallets.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><strong>Bitcoin Developer Guide</strong
+            ><span>Private keys and wallet architecture.</span></a
+          ><a
+            href="https://developer.bitcoin.org/reference/transactions.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><strong>Bitcoin Transaction Reference</strong
+            ><span>P2PKH and address conversion.</span></a
+          ><a
+            href="https://www.blockchain.com/explorer"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><strong>Blockchain.com Explorer</strong
+            ><span>Public Bitcoin address verification used by COBRA.</span></a
+          >
+        </div>
+      </section>
+      <section class="developers" id="developers">
+        <div>
+          <span class="status-label roadmap">Roadmap</span>
+          <h2>Developer access beyond the repository.</h2>
+          <p>
+            COBRA does not currently provide a public hosted API or SDK. The
+            source repository is the available integration surface today.
+          </p>
+          <p class="small">
+            A public API belongs to the roadmap and will require documented
+            authentication, rate limits and strict exclusion of private key
+            material.
+          </p>
+        </div>
+        <div class="developer-actions">
+          <a
+            class="primary-link"
+            href="mailto:gs_wl889@icloud.com?subject=COBRA%20API%20%2F%20Developer%20Access"
+            >Ask about the roadmap</a
+          ><a
+            class="secondary-link"
+            href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Build on GitHub ↗</a
+          >
+        </div>
+      </section>
+      <section class="community">
+        <div>
+          <div class="eyebrow">OPEN SOURCE · BY OL-S-CLOUD</div>
+          <h2>Learn from it. Fork it. Improve it.</h2>
+          <p>
+            COBRA is an open-source evolution of the original Bitcoin Address
+            Generator repository. The source, methodology, notebook history and
+            contributions remain visible on GitHub.
+          </p>
+        </div>
+        <div class="community-actions">
+          <a
+            class="primary-link"
+            href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+            target="_blank"
+            rel="noopener noreferrer"
+            >★ Star ol-s-cloud on GitHub</a
+          ><a
+            class="secondary-link"
+            id="shareXBottom"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Share on X ↗</a
+          >
+        </div>
+      </section>
+    </main>
+    <footer>
+      <span>COBRA <small>by ol-s-cloud</small></span
+      ><span
+        ><a
+          href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+          >github.com/ol-s-cloud/bitcoin-address-generator</a
+        >
+        · <a href="/terms.html">Terms of Use</a> · Cryptographic Oracle for
+        Bytes, Randomness & Addresses</span
+      >
+    </footer>
+    <script src="/site-ui.js" defer></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

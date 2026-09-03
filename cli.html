@@ -1,17 +1,173 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="COBRA CLI 0.3.0 developer documentation: testnet-first Bitcoin address generation and validation from the terminal."><title>COBRA CLI — Developer Terminal</title><link rel="stylesheet" href="styles.css"><style>body{background:#050706;color:#e8f0ea}.cli-docs{max-width:1050px;margin:auto;padding:76px 28px 120px}.back,a{color:#55f58a}.badge{display:inline-flex;gap:9px;align-items:center;border:1px solid rgba(85,245,138,.25);padding:8px 11px;font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;color:#55f58a}.badge i{width:7px;height:7px;border-radius:50%;background:#55f58a}.cli-docs h1{font-size:clamp(48px,8vw,88px);line-height:.92;letter-spacing:-.055em;margin:18px 0 25px}.cli-docs h2{margin-top:54px;font-size:clamp(26px,4vw,42px)}.cli-docs p,.cli-docs li{color:#aab7ae;line-height:1.75}.term{background:#030504;border:1px solid #274030;padding:20px;margin:18px 0;overflow:auto;color:#c8f8d5;font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.grid article{border:1px solid #223027;padding:18px;background:#090d0b}.yes{color:#55f58a}.no{color:#d6a877}.callout{border-left:2px solid #55f58a;padding:14px 18px;background:rgba(85,245,138,.035);margin:24px 0}@media(max-width:760px){.grid{grid-template-columns:1fr}}</style></head><body><main class="cli-docs"><a class="back" href="/">← COBRA</a><br><br><div class="badge"><i></i> COBRA CLI 0.3.0 · EXPERIMENTAL · TESTNET-FIRST</div><h1>COBRA from<br>your terminal.</h1><p>The CLI exposes the same cryptographic research lineage for developers who prefer command-line workflows. Version 0.3.0 is intentionally testnet-first and is not a production wallet.</p><h2>Install</h2><p>Until a separately verified PyPI release is published, install directly from the source repository with pip:</p><div class="term">python -m venv .venv
-source .venv/bin/activate          # macOS / Linux
-# .venv\Scripts\activate          # Windows
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Install and use COBRA CLI 0.3.0 for local randomness, testnet-first P2PKH generation, derivation and validation."
+    />
+    <meta name="theme-color" content="#050706" />
+    <title>COBRA CLI — Experimental Developer Guide</title>
+    <script>
+      (() => {
+        try {
+          const saved = localStorage.getItem("cobra-theme");
+          const theme =
+            saved === "light" || saved === "dark"
+              ? saved
+              : matchMedia("(prefers-color-scheme: light)").matches
+                ? "light"
+                : "dark";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/content.css" />
+    <link rel="stylesheet" href="/site-ui.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="COBRA home">COBRA</a>
+      <nav aria-label="Primary navigation">
+        <a href="/">Home</a><a href="/docs.html">Docs</a
+        ><a href="/explorer.html">Explorer</a
+        ><a href="/research.html">Research</a><a href="/offline.html">Offline</a
+        ><a href="/cli.html">CLI</a
+        ><a
+          href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub ↗</a
+        >
+      </nav>
+    </header>
+
+    <main class="content-page">
+      <section class="content-intro">
+        <span class="status-label experimental">Experimental · CLI 0.3.0</span>
+        <h1>COBRA from<br />your terminal.</h1>
+        <p>
+          The CLI provides local randomness, compressed secp256k1 public-key
+          derivation, legacy P2PKH address generation and checksum validation.
+          Testnet is the default network.
+        </p>
+        <nav class="content-toc" aria-label="On this page">
+          <a href="#install">Install</a><a href="#commands">Commands</a
+          ><a href="#secrets">Secret handling</a
+          ><a href="#limits">Limitations</a>
+        </nav>
+      </section>
+
+      <section class="doc-section" id="install">
+        <div>
+          <span class="status-label experimental">Source install</span>
+          <h2>Install</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            Use an isolated Python environment. Until a separately verified
+            package release is published, install from the source repository.
+          </p>
+          <pre class="term"><code>python -m venv .venv
+
+# macOS / Linux
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate
 
 pip install git+https://github.com/ol-s-cloud/bitcoin-address-generator.git
-
 cobra --version
-cobra status</div><p>For an air-gapped machine, download/build the package and dependencies on a connected machine first, verify the artifacts, then transfer them offline. Do not make the offline signer fetch packages from the internet.</p><h2>Commands available now</h2><div class="term">cobra status
+cobra status</code></pre>
+          <p>
+            On an air-gapped machine, transfer pre-downloaded and checksummed
+            packages from a connected machine. Do not make an offline signer
+            fetch dependencies from the internet.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="commands">
+        <div>
+          <span class="status-label available">Implemented</span>
+          <h2>Commands</h2>
+        </div>
+        <div class="doc-body">
+          <pre class="term"><code>cobra status
 cobra random --bytes 32
-cobra generate                         # testnet by default
+cobra generate
 cobra generate --network testnet
 cobra derive &lt;64-hex-private-key&gt; --network testnet
 cobra validate &lt;address&gt; --network testnet
 
 # Explicit experimental mainnet derivation
-cobra generate --network mainnet</div><div class="grid"><article><strong class="yes">AVAILABLE</strong><p>Local CSPRNG randomness, secp256k1 key derivation, legacy P2PKH address generation, testnet/mainnet network selection, checksum validation and CLI status.</p></article><article><strong class="no">NOT YET AVAILABLE</strong><p>PSBT construction, transaction signing, broadcasting, HD/seed wallets, multisig orchestration, hardware-wallet integration or production custody guarantees.</p></article></div><h2>Secret handling</h2><p>Generated private keys are hidden by default. Developers must explicitly request terminal output with <code>--show-secret</code> or write locally with <code>--secret-output</code>. Shell history, screen recording and log capture can expose secrets.</p><div class="term">cobra generate --network testnet --show-secret
-cobra generate --network testnet --secret-output ./testnet-key.txt</div><div class="callout"><strong>Security status:</strong> COBRA CLI 0.3.0 is Alpha/experimental. Use testnet or signet for development. Do not entrust material funds to the CLI until transaction functionality, reproducible builds, deterministic vectors and independent security review are complete.</div><h2>Why testnet first?</h2><p>Testnet lets developers exercise key/address flows without representing experimental software as custody-grade. The next terminal milestone is PSBT inspection and testnet/signet signing, followed by two-machine air-gap testing.</p><p><a href="/docs.html#terminal">Read the broader COBRA documentation →</a> · <a href="/offline.html">Open Offline Lab →</a> · <a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">Source on GitHub ↗</a></p></main><script src="/surface-i18n.js"></script></body></html>
+cobra generate --network mainnet</code></pre>
+          <p>
+            <code>generate</code>, <code>derive</code> and
+            <code>validate</code> currently support legacy P2PKH addresses.
+            Always pass the intended network when validating or deriving.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="secrets">
+        <div>
+          <span class="status-label experimental">Handle locally</span>
+          <h2>Secret output</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            Generated private keys are hidden by default. Reveal or save one
+            only in a trusted local environment.
+          </p>
+          <pre class="term"><code>cobra generate --network testnet --show-secret
+cobra generate --network testnet --secret-output ./testnet-key.txt</code></pre>
+          <div class="callout">
+            <strong>Exposure paths:</strong> shell history, terminal logging,
+            screen recording, cloud-synced folders, backups and clipboard
+            managers can all disclose secrets.
+          </div>
+        </div>
+      </section>
+
+      <section class="doc-section" id="limits">
+        <div>
+          <span class="status-label roadmap">Not implemented</span>
+          <h2>Current limits</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            The CLI does not construct or sign PSBTs, broadcast transactions,
+            manage HD or seed wallets, orchestrate multisignature policies, or
+            integrate with hardware wallets.
+          </p>
+          <p>
+            Use testnet or signet for development. Mainnet address derivation is
+            exposed only for explicit experiments and does not make COBRA a
+            production wallet.
+          </p>
+          <p>
+            <a href="/docs.html#security">Read the security boundary →</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <span>COBRA</span>
+      <span>CLI 0.3.0 · Experimental · Testnet-first</span>
+      <span
+        ><a
+          href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Source on GitHub ↗</a
+        ></span
+      >
+    </footer>
+    <script src="/site-ui.js" defer></script>
+  </body>
+</html>

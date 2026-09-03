@@ -1,1 +1,148 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>COBRA Offline Lab</title><style>body{margin:0;background:#050706;color:#e9f2ec;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.wrap{max-width:900px;margin:auto;padding:70px 24px}.status{color:#55f58a;font-size:12px;letter-spacing:.12em}.box{margin:30px 0;padding:24px;border:1px solid #243329;background:#090d0b}.box p{color:#9eada3;line-height:1.7}.row{display:flex;gap:10px;flex-wrap:wrap}button,input{font:inherit}button{padding:12px 16px;background:#55f58a;color:#031006;border:0;cursor:pointer;font-weight:800}input{width:100%;box-sizing:border-box;padding:12px;background:#050706;color:#e9f2ec;border:1px solid #33463a;margin:12px 0}.out{word-break:break-all;color:#b9ffc9}.warn{border-left:2px solid #55f58a;padding-left:15px;color:#aab7ae}.small{font-size:11px;color:#839087;line-height:1.6}a{color:#55f58a}</style></head><body><main class="wrap"><div class="status" id="net">COBRA OFFLINE // CHECKING NETWORK</div><h1>Offline cryptographic lab</h1><p class="warn">This page contains no remote application API calls. Save the complete COBRA offline release on the target machine before disconnecting it. For material funds, use independently reviewed wallet software/hardware; this remains educational software.</p><section class="box"><h2>Random 256-bit value</h2><p>Uses the browser's <code>crypto.getRandomValues</code> implementation. This value can be generated without internet access.</p><button id="random">Generate 32 bytes</button><div class="out" id="randomOut">—</div></section><section class="box"><h2>Bitcoin derivation</h2><p>The full offline Bitcoin address derivation engine is being packaged separately with pinned local cryptographic dependencies so an air-gapped release does not fetch libraries from a CDN. This page intentionally does not pretend that an online dependency is offline-safe.</p><p>Architecture: private key → secp256k1 public key → HASH160 → Base58Check address.</p><a href="/docs.html#offline">Read offline architecture →</a></section><section class="box"><h2>Offline transaction model</h2><p>Online watch-only machine creates unsigned PSBT → transfer by QR/removable media → offline machine verifies and signs → return signed data → online machine broadcasts.</p><p class="small">Never type a private key, WIF or seed phrase into an AI agent, remote form, analytics product or networked COBRA API.</p></section></main><script>const net=document.getElementById('net');function status(){net.textContent=navigator.onLine?'COBRA OFFLINE LAB // DEVICE REPORTS NETWORK AVAILABLE':'COBRA OFFLINE LAB // NETWORK DISCONNECTED';}addEventListener('online',status);addEventListener('offline',status);status();document.getElementById('random').onclick=()=>{const b=new Uint8Array(32);crypto.getRandomValues(b);document.getElementById('randomOut').textContent=[...b].map(x=>x.toString(16).padStart(2,'0')).join('');};</script><script src="/docs-i18n.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="COBRA Offline Lab: generate a 256-bit random value locally and understand the current offline security boundary."
+    />
+    <meta name="theme-color" content="#050706" />
+    <meta name="robots" content="noindex" />
+    <title>COBRA Offline Lab — Experimental</title>
+    <script>
+      (() => {
+        try {
+          const saved = localStorage.getItem("cobra-theme");
+          const theme =
+            saved === "light" || saved === "dark"
+              ? saved
+              : matchMedia("(prefers-color-scheme: light)").matches
+                ? "light"
+                : "dark";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/content.css" />
+    <link rel="stylesheet" href="/site-ui.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="COBRA home">COBRA</a>
+      <nav aria-label="Primary navigation">
+        <a href="/">Home</a><a href="/docs.html">Docs</a
+        ><a href="/explorer.html">Explorer</a
+        ><a href="/research.html">Research</a><a href="/offline.html">Offline</a
+        ><a href="/cli.html">CLI</a
+        ><a
+          href="https://github.com/ol-s-cloud/bitcoin-address-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub ↗</a
+        >
+      </nav>
+    </header>
+
+    <main class="content-page">
+      <section class="content-intro">
+        <span class="status-label experimental">Experimental</span>
+        <h1>Offline cryptographic lab.</h1>
+        <p>
+          Generate a 256-bit random value with the browser cryptographic API.
+          This page is a limited experiment, not a complete air-gapped wallet or
+          transaction signer.
+        </p>
+      </section>
+
+      <div class="callout" role="status">
+        <strong id="net">Checking this device’s network status…</strong>
+      </div>
+
+      <section class="content-box">
+        <span class="status-label available">Available here</span>
+        <h2>Generate 32 random bytes</h2>
+        <p>
+          Select the button once. The result is produced locally with
+          <code>crypto.getRandomValues</code> and displayed as 64 hexadecimal
+          characters.
+        </p>
+        <button class="primary-action" id="random">Generate 32 bytes</button>
+        <div class="out" id="randomOut" aria-live="polite">—</div>
+      </section>
+
+      <section class="doc-section">
+        <div>
+          <span class="status-label roadmap">Roadmap</span>
+          <h2>Bitcoin derivation</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            A self-contained offline build of the Bitcoin derivation engine is
+            not available on this page. The public browser lab loads pinned
+            cryptographic libraries from the network, so saving only this page
+            does not create a verified air-gapped release.
+          </p>
+          <div class="flow">
+            private key → secp256k1 public key → HASH160 → Base58Check → Bitcoin
+            address
+          </div>
+          <p>
+            <a href="/docs.html#offline">Read the offline instructions →</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section">
+        <div>
+          <span class="status-label research">Research</span>
+          <h2>Transaction model</h2>
+        </div>
+        <div class="doc-body">
+          <p>
+            The documented model separates an online watch-only machine from an
+            offline signer. PSBT inspection and signing are not implemented in
+            the current Offline Lab.
+          </p>
+          <div class="flow">
+            ONLINE: create unsigned PSBT ↓ QR code or removable media OFFLINE:
+            inspect → verify → sign ↓ signed data ONLINE: broadcast
+          </div>
+          <div class="callout">
+            Never send a private key, WIF or seed phrase through chat, support,
+            analytics, an issue tracker or any networked form.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <span>COBRA</span>
+      <span>Offline Lab · Experimental</span>
+      <span><a href="/terms.html">Terms of Use</a></span>
+    </footer>
+
+    <script>
+      const networkStatus = document.getElementById("net");
+      function updateNetworkStatus() {
+        networkStatus.textContent = navigator.onLine
+          ? "Device reports a network connection. Disconnect before treating this as an offline session."
+          : "Device reports no network connection.";
+      }
+      addEventListener("online", updateNetworkStatus);
+      addEventListener("offline", updateNetworkStatus);
+      updateNetworkStatus();
+
+      document.getElementById("random").addEventListener("click", () => {
+        const bytes = new Uint8Array(32);
+        crypto.getRandomValues(bytes);
+        document.getElementById("randomOut").textContent = [...bytes]
+          .map((byte) => byte.toString(16).padStart(2, "0"))
+          .join("");
+      });
+    </script>
+    <script src="/site-ui.js" defer></script>
+  </body>
+</html>
