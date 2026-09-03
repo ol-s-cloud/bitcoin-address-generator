@@ -21,14 +21,17 @@ const randomType = $("randomType"),
   activityList = $("activityList"),
   liveActivity = $("liveActivity"),
   metricTotal = $("metricTotal"),
-  metricSession = $("metricSession");
+  metricSession = $("metricSession"),
+  publishToExplorer = $("publishToExplorer"),
+  explorerChoiceStatus = $("explorerChoiceStatus");
 let lastRandomHex = "",
   currentWallet = null,
   sessionGenerated = 0;
 const CURVE_N = BigInt(
     "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141",
   ),
-  LOG_KEY = "cobra-public-address-log-v1";
+  LOG_KEY = "cobra-public-address-log-v1",
+  EXPLORER_PREFERENCE_KEY = "cobra-explorer-opt-in-v1";
 const explorerUrl = (address) =>
   `https://www.blockchain.com/explorer/addresses/btc/${address}`;
 for (const tab of tabs)
@@ -63,6 +66,26 @@ $("useRandomAsKey").addEventListener("click", () => {
   deriveAndRender(normalizePrivateKey(lastRandomHex), true);
 });
 $("downloadRecovery").addEventListener("click", downloadRecoveryKit);
+if (publishToExplorer) {
+  try {
+    publishToExplorer.checked =
+      localStorage.getItem(EXPLORER_PREFERENCE_KEY) === "true";
+  } catch {
+    publishToExplorer.checked = false;
+  }
+  syncExplorerPreference();
+  publishToExplorer.addEventListener("change", () => {
+    try {
+      localStorage.setItem(
+        EXPLORER_PREFERENCE_KEY,
+        String(publishToExplorer.checked),
+      );
+    } catch {
+      // The choice still applies to the current page view.
+    }
+    syncExplorerPreference();
+  });
+}
 $("clearLog").addEventListener("click", () => {
   localStorage.removeItem(LOG_KEY);
   renderLog();
@@ -210,9 +233,17 @@ function deriveAndRender(privateHex, logAddress = false) {
     addressOut.textContent = address;
     explorerLink.href = explorerUrl(address);
     explorerLink.classList.remove("disabled");
-    if (logAddress) {
+    if (logAddress && publishToExplorer?.checked) {
       const added = addPublicLog(address);
       if (added) sessionGenerated++;
+      if (explorerChoiceStatus) {
+        explorerChoiceStatus.textContent = added
+          ? "Public address added to your local COBRA Explorer."
+          : "This public address is already in your local COBRA Explorer.";
+      }
+    } else if (logAddress && explorerChoiceStatus) {
+      explorerChoiceStatus.textContent =
+        "Address created locally and kept out of your COBRA Explorer.";
     }
     renderLog();
   } catch (error) {
@@ -240,15 +271,21 @@ function getLog() {
     return [];
   }
 }
+function syncExplorerPreference() {
+  if (!publishToExplorer || !explorerChoiceStatus) return;
+  explorerChoiceStatus.textContent = publishToExplorer.checked
+    ? "Explorer listing is on for the next address you create or derive."
+    : "Explorer listing is off.";
+}
 function renderLog() {
   const log = getLog();
   metricTotal.textContent = String(log.length);
   metricSession.textContent = String(sessionGenerated);
   if (!log.length) {
     activityList.innerHTML =
-      '<div class="empty-state">Generate a Bitcoin address to begin your local activity log.</div>';
+      '<div class="empty-state">No addresses have been added to your local Explorer.</div>';
     liveActivity.innerHTML =
-      '<div class="empty-state">Generate an address to see live activity.</div>';
+      '<div class="empty-state">Opt in when creating an address to see it here.</div>';
     return;
   }
   activityList.innerHTML = log

@@ -99,12 +99,20 @@ body,
   position: relative;
   display: inline-flex;
   align-items: center;
+  gap: 7px;
   flex: 0 0 auto;
 }
 
+.language-label {
+  color: var(--muted);
+  font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .language-switcher select {
-  width: 58px;
-  max-width: 58px;
+  width: 108px;
+  max-width: 108px;
   min-height: 36px;
   padding: 0 8px;
   overflow: hidden;
@@ -263,10 +271,10 @@ html[data-theme="light"] .status-label.research {
   background:
     linear-gradient(
       90deg,
-      rgba(5, 7, 6, 0.95) 0%,
-      rgba(5, 7, 6, 0.78) 39%,
-      rgba(5, 7, 6, 0.26) 72%,
-      rgba(5, 7, 6, 0.45) 100%
+      rgba(5, 7, 6, 0.84) 0%,
+      rgba(5, 7, 6, 0.67) 39%,
+      rgba(5, 7, 6, 0.18) 72%,
+      rgba(5, 7, 6, 0.3) 100%
     ),
     linear-gradient(180deg, rgba(5, 7, 6, 0.05) 50%, var(--bg) 100%);
   pointer-events: none;
@@ -298,10 +306,10 @@ html[data-theme="light"] .hero-bg-shade {
   background:
     linear-gradient(
       90deg,
-      rgba(247, 249, 247, 0.88) 0%,
-      rgba(247, 249, 247, 0.7) 43%,
-      rgba(247, 249, 247, 0.12) 74%,
-      rgba(247, 249, 247, 0.3) 100%
+      rgba(247, 249, 247, 0.8) 0%,
+      rgba(247, 249, 247, 0.56) 43%,
+      rgba(247, 249, 247, 0.07) 74%,
+      rgba(247, 249, 247, 0.2) 100%
     ),
     linear-gradient(180deg, rgba(247, 249, 247, 0.02) 48%, var(--bg) 100%) !important;
 }
@@ -488,6 +496,10 @@ html[data-theme="light"] .nasa-credit {
     margin: 7px 0 0;
     padding: 0;
     border: 0;
+  }
+
+  .language-label {
+    min-width: 70px;
   }
 
   .language-switcher select {

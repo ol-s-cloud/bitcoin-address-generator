@@ -96,14 +96,42 @@ def test_docs_do_not_publish_internal_provenance_notes():
 
 def test_home_restores_public_research_news_poll_and_build_surfaces():
     home = page_source("index.html")
+    home_script = page_source("home-live.js")
+    app_script = page_source("app.js")
     assert 'src="/assets/cobra-hero.jpg"' in home
+    assert "Create randomness." in home
+    assert "Derive addresses." in home
+    assert "playground" not in home.lower()
     assert 'class="research-frontier"' in home
     assert 'id="newsFeatured"' in home
+    assert "DOJ: Won’t pursue coders merely for writing code" in home
+    assert "justice.gov/opa/speech/" in home
+    assert "Ethereum maps its post-quantum cryptography transition" in home
+    assert "ethereum.org/roadmap/security/quantum-resistance/" in home
+    assert 'id="newsLatest"' in home
     assert 'class="news-more"' in home
     assert 'id="network-poll"' in home
-    assert "Should privacy be the default on public blockchains?" in home
+    assert "What blockchain would you like next?" in home
+    for network in ("Ethereum", "Solana", "Litecoin", "Other / Suggest"):
+        assert f'"{network}"' in home_script
     assert 'class="developer-terminal"' in home
     assert "Tell us about your project" in home
+    assert 'id="feature-poll"' in home
+    for feature in (
+        "Onchain privacy",
+        "Wallet systems",
+        "Cold-storage integrations",
+        "COBRA cross-border payments",
+        "Offline functionality",
+        "Public API & SDK",
+    ):
+        assert f'"{feature}"' in home_script
+    assert "COBRA × AI AGENTS" in home
+    assert "robots and physical-intelligence systems" in home
+    assert 'id="publishToExplorer"' in home
+    assert "cobra-explorer-opt-in-v1" in app_script
+    assert "publishToExplorer?.checked" in app_script
+    assert 'getElementById("newsFeatured")' not in home_script
     assert "the shared registry is not connected" not in home.lower()
     assert "built on the original 2023" not in home.lower()
 
@@ -136,6 +164,8 @@ def test_language_switcher_supports_six_languages():
     script = page_source("surface-i18n.js")
     for language in ("en", "fr", "es", "pt", "de", "zh"):
         assert f'["{language}",' in script
+    assert 'visibleLabel.textContent = "Language"' in script
+    assert "option.textContent = fullLabel" in script
 
 
 def test_provenance_artifacts_remain_byte_for_byte_unchanged():

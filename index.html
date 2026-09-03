@@ -14,7 +14,7 @@
     />
     <meta
       property="og:description"
-      content="Generate cryptographic randomness, derive Bitcoin addresses, inspect recovery material and explore the research methodology behind the project."
+      content="Create cryptographic randomness, derive Bitcoin addresses locally and integrate COBRA into sovereign payment and autonomous-system workflows."
     />
     <meta property="og:type" content="website" />
     <title>COBRA — by ol-s-cloud</title>
@@ -61,11 +61,13 @@
           <div class="eyebrow">
             CRYPTOGRAPHIC ORACLE FOR BYTES, RANDOMNESS & ADDRESSES
           </div>
-          <h1>Numbers become<br /><span>addresses.</span></h1>
+          <h1>Create randomness.<br /><span>Derive addresses.</span></h1>
           <p>
-            COBRA is a free, open-source Bitcoin cryptography playground for
-            generating randomness and understanding how private keys become
-            public addresses.
+            COBRA is open-source cryptographic infrastructure for creating
+            secure random values and deriving Bitcoin mainnet addresses
+            locally. Use the browser engine or Python toolkit to build address
+            creation into payment and autonomous-system workflows without
+            surrendering key authority.
           </p>
           <div class="chips">
             <span>Local-first secrets</span><span>secp256k1</span
@@ -106,18 +108,32 @@
       <section class="desert-callout">
         <div class="eyebrow">THE DESERT / MARS TEST</div>
         <h2>
-          If you were stranded in a desert — or on another planet — Bitcoin
-          would not need to issue you an account.
+          Ever get stranded in a desert — or on another planet — with no
+          internet? No problem.
         </h2>
         <p>
-          In principle, a valid secret number plus the Bitcoin derivation rules
-          is enough to reconstruct its corresponding address. Human-created
-          “random” numbers are not secure enough for real funds, however. COBRA
-          demonstrates the mathematics with a local browser engine that can
-          operate without an account, custodian or continuous network
-          connection.
+          COBRA Offline creates cryptographic randomness without a continuous
+          connection. Once installed locally, COBRA’s Python tools can also
+          derive Bitcoin mainnet receiving addresses offline — without an
+          account, custodian or central key issuer. Connect compatible wallet
+          software when you need to inspect or move onchain value.
         </p>
         <a class="inline-action" href="/offline.html">Explore COBRA Offline →</a>
+      </section>
+      <section class="sovereignty" id="cobra-plus" aria-labelledby="sovereignty-title">
+        <div>
+          <div class="eyebrow">COBRA+</div>
+          <h2 id="sovereignty-title">Your numbers. Your addresses. Your authority.</h2>
+          <p>
+            No KYC. No COBRA account. No custodian. No centralized key issuer.
+            Address creation stays on your device, and Explorer visibility is
+            your choice.
+          </p>
+        </div>
+        <div class="sovereignty-points" aria-label="COBRA sovereignty principles">
+          <span>LOCAL CREATION</span><span>PRIVATE BY DEFAULT</span
+          ><span>OPT-IN EXPLORER</span><span>USER-CONTROLLED KEYS</span>
+        </div>
       </section>
       <section class="warning" role="note">
         <strong>Security note.</strong
@@ -224,6 +240,24 @@
                 /><button id="deriveAddress">Derive</button>
               </div></label
             >
+            <label class="explorer-choice" for="publishToExplorer">
+              <input id="publishToExplorer" type="checkbox" />
+              <span>
+                <strong>Add this public address to my local COBRA Explorer</strong>
+                <small
+                  >Off by default. Private keys and WIFs never enter
+                  Explorer.</small
+                >
+              </span>
+            </label>
+            <p
+              class="explorer-choice-status"
+              id="explorerChoiceStatus"
+              role="status"
+              aria-live="polite"
+            >
+              Explorer listing is off.
+            </p>
             <div class="pipeline">
               <article>
                 <span>01</span>
@@ -284,19 +318,19 @@
             </div>
           </div>
           <div class="metric-grid">
-            <div><strong id="metricTotal">0</strong><span>generated</span></div>
+            <div><strong id="metricTotal">0</strong><span>in Explorer</span></div>
             <div>
-              <strong id="metricSession">0</strong><span>this session</span>
+              <strong id="metricSession">0</strong><span>added this session</span>
             </div>
           </div>
           <div id="liveActivity" class="live-activity">
             <div class="empty-state">
-              Generate an address to see live activity.
+              Opt in when creating an address to see it here.
             </div>
           </div>
           <div class="rail-note">
-            Only public Bitcoin addresses are shown here. Private keys and WIFs
-            never enter the activity feed.
+            Only public Bitcoin addresses you choose to add are shown here.
+            Private keys and WIFs never enter the activity feed.
           </div>
           <div class="social-stack">
             <a
@@ -538,16 +572,57 @@ SHA-256 → RIPEMD-160 → version byte
       <section class="news-pulse" id="news" aria-labelledby="news-title">
         <div class="news-head">
           <div>
-            <div class="eyebrow">GLOBAL CRYPTO PULSE</div>
-            <h2 id="news-title">Bitcoin, blockchain and cryptography—now.</h2>
+            <div class="eyebrow">POLICY & RESEARCH WATCH</div>
+            <h2 id="news-title">Signals shaping cryptographic systems.</h2>
           </div>
-          <div class="news-status"><span class="live-dot"></span><span id="newsUpdated">Loading live feed…</span></div>
         </div>
-        <div id="newsFeatured" class="news-featured" aria-live="polite">
-          <div class="news-loading">Fetching the latest headlines…</div>
+        <div id="newsFeatured" class="news-featured">
+          <a
+            class="news-card featured"
+            data-source="us-department-of-justice"
+            href="https://www.justice.gov/opa/speech/acting-assistant-attorney-general-matthew-r-galeotti-delivers-remarks-american"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="news-meta">
+              <span>U.S. Department of Justice</span
+              ><time datetime="2025-05-16">May 16, 2025</time>
+            </div>
+            <h3>DOJ: Won’t pursue coders merely for writing code</h3>
+            <p class="news-summary">
+              The Criminal Division says writing code without criminal intent
+              is not a crime, drawing an important boundary for developers of
+              neutral tools.
+            </p>
+            <span class="news-open">Read the DOJ statement ↗</span>
+          </a>
+          <a
+            class="news-card featured"
+            data-source="ethereum"
+            href="https://ethereum.org/roadmap/security/quantum-resistance/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="news-meta">
+              <span>ethereum.org</span><time>Post-quantum security</time>
+            </div>
+            <h3>Ethereum maps its post-quantum cryptography transition</h3>
+            <p class="news-summary">
+              Ethereum’s research tracks quantum-resistant changes across
+              signatures, consensus, data availability and proof systems.
+            </p>
+            <span class="news-open">Explore the research ↗</span>
+          </a>
+        </div>
+        <div class="news-live-head">
+          <div><span class="live-dot"></span><strong>LIVE ECOSYSTEM FEED</strong></div>
+          <span id="newsUpdated">Loading RSS…</span>
+        </div>
+        <div id="newsLatest" class="news-latest" aria-live="polite">
+          <div class="news-loading">Fetching the latest headline…</div>
         </div>
         <details class="news-more">
-          <summary>More from across the ecosystem <span aria-hidden="true">↓</span></summary>
+          <summary>More live headlines from across the ecosystem <span aria-hidden="true">↓</span></summary>
           <div class="news-rail-controls" aria-label="News navigation">
             <button type="button" id="newsPrev" aria-label="Previous headlines">←</button>
             <button type="button" id="newsNext" aria-label="Next headlines">→</button>
@@ -555,33 +630,44 @@ SHA-256 → RIPEMD-160 → version byte
           <div id="newsRail" class="news-rail"></div>
         </details>
       </section>
-      <section class="network-poll" id="network-poll" aria-labelledby="poll-title">
+      <section class="network-poll" id="network-poll" aria-labelledby="network-poll-title">
         <div class="poll-copy">
-          <div class="eyebrow">NETWORK PULSE</div>
-          <h2 id="poll-title">Should privacy be the default on public blockchains?</h2>
-          <p>Cast one vote on this device and see the community signal.</p>
+          <div class="eyebrow">COBRA // NEXT NETWORK</div>
+          <h2 id="network-poll-title">What blockchain would you like next?</h2>
+          <p>Vote, request or suggest the next blockchain integration.</p>
         </div>
-        <div class="poll-meta"><span>Community signal</span><strong id="pollTotal">2,931 votes</strong></div>
-        <div class="poll-options" id="pollOptions"></div>
-        <p class="poll-note" id="pollNote">Choose Yes, No or Unsure.</p>
+        <div class="poll-meta">
+          <span>Your choice</span><strong id="networkPollState">No selection</strong>
+        </div>
+        <div class="poll-options network-options" id="networkPollOptions"></div>
+        <div class="poll-foot">
+          <p class="poll-note" id="networkPollNote">
+            Select one network. Your preference is saved on this device.
+          </p>
+          <a
+            href="https://github.com/ol-s-cloud/bitcoin-address-generator/issues/new?title=COBRA%20next%20network%20request&body=Network%3A%20%0A%0AWhy%20COBRA%20should%20support%20it%3A%20"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Submit a network proposal ↗</a
+          >
+        </div>
       </section>
       <section class="activity" id="log">
         <div class="activity-head">
           <div>
             <div class="eyebrow">YOUR COBRA GENERATION LOG</div>
-            <h2>Public addresses. Private secrets stay private.</h2>
+            <h2>Your chosen public addresses. Private secrets stay private.</h2>
             <p>
-              This browser keeps a local log of addresses generated on this
-              device. Every record links directly to the corresponding Bitcoin
-              address on Blockchain.com Explorer. Private keys and WIFs are
-              never placed in the log.
+              When you opt in, this browser keeps a local log of the public
+              address and links it to Blockchain.com Explorer. Private keys and
+              WIFs are never placed in the log.
             </p>
           </div>
           <button class="secondary" id="clearLog">Clear local log</button>
         </div>
         <div id="activityList" class="activity-list">
           <div class="empty-state">
-            Generate a Bitcoin address to begin your local activity log.
+            No addresses have been added to your local Explorer.
           </div>
         </div>
         <a class="registry-note" href="/explorer.html">
@@ -674,6 +760,59 @@ SHA-256 → RIPEMD-160 → version byte
             target="_blank"
             rel="noopener noreferrer"
             >Build on GitHub ↗</a
+          >
+        </div>
+      </section>
+      <section class="agent-systems" id="agents" aria-labelledby="agents-title">
+        <div class="agent-copy">
+          <div class="eyebrow">COBRA × AI AGENTS</div>
+          <h2 id="agents-title">Machine-speed workflows. Controlled authority.</h2>
+          <p>
+            COBRA’s local randomness and address-derivation primitives can be
+            integrated into AI agents, robots and physical-intelligence systems
+            that allocate receiving addresses or prepare payment workflows in
+            real time. Secret-bearing actions remain behind an explicit wallet,
+            signer or policy boundary.
+          </p>
+          <p class="agent-note">
+            For high-throughput systems, COBRA supplies the randomness and
+            address layer; an audited signer controls transaction execution.
+          </p>
+        </div>
+        <div class="agent-console" aria-label="COBRA agent integration flow">
+          <span>01 / OBSERVE</span>
+          <strong>agent or robot</strong>
+          <i aria-hidden="true">↓</i>
+          <span>02 / PREPARE</span>
+          <strong>COBRA randomness + address</strong>
+          <i aria-hidden="true">↓</i>
+          <span>03 / AUTHORIZE</span>
+          <strong>policy + trusted signer</strong>
+        </div>
+      </section>
+      <section
+        class="network-poll feature-poll"
+        id="feature-poll"
+        aria-labelledby="feature-poll-title"
+      >
+        <div class="poll-copy">
+          <div class="eyebrow">SHAPE COBRA</div>
+          <h2 id="feature-poll-title">What should COBRA roll out next?</h2>
+          <p>Choose the capability that would create the most value for your work.</p>
+        </div>
+        <div class="poll-meta">
+          <span>Your choice</span><strong id="featurePollState">No selection</strong>
+        </div>
+        <div class="poll-options feature-options" id="featurePollOptions"></div>
+        <div class="poll-foot">
+          <p class="poll-note" id="featurePollNote">
+            Select one feature. Your preference is saved on this device.
+          </p>
+          <a
+            href="https://github.com/ol-s-cloud/bitcoin-address-generator/issues/new?title=COBRA%20feature%20request&body=Feature%3A%20%0A%0AHow%20you%20would%20use%20it%3A%20"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Tell us about the use case ↗</a
           >
         </div>
       </section>
