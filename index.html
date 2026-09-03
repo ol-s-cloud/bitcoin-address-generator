@@ -7,7 +7,7 @@
       name="description"
       content="COBRA — Cryptographic Oracle for Bytes, Randomness & Addresses. Free Bitcoin cryptography, randomness and address research tools by ol-s-cloud."
     />
-    <meta name="theme-color" content="#050706" />
+    <meta name="theme-color" content="#f7f9f7" />
     <meta
       property="og:title"
       content="COBRA — Cryptographic Oracle for Bytes, Randomness & Addresses"
@@ -22,12 +22,7 @@
       (() => {
         try {
           const saved = localStorage.getItem("cobra-theme");
-          const theme =
-            saved === "light" || saved === "dark"
-              ? saved
-              : matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+          const theme = saved === "dark" ? "dark" : "light";
           document.documentElement.dataset.theme = theme;
           document.documentElement.style.colorScheme = theme;
         } catch {}
@@ -35,6 +30,7 @@
     </script>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="site-ui.css" />
+    <link rel="stylesheet" href="home-live.css" />
   </head>
   <body>
     <header class="site-header">
@@ -56,7 +52,7 @@
       <section class="hero">
         <img
           class="hero-bg-image"
-          src="https://www.nasa.gov/wp-content/uploads/2023/03/iss068e011296_alt.jpg?w=1920"
+          src="/assets/cobra-hero.jpg"
           alt=""
           aria-hidden="true"
         />
@@ -71,16 +67,6 @@
             generating randomness and understanding how private keys become
             public addresses.
           </p>
-          <div class="hero-credit">
-            Built from the
-            <a
-              href="https://github.com/ol-s-cloud/bitcoin-address-generator"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Bitcoin Address Generator research repository</a
-            >
-            · <strong>by ol-s-cloud</strong>
-          </div>
           <div class="chips">
             <span>Local-first secrets</span><span>secp256k1</span
             ><span>ECDSA</span><span>SHA-256</span><span>RIPEMD-160</span
@@ -111,10 +97,10 @@
           <strong>Open questions</strong>
           <small>Security, privacy, resilience and cryptographic value.</small>
         </a>
-        <a href="/explorer.html">
-          <span class="status-label roadmap">Roadmap</span>
-          <strong>Shared registry</strong>
-          <small>Opt-in public address activity; not yet connected.</small>
+        <a href="#developers">
+          <span class="status-label available">Open source</span>
+          <strong>Build on COBRA</strong>
+          <small>Tools and research for cryptographic projects.</small>
         </a>
       </section>
       <section class="desert-callout">
@@ -127,17 +113,17 @@
           In principle, a valid secret number plus the Bitcoin derivation rules
           is enough to reconstruct its corresponding address. Human-created
           “random” numbers are not secure enough for real funds, however. COBRA
-          demonstrates the mathematics; secure wallet software uses
-          cryptographically strong entropy.
+          demonstrates the mathematics with a local browser engine that can
+          operate without an account, custodian or continuous network
+          connection.
         </p>
+        <a class="inline-action" href="/offline.html">Explore COBRA Offline →</a>
       </section>
       <section class="warning" role="note">
-        <strong>Educational and experimental software.</strong
+        <strong>Security note.</strong
         ><span
-          >COBRA can derive mathematically valid Bitcoin addresses, but it is
-          not a wallet provider, custodian, exchange, recovery service or
-          financial service. Never use demonstration keys for material
-          funds.</span
+          >Private keys and WIFs control funds. Keep them off shared devices,
+          forms, analytics and messages.</span
         >
       </section>
       <div class="tool-layout" id="tools">
@@ -216,14 +202,13 @@
             <div class="engine-note">
               <strong>Live engine:</strong> Browser JavaScript.
               <span
-                >The original Python methodology remains preserved in the
-                repository and notebook; COBRA does not send your private key to
-                a Python server.</span
+                >Derivation happens on this device; COBRA does not send your
+                private key to a server.</span
               >
             </div>
             <div class="lab-actions">
               <button class="primary" id="generateBitcoin">
-                Generate educational example</button
+                Generate Bitcoin address</button
               ><button class="secondary" id="useRandomAsKey">
                 Use last 32-byte random hex
               </button>
@@ -340,14 +325,14 @@
         </div>
         <div class="explain-copy">
           <p>
-            COBRA follows the original project methodology: valid 256-bit scalar
+            COBRA follows the Bitcoin derivation method: valid 256-bit scalar
             → secp256k1 public key → SHA-256 → RIPEMD-160 → Bitcoin mainnet
             version byte → double-SHA-256 checksum → Base58Check address.
           </p>
           <p>
-            The current browser engine reimplements that method in JavaScript.
-            The original Python implementation and historical Colab notebook
-            remain separate and preserved as the project's research provenance.
+            The browser engine performs the derivation locally in JavaScript so
+            the cryptographic steps can be inspected instead of hidden behind a
+            single output field.
           </p>
         </div>
       </section>
@@ -356,9 +341,8 @@
           <div class="eyebrow">RESEARCH TERMINAL</div>
           <h2>The code, curve and derivation chain behind COBRA.</h2>
           <p>
-            These visuals and references come from the original Bitcoin Address
-            Generator repository. The web product exposes the underlying
-            cryptographic method rather than hiding it behind a single button.
+            Inspect the implementation, run the package and follow every stage
+            from entropy to a mainnet P2PKH address.
           </p>
         </div>
         <div class="terminal-window">
@@ -455,8 +439,40 @@ SHA-256 → RIPEMD-160 → version byte
           </article>
         </div>
       </section>
+      <section class="research-frontier" aria-labelledby="frontier-title">
+        <div class="eyebrow">COBRA RESEARCH FRONTIER</div>
+        <h2 id="frontier-title">Cryptography, intelligent systems and the future of value.</h2>
+        <p class="frontier-intro">
+          COBRA is an open research surface for developers and researchers
+          working on cryptographic sovereignty, resilient infrastructure and
+          verifiable digital systems.
+        </p>
+        <div class="frontier-grid">
+          <article>
+            <span>01</span>
+            <h3>Post-quantum security</h3>
+            <p>Signature agility and migration paths for assets that must survive cryptographic change.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Privacy and sovereignty</h3>
+            <p>Address reuse, metadata exposure, selective disclosure and user-controlled authorization.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Autonomous systems</h3>
+            <p>Machines that can observe and prepare actions while keys remain inside a trusted boundary.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Resilient value</h3>
+            <p>Offline operation, recovery architecture and the preservation of digital claims across time.</p>
+          </article>
+        </div>
+        <a class="inline-action" href="/research.html">Open the Research Hub →</a>
+      </section>
       <section class="comparison">
-        <div class="eyebrow">TWO IMPLEMENTATIONS, ONE METHOD</div>
+        <div class="eyebrow">TWO INTERFACES, ONE METHOD</div>
         <div class="comparison-grid">
           <article>
             <span>LIVE</span>
@@ -468,18 +484,17 @@ SHA-256 → RIPEMD-160 → version byte
             </p>
           </article>
           <article>
-            <span>ORIGINAL</span>
-            <h3>Python research lineage</h3>
+            <span>PYTHON</span>
+            <h3>Python package</h3>
             <p>
-              The repository's Python package and 2023 notebook demonstrate the
-              same address-construction chain using Python, ECDSA, hashlib and
-              Base58.
+              Run the address-construction chain locally using Python, ECDSA,
+              hashlib and Base58.
             </p>
             <a
-              href="https://github.com/ol-s-cloud/bitcoin-address-generator/blob/main/How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb"
+              href="https://github.com/ol-s-cloud/bitcoin-address-generator/tree/main/bitcoin_address_generator"
               target="_blank"
               rel="noopener noreferrer"
-              >Open original notebook ↗</a
+              >Open Python source ↗</a
             >
           </article>
         </div>
@@ -520,6 +535,36 @@ SHA-256 → RIPEMD-160 → version byte
           </article>
         </div>
       </section>
+      <section class="news-pulse" id="news" aria-labelledby="news-title">
+        <div class="news-head">
+          <div>
+            <div class="eyebrow">GLOBAL CRYPTO PULSE</div>
+            <h2 id="news-title">Bitcoin, blockchain and cryptography—now.</h2>
+          </div>
+          <div class="news-status"><span class="live-dot"></span><span id="newsUpdated">Loading live feed…</span></div>
+        </div>
+        <div id="newsFeatured" class="news-featured" aria-live="polite">
+          <div class="news-loading">Fetching the latest headlines…</div>
+        </div>
+        <details class="news-more">
+          <summary>More from across the ecosystem <span aria-hidden="true">↓</span></summary>
+          <div class="news-rail-controls" aria-label="News navigation">
+            <button type="button" id="newsPrev" aria-label="Previous headlines">←</button>
+            <button type="button" id="newsNext" aria-label="Next headlines">→</button>
+          </div>
+          <div id="newsRail" class="news-rail"></div>
+        </details>
+      </section>
+      <section class="network-poll" id="network-poll" aria-labelledby="poll-title">
+        <div class="poll-copy">
+          <div class="eyebrow">NETWORK PULSE</div>
+          <h2 id="poll-title">Should privacy be the default on public blockchains?</h2>
+          <p>Cast one vote on this device and see the community signal.</p>
+        </div>
+        <div class="poll-meta"><span>Community signal</span><strong id="pollTotal">2,931 votes</strong></div>
+        <div class="poll-options" id="pollOptions"></div>
+        <p class="poll-note" id="pollNote">Choose Yes, No or Unsure.</p>
+      </section>
       <section class="activity" id="log">
         <div class="activity-head">
           <div>
@@ -539,50 +584,9 @@ SHA-256 → RIPEMD-160 → version byte
             Generate a Bitcoin address to begin your local activity log.
           </div>
         </div>
-        <div class="registry-note">
-          <strong>Roadmap:</strong> the shared registry is not connected yet.
-          When introduced, participation will be opt-in and limited to public
-          addresses, timestamps and derivation metadata — never private keys.
-        </div>
-      </section>
-      <section class="origins" id="origins">
-        <div>
-          <div class="eyebrow">ORIGINAL RESEARCH · 2023</div>
-          <h2>Built on the original 2023 work.</h2>
-          <p>
-            The project originated during postgraduate study in Finance & Data
-            Analytics as an exploration of blockchain technologies,
-            cryptographic keys and Bitcoin address construction. The original
-            <code>notebook</code> file and Colab notebook remain untouched in
-            the repository. COBRA does not imply university endorsement or
-            custody of user funds.
-          </p>
-          <p class="origin-credit">
-            <strong>COBRA by ol-s-cloud</strong> · modern web interface built
-            directly on the original
-            <a
-              href="https://github.com/ol-s-cloud/bitcoin-address-generator"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Bitcoin Address Generator repository</a
-            >.
-          </p>
-        </div>
-        <div class="origin-actions">
-          <a
-            class="primary-link"
-            href="https://github.com/ol-s-cloud/bitcoin-address-generator/blob/main/How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb"
-            target="_blank"
-            rel="noopener noreferrer"
-            >View original notebook ↗</a
-          ><a
-            class="secondary-link"
-            href="https://github.com/ol-s-cloud/bitcoin-address-generator"
-            target="_blank"
-            rel="noopener noreferrer"
-            >View source ↗</a
-          >
-        </div>
+        <a class="registry-note" href="/explorer.html">
+          Open COBRA Explorer for live Bitcoin network data and your device activity →
+        </a>
       </section>
       <section class="references">
         <div class="eyebrow">TECHNICAL & ACADEMIC REFERENCES</div>
@@ -648,23 +652,22 @@ SHA-256 → RIPEMD-160 → version byte
       </section>
       <section class="developers" id="developers">
         <div>
-          <span class="status-label roadmap">Roadmap</span>
-          <h2>Developer access beyond the repository.</h2>
+          <div class="eyebrow">BUILD ON COBRA</div>
+          <h2>Bring your blockchain or cryptography project.</h2>
           <p>
-            COBRA does not currently provide a public hosted API or SDK. The
-            source repository is the available integration surface today.
-          </p>
-          <p class="small">
-            A public API belongs to the roadmap and will require documented
-            authentication, rate limits and strict exclusion of private key
-            material.
+            Developers, researchers and teams can use the open-source toolkit,
+            extend the cryptographic pipeline, propose experiments or tell us
+            where COBRA could support their work.
           </p>
         </div>
+        <pre class="developer-terminal"><code><span>$</span> pip install git+https://github.com/ol-s-cloud/bitcoin-address-generator.git
+<span>$</span> cobra status
+<span>$</span> cobra generate --network mainnet</code></pre>
         <div class="developer-actions">
           <a
             class="primary-link"
-            href="mailto:gs_wl889@icloud.com?subject=COBRA%20API%20%2F%20Developer%20Access"
-            >Ask about the roadmap</a
+            href="mailto:gs_wl889@icloud.com?subject=Build%20on%20COBRA"
+            >Tell us about your project</a
           ><a
             class="secondary-link"
             href="https://github.com/ol-s-cloud/bitcoin-address-generator"
@@ -679,9 +682,8 @@ SHA-256 → RIPEMD-160 → version byte
           <div class="eyebrow">OPEN SOURCE · BY OL-S-CLOUD</div>
           <h2>Learn from it. Fork it. Improve it.</h2>
           <p>
-            COBRA is an open-source evolution of the original Bitcoin Address
-            Generator repository. The source, methodology, notebook history and
-            contributions remain visible on GitHub.
+            COBRA is open source. Study the method, use the tools and contribute
+            improvements through GitHub.
           </p>
         </div>
         <div class="community-actions">
@@ -703,19 +705,13 @@ SHA-256 → RIPEMD-160 → version byte
       </section>
     </main>
     <footer>
-      <span>COBRA <small>by ol-s-cloud</small></span
-      ><span
-        ><a
-          href="https://github.com/ol-s-cloud/bitcoin-address-generator"
-          target="_blank"
-          rel="noopener noreferrer"
-          >github.com/ol-s-cloud/bitcoin-address-generator</a
-        >
-        · <a href="/terms.html">Terms of Use</a> · Cryptographic Oracle for
-        Bytes, Randomness & Addresses</span
-      >
+      <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
+      <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
+      <div class="footer-meta">First roll out 2023.<br />Last Updated 2026</div>
     </footer>
     <script src="/site-ui.js" defer></script>
+    <script src="/surface-i18n.js" defer></script>
+    <script src="/home-live.js" defer></script>
     <script type="module" src="app.js"></script>
   </body>
 </html>

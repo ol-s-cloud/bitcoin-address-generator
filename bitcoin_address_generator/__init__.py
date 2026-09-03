@@ -21,7 +21,7 @@ from bitcoin_address_generator.core.address import (
 )
 from bitcoin_address_generator.core.qr import generate_qr_code
 
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 
 def generate_wallet(private_key=None, address_type='p2pkh'):
     """Generate a new Bitcoin wallet or use existing private key.

@@ -298,10 +298,10 @@ html[data-theme="light"] .hero-bg-shade {
   background:
     linear-gradient(
       90deg,
-      rgba(247, 249, 247, 0.93) 0%,
-      rgba(247, 249, 247, 0.82) 43%,
-      rgba(247, 249, 247, 0.3) 74%,
-      rgba(247, 249, 247, 0.5) 100%
+      rgba(247, 249, 247, 0.88) 0%,
+      rgba(247, 249, 247, 0.7) 43%,
+      rgba(247, 249, 247, 0.12) 74%,
+      rgba(247, 249, 247, 0.3) 100%
     ),
     linear-gradient(180deg, rgba(247, 249, 247, 0.02) 48%, var(--bg) 100%) !important;
 }
@@ -396,6 +396,39 @@ html[data-theme="light"] .nasa-credit {
   color: rgba(255, 255, 255, 0.82);
 }
 
+.footer-brand {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+}
+
+.footer-sovereignty {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  text-align: center;
+}
+
+.footer-sovereignty strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.footer-sovereignty span {
+  color: var(--accent);
+  font-size: 11px;
+}
+
+.footer-meta {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+  text-align: right;
+}
+
 @media (max-width: 920px) {
   .site-header {
     height: 68px;
@@ -472,6 +505,11 @@ html[data-theme="light"] .nasa-credit {
 
   .status-index {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-sovereignty,
+  .footer-meta {
+    text-align: left;
   }
 
   .status-index > * + * {

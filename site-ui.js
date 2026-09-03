@@ -1,7 +1,6 @@
 (() => {
   const root = document.documentElement;
   const storageKey = "cobra-theme";
-  const media = window.matchMedia?.("(prefers-color-scheme: light)");
 
   const readPreference = () => {
     try {
@@ -38,13 +37,7 @@
   };
 
   const savedTheme = readPreference();
-  applyTheme(savedTheme || (media?.matches ? "light" : "dark"));
-
-  if (!savedTheme) {
-    media?.addEventListener?.("change", (event) => {
-      if (!readPreference()) applyTheme(event.matches ? "light" : "dark");
-    });
-  }
+  applyTheme(savedTheme || "light");
 
   const currentPath =
     location.pathname.replace(/index\.html$/, "").replace(/\/$/, "") || "/";

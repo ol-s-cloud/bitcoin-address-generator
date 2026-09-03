@@ -1,5 +1,7 @@
+const FEED_TIMEOUT_MS=6000;
 const FEEDS=[
   {name:'CoinDesk',url:'https://www.coindesk.com/arc/outboundfeeds/rss/'},
+  {name:'The Block',url:'https://www.theblock.co/rss.xml'},
   {name:'Cointelegraph',url:'https://cointelegraph.com/rss'},
   {name:'Decrypt',url:'https://decrypt.co/feed'},
   {name:'Bitcoin Magazine',url:'https://bitcoinmagazine.com/.rss/full/'},
@@ -12,7 +14,7 @@ const FEEDS=[
 export default async function handler(req,res){
   try{
     const results=await Promise.allSettled(FEEDS.map(async feed=>{
-      const response=await fetch(feed.url,{headers:{'User-Agent':'COBRA/1.0 (+https://github.com/ol-s-cloud/bitcoin-address-generator)','Accept':'application/rss+xml, application/xml, text/xml, */*'}});
+      const response=await fetch(feed.url,{signal:AbortSignal.timeout(FEED_TIMEOUT_MS),headers:{'User-Agent':'COBRA/1.0 (+https://github.com/ol-s-cloud/bitcoin-address-generator)','Accept':'application/rss+xml, application/xml, text/xml, */*'}});
       if(!response.ok)throw new Error(`${feed.name}: ${response.status}`);
       const xml=await response.text();
       return parseFeed(xml,feed.name);

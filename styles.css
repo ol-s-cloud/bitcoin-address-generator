@@ -82,17 +82,7 @@ footer {
   margin-top: 28px;
   border: 1px solid #213328;
   border-radius: 28px;
-  background-image:
-    linear-gradient(
-      90deg,
-      rgba(5, 7, 6, 0.98) 0%,
-      rgba(5, 7, 6, 0.92) 42%,
-      rgba(5, 7, 6, 0.54) 72%,
-      rgba(5, 7, 6, 0.82) 100%
-    ),
-    url("https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/5c530686-c50a-4a00-bce7-3d1be3462d99");
-  background-size: cover;
-  background-position: center;
+  background: #050706;
   box-shadow: var(--shadow);
 }
 .hero:after {

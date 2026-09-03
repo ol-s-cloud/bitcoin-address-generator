@@ -34,7 +34,7 @@ def page_source(name):
     return (ROOT / name).read_text(encoding="utf-8")
 
 
-def test_every_public_page_uses_the_shared_navigation_and_theme():
+def test_every_public_page_uses_shared_navigation_theme_and_language():
     for page in PUBLIC_PAGES:
         source = page_source(page)
         assert 'class="brand"' in source
@@ -42,17 +42,17 @@ def test_every_public_page_uses_the_shared_navigation_and_theme():
         assert 'class="mark"' not in source
         assert 'href="/site-ui.css"' in source or 'href="site-ui.css"' in source
         assert 'src="/site-ui.js"' in source or 'src="site-ui.js"' in source
+        assert 'src="/surface-i18n.js"' in source
+        assert 'saved === "dark" ? "dark" : "light"' in source
         for route in PRIMARY_ROUTES:
             assert f'href="{route}"' in source
 
 
 def test_capability_statuses_are_explicit():
     docs = page_source("docs.html").lower()
-    for status in ("available", "experimental", "research", "roadmap"):
+    for status in ("available", "experimental", "research"):
         assert f">{status}<" in docs
 
-    assert ">roadmap<" in page_source("explorer.html").lower()
-    assert ">research<" in page_source("research.html").lower()
     assert ">experimental" in page_source("offline.html").lower()
     assert ">experimental" in page_source("cli.html").lower()
 
@@ -66,6 +66,10 @@ def test_public_copy_does_not_expose_internal_agent_or_planning_language():
         "what we are investigating",
         "coming later",
         "privacy coming soon",
+        "key 01",
+        "key 02",
+        "proposed public fields",
+        "research content is not a deployed product capability",
     )
     for phrase in banned:
         assert phrase not in combined
@@ -81,6 +85,57 @@ def test_home_does_not_load_retired_promotional_injections():
         "cli-status.js",
     ):
         assert module not in script
+
+
+def test_docs_do_not_publish_internal_provenance_notes():
+    docs = page_source("docs.html").lower()
+    assert "provenance" not in docs
+    assert "how_to_create_a_bitcoin_address" not in docs
+    assert "root-level file" not in docs
+
+
+def test_home_restores_public_research_news_poll_and_build_surfaces():
+    home = page_source("index.html")
+    assert 'src="/assets/cobra-hero.jpg"' in home
+    assert 'class="research-frontier"' in home
+    assert 'id="newsFeatured"' in home
+    assert 'class="news-more"' in home
+    assert 'id="network-poll"' in home
+    assert "Should privacy be the default on public blockchains?" in home
+    assert 'class="developer-terminal"' in home
+    assert "Tell us about your project" in home
+    assert "the shared registry is not connected" not in home.lower()
+    assert "built on the original 2023" not in home.lower()
+
+
+def test_explorer_is_a_live_mainnet_surface():
+    explorer = page_source("explorer.html").lower()
+    script = page_source("explorer.js")
+    api = page_source("api/bitcoin.js")
+    assert "bitcoin mainnet" in explorer
+    assert "testnet" not in explorer
+    assert "roadmap" not in explorer
+    assert 'id="pricechart"' in explorer
+    assert 'id="txchart"' in explorer
+    assert 'id="cobraaddresscount"' in explorer
+    assert 'fetch("/api/bitcoin"' in script
+    assert "api.blockchain.info" in api
+
+
+def test_requested_footer_is_consistent():
+    for page in PUBLIC_PAGES:
+        source = page_source(page)
+        assert "COBRA by ols-cloud" in source
+        assert "Cryptographic sovereignty." in source
+        assert "Your keys. Your mathematics. Your authority." in source
+        assert "First roll out 2023." in source
+        assert "Last Updated 2026" in source
+
+
+def test_language_switcher_supports_six_languages():
+    script = page_source("surface-i18n.js")
+    for language in ("en", "fr", "es", "pt", "de", "zh"):
+        assert f'["{language}",' in script
 
 
 def test_provenance_artifacts_remain_byte_for_byte_unchanged():

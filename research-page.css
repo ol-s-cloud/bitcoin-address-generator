@@ -21,11 +21,70 @@
   line-height: 1.75;
 }
 
+.research-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin-top: 30px;
+}
+
+.research-topics span {
+  color: var(--accent);
+  font: 800 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .research-section,
 .value-section,
 .publications {
   padding: 70px 0;
   border-top: 1px solid var(--line);
+}
+
+.research-terminal-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 56px;
+  padding: 70px 0;
+  border-top: 1px solid var(--line);
+}
+
+.research-terminal {
+  overflow: hidden;
+  border: 1px solid #294235;
+  border-radius: 16px;
+  background: #101612;
+  color: #dcffe6;
+}
+
+.terminal-caption {
+  padding: 13px 18px;
+  border-bottom: 1px solid #294235;
+  color: #91a098;
+  font: 800 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.1em;
+}
+
+.terminal-caption span {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: #55f58a;
+  box-shadow: 0 0 11px rgba(85, 245, 138, 0.55);
+}
+
+.research-terminal pre,
+.research-command {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.research-terminal pre {
+  padding: 24px;
+  font: 650 13px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 .section-kicker {
@@ -165,13 +224,31 @@
 
 .research-call {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
   gap: 50px;
   align-items: end;
   margin-bottom: 90px;
   padding: 42px 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+}
+
+.research-command {
+  padding: 20px;
+  overflow-x: auto;
+  border: 1px solid #294235;
+  border-radius: 12px;
+  background: #101612;
+  color: #dcffe6;
+  font: 600 12px/1.8 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.research-command span {
+  color: #55f58a;
+}
+
+.research-call .call-actions {
+  grid-column: 1 / -1;
 }
 
 .research-call h2 {
@@ -223,6 +300,7 @@
 }
 
 @media (max-width: 780px) {
+  .research-terminal-section,
   .timeline article,
   .research-references a,
   .publication-list article {
@@ -233,6 +311,10 @@
   .research-call {
     grid-template-columns: 1fr;
     align-items: start;
+  }
+
+  .research-call .call-actions {
+    grid-column: auto;
   }
 
   footer {

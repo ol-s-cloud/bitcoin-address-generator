@@ -5,20 +5,15 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="COBRA Terms of Use — educational and experimental cryptography software by ol-s-cloud."
+      content="COBRA Terms of Use for the cryptographic tools and research published by ol-s-cloud."
     />
-    <meta name="theme-color" content="#050706" />
+    <meta name="theme-color" content="#f7f9f7" />
     <title>Terms of Use — COBRA</title>
     <script>
       (() => {
         try {
           const saved = localStorage.getItem("cobra-theme");
-          const theme =
-            saved === "light" || saved === "dark"
-              ? saved
-              : matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+          const theme = saved === "dark" ? "dark" : "light";
           document.documentElement.dataset.theme = theme;
           document.documentElement.style.colorScheme = theme;
         } catch {}
@@ -240,9 +235,11 @@
       <a class="legal-back" href="/">← Return to COBRA</a>
     </main>
     <footer class="legal-footer">
-      First rollout 2023 · Last updated 2026 · COBRA by ol-s-cloud · For
-      educational purposes only
+      <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
+      <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
+      <div class="footer-meta">First roll out 2023.<br />Last Updated 2026</div>
     </footer>
     <script src="/site-ui.js" defer></script>
+    <script src="/surface-i18n.js" defer></script>
   </body>
 </html>

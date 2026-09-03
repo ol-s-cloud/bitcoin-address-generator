@@ -292,7 +292,7 @@ function downloadRecoveryKit() {
     alert("Generate or derive an address first.");
     return;
   }
-  const text = `COBRA RECOVERY KIT\nEducational / experimental use only\nCreated: ${currentWallet.createdAt}\nAddress type: ${currentWallet.type}\n\nBITCOIN ADDRESS\n${currentWallet.address}\n\nPRIVATE KEY — SECRET\n${currentWallet.privateKey}\n\nWIF — SECRET\n${currentWallet.wif}\n\nCOMPRESSED PUBLIC KEY\n${currentWallet.publicKey}\n\nHASH160\n${currentWallet.hash160}\n\nExplorer\n${explorerUrl(currentWallet.address)}\n\nWARNING\nAnyone with the private key or WIF can potentially control funds associated with this address. COBRA does not retain a backup. Store this file securely and do not use demonstration keys for material funds.\n`;
+  const text = `COBRA RECOVERY KIT\nSecret material — store securely\nCreated: ${currentWallet.createdAt}\nAddress type: ${currentWallet.type}\n\nBITCOIN ADDRESS\n${currentWallet.address}\n\nPRIVATE KEY — SECRET\n${currentWallet.privateKey}\n\nWIF — SECRET\n${currentWallet.wif}\n\nCOMPRESSED PUBLIC KEY\n${currentWallet.publicKey}\n\nHASH160\n${currentWallet.hash160}\n\nExplorer\n${explorerUrl(currentWallet.address)}\n\nWARNING\nAnyone with the private key or WIF can potentially control funds associated with this address. COBRA does not retain a backup. Store this file securely.\n`;
   const blob = new Blob([text], { type: "text/plain" }),
     url = URL.createObjectURL(blob),
     a = document.createElement("a");

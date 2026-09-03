@@ -7,18 +7,13 @@
       name="description"
       content="COBRA research on cryptographic sovereignty, privacy, resilient signing, post-quantum migration and the preservation of value."
     />
-    <meta name="theme-color" content="#050706" />
+    <meta name="theme-color" content="#f7f9f7" />
     <title>COBRA Research — Cryptography, Resilience & Value</title>
     <script>
       (() => {
         try {
           const saved = localStorage.getItem("cobra-theme");
-          const theme =
-            saved === "light" || saved === "dark"
-              ? saved
-              : matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+          const theme = saved === "dark" ? "dark" : "light";
           document.documentElement.dataset.theme = theme;
           document.documentElement.style.colorScheme = theme;
         } catch {}
@@ -47,7 +42,7 @@
 
     <main class="research-page">
       <section class="research-hero">
-        <span class="status-label research">Research</span>
+        <div class="eyebrow">COBRA RESEARCH</div>
         <h1>Cryptographic control is a technical and human question.</h1>
         <p>
           COBRA examines how keys are created, protected and used; how public
@@ -55,11 +50,16 @@
           technological change; and how people preserve claims on value across
           time.
         </p>
+        <div class="research-topics" aria-label="Research topics">
+          <span>Post-quantum systems</span><span>Privacy</span
+          ><span>Offline resilience</span><span>Autonomous systems</span
+          ><span>Digital value</span>
+        </div>
       </section>
 
       <section class="research-section">
         <div class="section-kicker">
-          <span class="status-label research">Research</span>
+          <div class="eyebrow">RESEARCH FRONTIER</div>
           <h2>Current lines of inquiry</h2>
         </div>
         <div class="research-lines">
@@ -104,12 +104,51 @@
               </p>
             </div>
           </article>
+          <article>
+            <span>05</span>
+            <div>
+              <h3>Offline and extreme-environment operation</h3>
+              <p>
+                Cryptographic workflows that remain inspectable and recoverable
+                across unreliable networks, air gaps and constrained hardware.
+              </p>
+            </div>
+          </article>
+          <article>
+            <span>06</span>
+            <div>
+              <h3>Verification, audit and reproducibility</h3>
+              <p>
+                Deterministic tests, transparent assumptions and evidence that
+                lets independent developers verify critical implementations.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="research-terminal-section">
+        <div class="section-kicker">
+          <div class="eyebrow">RESEARCH TERMINAL</div>
+          <h2>From entropy to authority.</h2>
+        </div>
+        <div class="research-terminal">
+          <div class="terminal-caption"><span></span> COBRA / MAINNET DERIVATION</div>
+          <pre><code>entropy
+  ↓
+private scalar
+  ↓ secp256k1
+compressed public key
+  ↓ SHA-256 → RIPEMD-160
+version byte + checksum
+  ↓ Base58Check
+Bitcoin P2PKH address</code></pre>
         </div>
       </section>
 
       <section class="value-section">
         <div class="section-kicker">
-          <span class="status-label research">Economic history</span>
+          <div class="eyebrow">ECONOMIC HISTORY</div>
           <h2>How value survives across systems</h2>
         </div>
         <p class="lead">
@@ -150,7 +189,7 @@
 
       <section class="research-section">
         <div class="section-kicker">
-          <span class="status-label available">References</span>
+          <div class="eyebrow">PRIMARY SOURCES</div>
           <h2>Primary sources and standards</h2>
         </div>
         <div class="research-references">
@@ -186,6 +225,22 @@
             <strong>Zero-knowledge proofs</strong>
             <span>Background on proving claims without revealing inputs.</span>
           </a>
+          <a
+            href="https://developer.bitcoin.org/devguide/wallets.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <strong>Bitcoin Developer Guide</strong>
+            <span>Keys, wallet architecture and transaction control.</span>
+          </a>
+          <a
+            href="https://github.com/bitcoin/bitcoin/blob/master/doc/offline-signing-tutorial.md"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <strong>Bitcoin Core Offline Signing</strong>
+            <span>Reference workflow for separated signing environments.</span>
+          </a>
         </div>
         <p class="reference-note">
           Links point to the original publisher. Inclusion is for study and does
@@ -195,8 +250,8 @@
 
       <section class="publications">
         <div class="section-kicker">
-          <span class="status-label roadmap">Roadmap</span>
-          <h2>Publication agenda</h2>
+          <div class="eyebrow">RESEARCH PROGRAMME</div>
+          <h2>Questions we want to publish, test and debate</h2>
         </div>
         <div class="publication-list">
           <article>
@@ -225,17 +280,21 @@
 
       <section class="research-call">
         <div>
-          <span class="status-label research">Open collaboration</span>
-          <h2>Contribute evidence, critique or experiments.</h2>
+          <div class="eyebrow">BUILD + RESEARCH ON COBRA</div>
+          <h2>Tell us about your blockchain or cryptographic project.</h2>
           <p>
-            Relevant papers, preprints, datasets, implementation notes and
-            reproducible tests are welcome.
+            Developers and researchers can bring papers, datasets,
+            implementations, reproducible experiments or a problem that COBRA
+            could help investigate.
           </p>
         </div>
+        <pre class="research-command"><code><span>$</span> pip install git+https://github.com/ol-s-cloud/bitcoin-address-generator.git
+<span>$</span> cobra status
+<span>$</span> cobra generate --network mainnet</code></pre>
         <div class="call-actions">
           <a
             href="mailto:gs_wl889@icloud.com?subject=COBRA%20Research%20Collaboration"
-            >Contact COBRA</a
+            >Tell us about your project</a
           >
           <a
             href="https://github.com/ol-s-cloud/bitcoin-address-generator/issues/new?title=COBRA%20research%20reference%20or%20collaboration"
@@ -248,13 +307,11 @@
     </main>
 
     <footer>
-      <span>COBRA</span>
-      <div class="sovereignty">
-        <strong>Cryptographic sovereignty.</strong>
-        <small>Your keys. Your mathematics. Your authority.</small>
-      </div>
-      <div>Research content is not a deployed product capability</div>
+      <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
+      <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
+      <div class="footer-meta">First roll out 2023.<br />Last Updated 2026</div>
     </footer>
     <script src="/site-ui.js" defer></script>
+    <script src="/surface-i18n.js" defer></script>
   </body>
 </html>

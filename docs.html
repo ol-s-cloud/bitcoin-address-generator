@@ -7,18 +7,13 @@
       name="description"
       content="Use COBRA's browser tools, experimental CLI and Offline Lab safely, with clear capability and security boundaries."
     />
-    <meta name="theme-color" content="#050706" />
+    <meta name="theme-color" content="#f7f9f7" />
     <title>COBRA Docs — User & Developer Guide</title>
     <script>
       (() => {
         try {
           const saved = localStorage.getItem("cobra-theme");
-          const theme =
-            saved === "light" || saved === "dark"
-              ? saved
-              : matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+          const theme = saved === "dark" ? "dark" : "light";
           document.documentElement.dataset.theme = theme;
           document.documentElement.style.colorScheme = theme;
         } catch {}
@@ -50,10 +45,8 @@
         <span class="status-label available">Documentation</span>
         <h1>Use COBRA.<br />Know the boundary.</h1>
         <p>
-          This guide covers what works today, how to use each surface and where
-          experimentation ends. COBRA is educational software for studying
-          cryptographic randomness and Bitcoin address construction; it is not a
-          production wallet or custody service.
+          Generate cryptographic randomness, derive Bitcoin addresses, work
+          from the command line and prepare an offline COBRA environment.
         </p>
         <nav class="content-toc" aria-label="On this page">
           <a href="#status">Capability status</a>
@@ -62,7 +55,6 @@
           <a href="#offline">Offline Lab</a>
           <a href="#explorer">Explorer</a>
           <a href="#security">Security</a>
-          <a href="#provenance">Provenance</a>
         </nav>
       </section>
 
@@ -90,7 +82,7 @@
                 <td>Works on the public site now.</td>
                 <td>
                   Browser randomness, legacy P2PKH address derivation and the
-                  device-local public-address log.
+                  live Bitcoin Explorer with a device-local address log.
                 </td>
               </tr>
               <tr>
@@ -102,18 +94,10 @@
               </tr>
               <tr>
                 <td><span class="status-label research">Research</span></td>
-                <td>A documented investigation, not a product capability.</td>
+                <td>Published inquiry, evidence and open questions.</td>
                 <td>
                   Privacy, post-quantum migration, resilient signing and the
                   preservation of digital value.
-                </td>
-              </tr>
-              <tr>
-                <td><span class="status-label roadmap">Roadmap</span></td>
-                <td>Not available yet.</td>
-                <td>
-                  Shared public registry, live Explorer data, PSBT signing,
-                  hosted APIs and dedicated signing hardware.
                 </td>
               </tr>
             </tbody>
@@ -145,7 +129,7 @@
           <ol class="steps">
             <li>Open <a href="/#tools">Home → Bitcoin Address Lab</a>.</li>
             <li>
-              Generate a fresh educational example, reuse the last 32-byte
+              Generate a fresh address example, reuse the last 32-byte
               hexadecimal value, or enter a valid 64-character private key.
             </li>
             <li>
@@ -227,21 +211,16 @@ cobra validate &lt;address&gt; --network testnet</code></pre>
 
       <section class="doc-section" id="explorer">
         <div>
-          <span class="status-label roadmap">Roadmap</span>
+          <span class="status-label available">Available</span>
           <h2>Explorer</h2>
         </div>
         <div class="doc-body">
           <p>
-            The Explorer currently shows a zero-state interface. It is not
-            connected to a shared COBRA database and does not display live
-            cross-user activity.
+            COBRA Explorer shows live Bitcoin mainnet price, market, block,
+            transaction and hash-rate data alongside addresses generated on
+            the current device.
           </p>
-          <p>
-            The proposed registry is opt-in and public-address-only. Private
-            keys, WIFs, seed phrases, entropy and recovery kits must never enter
-            it.
-          </p>
-          <p><a href="/explorer.html">View the Explorer status →</a></p>
+          <p><a href="/explorer.html">Open COBRA Explorer →</a></p>
         </div>
       </section>
 
@@ -283,41 +262,18 @@ cobra validate &lt;address&gt; --network testnet</code></pre>
         </div>
       </section>
 
-      <section class="doc-section" id="provenance">
-        <div>
-          <span class="status-label research">Provenance</span>
-          <h2>Original artifacts</h2>
-        </div>
-        <div class="doc-body">
-          <p>
-            COBRA grows from two repository artifacts created on 3 August 2023:
-            the root-level file <code>notebook</code> and
-            <code
-              >How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb</code
-            >. They are preserved unchanged as the project’s historical record.
-          </p>
-          <p>
-            Maintained browser, CLI, documentation and future registry work
-            lives in separate files.
-          </p>
-        </div>
-      </section>
-
       <div class="callout">
-        <strong>Educational and experimental software.</strong> COBRA can
-        demonstrate mathematically valid address construction without providing
-        production-wallet assurances, custody or recovery.
+        <strong>Security note.</strong> Keep private keys, WIFs and recovery
+        material away from shared systems, messages and analytics.
       </div>
     </main>
 
     <footer class="page-footer">
-      <span>COBRA</span>
-      <span
-        >User & developer documentation ·
-        <a href="/terms.html">Terms of Use</a></span
-      >
-      <span>First rollout 2023 · Educational software</span>
+      <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
+      <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
+      <div class="footer-meta">First roll out 2023.<br />Last Updated 2026</div>
     </footer>
     <script src="/site-ui.js" defer></script>
+    <script src="/surface-i18n.js" defer></script>
   </body>
 </html>

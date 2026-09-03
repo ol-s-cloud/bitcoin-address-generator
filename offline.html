@@ -7,19 +7,13 @@
       name="description"
       content="COBRA Offline Lab: generate a 256-bit random value locally and understand the current offline security boundary."
     />
-    <meta name="theme-color" content="#050706" />
-    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#f7f9f7" />
     <title>COBRA Offline Lab — Experimental</title>
     <script>
       (() => {
         try {
           const saved = localStorage.getItem("cobra-theme");
-          const theme =
-            saved === "light" || saved === "dark"
-              ? saved
-              : matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+          const theme = saved === "dark" ? "dark" : "light";
           document.documentElement.dataset.theme = theme;
           document.documentElement.style.colorScheme = theme;
         } catch {}
@@ -75,7 +69,7 @@
 
       <section class="doc-section">
         <div>
-          <span class="status-label roadmap">Roadmap</span>
+          <span class="status-label experimental">In development</span>
           <h2>Bitcoin derivation</h2>
         </div>
         <div class="doc-body">
@@ -119,9 +113,9 @@
     </main>
 
     <footer class="page-footer">
-      <span>COBRA</span>
-      <span>Offline Lab · Experimental</span>
-      <span><a href="/terms.html">Terms of Use</a></span>
+      <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
+      <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
+      <div class="footer-meta">First roll out 2023.<br />Last Updated 2026</div>
     </footer>
 
     <script>
@@ -144,5 +138,6 @@
       });
     </script>
     <script src="/site-ui.js" defer></script>
+    <script src="/surface-i18n.js" defer></script>
   </body>
 </html>

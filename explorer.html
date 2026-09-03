@@ -5,20 +5,15 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="COBRA Explorer roadmap and privacy boundary for an opt-in public-address registry."
+      content="COBRA Explorer combines live Bitcoin mainnet market and network data with address activity created on this device."
     />
-    <meta name="theme-color" content="#050706" />
-    <title>COBRA Explorer — Roadmap</title>
+    <meta name="theme-color" content="#f7f9f7" />
+    <title>COBRA Explorer — Bitcoin Mainnet</title>
     <script>
       (() => {
         try {
           const saved = localStorage.getItem("cobra-theme");
-          const theme =
-            saved === "light" || saved === "dark"
-              ? saved
-              : matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+          const theme = saved === "dark" ? "dark" : "light";
           document.documentElement.dataset.theme = theme;
           document.documentElement.style.colorScheme = theme;
         } catch {}
@@ -47,137 +42,112 @@
 
     <main class="explorer-page">
       <section class="explorer-hero">
-        <span class="status-label roadmap">Roadmap</span>
-        <h1>Public activity.<br /><span>Private authority.</span></h1>
-        <p>
-          Explorer is the proposed public view for Bitcoin addresses that users
-          explicitly choose to register with COBRA. No shared registry is
-          connected yet, so the figures below remain at zero.
-        </p>
-        <div
-          class="explorer-switch"
-          role="tablist"
-          aria-label="Bitcoin network"
-        >
-          <button
-            class="network-tab active"
-            data-network="testnet"
-            role="tab"
-            aria-selected="true"
-          >
-            Bitcoin Testnet
-          </button>
-          <button
-            class="network-tab"
-            data-network="mainnet"
-            role="tab"
-            aria-selected="false"
-          >
-            Bitcoin Mainnet
-          </button>
+        <div class="eyebrow"><span class="live-dot"></span> BITCOIN MAINNET</div>
+        <div class="explorer-hero-grid">
+          <div>
+            <h1>Network intelligence.<br /><span>Local authority.</span></h1>
+            <p>
+              Follow Bitcoin market and network activity, then inspect the
+              public addresses created by COBRA on this device.
+            </p>
+          </div>
+          <div class="price-lockup">
+            <span>BTC / USD</span>
+            <strong id="btcPrice">—</strong>
+            <small id="marketUpdated">Connecting to mainnet data…</small>
+          </div>
+        </div>
+        <form class="address-search" id="addressSearchForm">
+          <label for="addressSearch">Inspect a Bitcoin address</label>
+          <div>
+            <input
+              id="addressSearch"
+              name="address"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Enter a mainnet address"
+            />
+            <button type="submit">Open address ↗</button>
+          </div>
+          <p id="addressSearchError" role="status"></p>
+        </form>
+      </section>
+
+      <section class="market-metrics" aria-label="Live Bitcoin mainnet metrics">
+        <article><span>MARKET CAP</span><strong id="marketCap">—</strong></article>
+        <article><span>LATEST BLOCK</span><strong id="blockHeight">—</strong></article>
+        <article><span>TRANSACTIONS · 24H</span><strong id="transactions24h">—</strong></article>
+        <article><span>HASH RATE</span><strong id="hashRate">—</strong></article>
+        <article><span>AVERAGE BLOCK TIME</span><strong id="blockTime">—</strong></article>
+      </section>
+
+      <section class="chart-grid" aria-label="Bitcoin charts">
+        <article class="chart-panel">
+          <div class="chart-heading">
+            <div><span>30 DAYS</span><h2>BTC market price</h2></div>
+            <strong id="priceChange">—</strong>
+          </div>
+          <div class="chart-frame" id="priceChart" aria-label="30-day Bitcoin market price chart">
+            <div class="chart-loading">Loading price history…</div>
+          </div>
+        </article>
+        <article class="chart-panel">
+          <div class="chart-heading">
+            <div><span>30 DAYS</span><h2>Confirmed transactions</h2></div>
+            <strong id="txAverage">—</strong>
+          </div>
+          <div class="chart-frame" id="txChart" aria-label="30-day confirmed Bitcoin transactions chart">
+            <div class="chart-loading">Loading network activity…</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="cobra-metrics" aria-labelledby="cobra-metrics-title">
+        <div class="section-heading">
+          <div class="eyebrow">COBRA METRICS</div>
+          <h2 id="cobra-metrics-title">Activity on this device.</h2>
+        </div>
+        <div class="cobra-metric-grid">
+          <article><span>COBRA ADDRESSES CREATED</span><strong id="cobraAddressCount">0</strong></article>
+          <article><span>PRIVATE / DEVICE-ONLY</span><strong id="cobraPrivateCount">0</strong></article>
+          <article><span>SHARED PUBLICLY</span><strong id="cobraPublicCount">0</strong></article>
+          <article><span>LAST CREATED</span><strong id="cobraLastCreated">—</strong></article>
+        </div>
+        <div class="local-addresses">
+          <div class="local-addresses-head">
+            <h3>Recent COBRA addresses</h3>
+            <a href="/#tools">Create an address →</a>
+          </div>
+          <div id="cobraAddressList" class="address-list"></div>
         </div>
       </section>
 
-      <section class="explorer-notice">
-        <strong>Privacy boundary.</strong> Publication will be opt-in. Private
-        keys, WIFs, seed phrases, entropy and recovery kits must never enter the
-        registry.
-      </section>
-
-      <section class="explorer-metrics" aria-label="Public registry totals">
-        <article>
-          <span>PUBLIC COBRA ADDRESSES</span>
-          <strong id="exAddresses">0</strong>
-        </article>
-        <article>
-          <span>OBSERVED TRANSACTIONS</span>
-          <strong id="exTransactions">0</strong>
-        </article>
-        <article>
-          <span>TOTAL RECEIVED</span>
-          <strong id="exReceived">0 BTC</strong>
-        </article>
-        <article>
-          <span>ACTIVE ADDRESSES</span>
-          <strong id="exActive">0</strong>
-        </article>
-      </section>
-
-      <section class="explorer-grid">
-        <div class="explorer-panel">
-          <div class="panel-title">
-            <div>
-              <span class="status-label roadmap">Not connected</span>
-              <h2>Public address registry</h2>
-            </div>
-          </div>
-          <div id="explorerActivity" class="explorer-empty">
-            No public COBRA addresses are recorded on this network.
-            <br />
-            <small
-              >This view will populate only after the shared registry is
-              implemented and a user opts in.</small
-            >
-          </div>
+      <section class="ecosystem-links" aria-labelledby="ecosystem-title">
+        <div class="section-heading">
+          <div class="eyebrow">COBRA ECOSYSTEM</div>
+          <h2 id="ecosystem-title">Explore the system.</h2>
         </div>
-
-        <aside class="explorer-panel">
-          <div class="eyebrow">PROPOSED PUBLIC FIELDS</div>
-          <ul class="track-list">
-            <li>Opt-in public address</li>
-            <li>Bitcoin network and address type</li>
-            <li>COBRA generation timestamp</li>
-            <li>Public transaction count</li>
-            <li>Public received and sent totals</li>
-            <li>Confirmation and activity state</li>
-          </ul>
-          <div class="never">
-            <strong>NEVER REGISTERED</strong>
-            <span
-              >Private key · WIF · seed phrase · entropy · recovery kit</span
-            >
-          </div>
-        </aside>
+        <div class="ecosystem-grid">
+          <a href="/offline.html"><span>01</span><strong>Offline</strong><small>Operate beyond a continuous network connection.</small></a>
+          <a href="/cli.html"><span>02</span><strong>CLI</strong><small>Run COBRA from a Python command line.</small></a>
+          <a href="/research.html"><span>03</span><strong>Research</strong><small>Cryptography, resilience, privacy and value.</small></a>
+          <a href="/#developers"><span>04</span><strong>Build on COBRA</strong><small>Bring a blockchain or cryptographic project.</small></a>
+        </div>
       </section>
 
-      <section class="explorer-roadmap">
-        <span class="status-label roadmap">Key 02</span>
-        <h2>Shared database comes first.</h2>
-        <ol class="roadmap-list">
-          <li>
-            <strong>Testnet validation</strong>
-            <span
-              >Record the first deliberately public test address and verify the
-              complete read path.</span
-            >
-          </li>
-          <li>
-            <strong>Public Explorer</strong>
-            <span
-              >Expose only approved public fields with clear timestamps and
-              network labels.</span
-            >
-          </li>
-          <li>
-            <strong>Small-value mainnet validation</strong>
-            <span
-              >Proceed only after testnet behavior, privacy rules and data
-              deletion controls are verified.</span
-            >
-          </li>
-        </ol>
-      </section>
+      <p class="data-credit">
+        Bitcoin market and network data from
+        <a href="https://www.blockchain.com/explorer/assets/btc" target="_blank" rel="noopener noreferrer">Blockchain.com Explorer ↗</a>
+      </p>
     </main>
 
     <footer>
-      <span>COBRA</span>
-      <div class="sovereignty">
-        <strong>Cryptographic sovereignty.</strong>
-        <small>Your keys. Your mathematics. Your authority.</small>
-      </div>
-      <div>Explorer status: Roadmap · No shared registry connected</div>
+      <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
+      <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
+      <div class="footer-meta">First roll out 2023.<br />Last Updated 2026</div>
     </footer>
     <script src="/site-ui.js" defer></script>
+    <script src="/surface-i18n.js" defer></script>
     <script src="/explorer.js" defer></script>
   </body>
 </html>

@@ -30,7 +30,7 @@ setup(
         "ecdsa>=0.18.0",
         "base58>=2.1.1",
         "click>=8.0.0",
-        "qrcode>=7.3.1",
+        "qrcode[pil]>=7.3.1",
         "cryptography>=37.0.0",
     ],
     entry_points={
