@@ -2,6 +2,7 @@ import { getNesoCarbonIntensity } from "../../lib/data/connectors/neso-carbon.js
 import { getNesoConstraints } from "../../lib/data/connectors/neso-constraints.js";
 import { getElexonDemand, getElexonMarketPrice } from "../../lib/data/connectors/elexon.js";
 import { getElexonGenerationMix, getElexonIndicatedMargin } from "../../lib/data/connectors/elexon-operations.js";
+import { getElexonSystemPrice, getElexonSurplus } from "../../lib/data/connectors/elexon-market-signals.js";
 import { getGbWeather } from "../../lib/data/connectors/weather.js";
 import { getBitcoinNetworkState } from "../../lib/data/connectors/bitcoin-network.js";
 import { persistObservations } from "../../lib/data/persistence.js";
@@ -13,6 +14,8 @@ const SOURCE_IDS = [
   "elexon-itsdo",
   "elexon-fuelinst",
   "elexon-melngc",
+  "elexon-system-price",
+  "elexon-ndz",
   "neso-constraint-breakdown",
   "open-meteo",
   "bitcoin-network",
@@ -26,6 +29,8 @@ export default async function handler(_request, response) {
     getElexonDemand(),
     getElexonGenerationMix(),
     getElexonIndicatedMargin(),
+    getElexonSystemPrice(),
+    getElexonSurplus(),
     getNesoConstraints(),
     getGbWeather(),
     getBitcoinNetworkState(),
