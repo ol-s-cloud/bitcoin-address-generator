@@ -1,6 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 let sqlClient;
 let schemaReady;
 
@@ -126,6 +126,28 @@ async function prepareSchema() {
     transaction`
       create index if not exists cobra_poll_votes_option_idx
         on cobra_poll_votes (poll_id, option_id)
+    `,
+    transaction`
+      create table if not exists cobra_data_observations (
+        id bigserial primary key,
+        source_id text not null,
+        metric_code text not null,
+        region text not null,
+        observed_at timestamptz not null,
+        value double precision,
+        unit text,
+        payload jsonb not null default '{}'::jsonb,
+        ingested_at timestamptz not null default now(),
+        unique (source_id, metric_code, region, observed_at)
+      )
+    `,
+    transaction`
+      create index if not exists cobra_data_observations_metric_time_idx
+        on cobra_data_observations (metric_code, region, observed_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_data_observations_source_time_idx
+        on cobra_data_observations (source_id, observed_at desc)
     `,
     transaction`
       insert into cobra_polls (slug, question)
