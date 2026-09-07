@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="COBRA Explorer V2 terminal preview — power, mining, compute and home intelligence." />
+  <title>COBRA Explorer V2 — Terminal Preview</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/site-ui.css" />
+  <link rel="stylesheet" href="/explorer-v2-terminal.css" />
+</head>
+<body>
+<header class="site-header"><a class="brand" href="/">COBRA</a><nav><a href="/">Home</a><a href="/explorer-v2.html">Explorer V2</a><a href="/explorer-v2-terminal.html" aria-current="page">Terminal</a><a href="/docs.html">Docs</a></nav></header>
+<main class="terminal-shell">
+  <section class="terminal-hero">
+    <div><div class="eyebrow"><span class="live-dot"></span> COBRA EXPLORER V2 · TERMINAL PREVIEW</div><h1>Power. Bitcoin. Compute.<br/><span>One operating picture.</span></h1><p>Live GB system data with explainable operating signals, mining economics and reference simulators for flexible compute, generation and home energy use.</p></div>
+    <div class="hero-status"><span>COBRA DATA</span><strong id="dataStatus">CONNECTING</strong><small id="checkedAt">Reading live sources…</small></div>
+  </section>
+
+  <section class="terminal-context">
+    <label>Country<select id="countrySelect"><option selected>United Kingdom · Live</option><option disabled>Finland · Coming soon</option></select></label>
+    <label>Application<select id="applicationSelect"><option selected>All intelligence</option><option>Bitcoin mining</option><option>AI compute</option><option>Generation</option><option>Home</option></select></label>
+    <div class="terminal-live-note">LIVE MARKET + GRID + BITCOIN<br/><span>Reference simulations are clearly labelled.</span></div>
+  </section>
+
+  <nav class="terminal-tabs" aria-label="Explorer sections">
+    <button class="active" data-tab="overview">Overview</button><button data-tab="power">Power</button><button data-tab="mining">Mining</button><button data-tab="compute">Compute</button><button data-tab="home">Home</button>
+  </nav>
+
+  <section class="tab-panel active" data-panel="overview">
+    <div class="summary-strip">
+      <article><span>POWER INDEX</span><strong id="ovPowerIndex">—</strong><small id="ovPowerState">Calculating</small></article>
+      <article><span>COMPUTE WINDOW</span><strong id="ovComputeWindow">—</strong><small id="ovComputeScore">—</small></article>
+      <article><span>GRID STATE</span><strong id="ovGridState">—</strong><small id="ovGridValue">—</small></article>
+      <article><span>BTC / GBP</span><strong id="ovBtcGbp">—</strong><small id="ovBtcHeight">—</small></article>
+    </div>
+    <div class="overview-grid">
+      <article class="panel decision-card"><div class="eyebrow">COBRA NOW</div><h2 id="nowAction">READING CONDITIONS</h2><p id="nowSummary">COBRA is combining live wholesale price, grid headroom, carbon and compute signals.</p><div class="reason-list" id="nowReasons"></div></article>
+      <article class="panel chart-card"><div class="panel-head"><div><div class="eyebrow">POWER MARKET</div><h3>Wholesale price · 24H</h3></div><strong id="priceMovement">—</strong></div><div id="priceChart" class="mini-chart"><div class="empty">Loading history…</div></div><div class="chart-stats"><span id="priceLow">LOW —</span><span id="priceNow">NOW —</span><span id="priceHigh">HIGH —</span></div></article>
+      <article class="panel"><div class="eyebrow">SYSTEM SNAPSHOT</div><div class="metric-grid"><div><span>Wholesale</span><strong id="ovMarket">—</strong></div><div><span>Imbalance</span><strong id="ovImbalance">—</strong></div><div><span>Demand</span><strong id="ovDemand">—</strong></div><div><span>Generation</span><strong id="ovGeneration">—</strong></div><div><span>Surplus</span><strong id="ovSurplus">—</strong></div><div><span>Carbon</span><strong id="ovCarbon">—</strong></div></div></article>
+      <article class="panel"><div class="eyebrow">BEST USE RIGHT NOW</div><div class="rank-list" id="bestUseList"><div><span>Flexible compute</span><strong>—</strong></div><div><span>Battery / EV charging</span><strong>—</strong></div><div><span>Bitcoin mining</span><strong>—</strong></div><div><span>Deferrable home loads</span><strong>—</strong></div></div></article>
+    </div>
+  </section>
+
+  <section class="tab-panel" data-panel="power">
+    <div class="subtabs"><button class="active">Overview</button><button disabled>Prices · soon</button><button disabled>Grid · soon</button><button disabled>Generation · soon</button><button disabled>Carbon · soon</button></div>
+    <div class="power-grid">
+      <article class="panel big-number"><span>COBRA POWER INDEX</span><strong id="powerIndex">—</strong><small id="powerState">—</small><p id="powerExplanation">—</p></article>
+      <article class="panel big-number"><span>GRID HEADROOM</span><strong id="powerSurplus">—</strong><small id="powerGridState">—</small><p>Forecast surplus/headroom signal. This is not the same as a consumer retail tariff.</p></article>
+      <article class="panel"><div class="eyebrow">POWER CONDITIONS</div><div class="signal-grid"><div><span>Price regime</span><strong id="priceRegime">—</strong></div><div><span>Power abundance</span><strong id="abundance">—</strong></div><div><span>System stress</span><strong id="stress">—</strong></div><div><span>Flexibility</span><strong id="flexCondition">—</strong></div><div><span>Carbon regime</span><strong id="carbonRegime">—</strong></div><div><span>Constraint pressure</span><strong id="constraintPressure">—</strong></div></div></article>
+      <article class="panel chart-card wide"><div class="panel-head"><div><div class="eyebrow">WHOLESALE ELECTRICITY</div><h3>Price movement</h3></div><small>24-hour COBRA observations</small></div><div id="powerPriceChart" class="large-chart"><div class="empty">Loading history…</div></div></article>
+    </div>
+  </section>
+
+  <section class="tab-panel" data-panel="mining">
+    <div class="subtabs"><button class="active">Economics</button><button disabled>Hardware compare · soon</button><button disabled>Facility · soon</button></div>
+    <div class="sim-layout">
+      <article class="panel controls-card"><div class="eyebrow">BITCOIN MINING</div><h2>Machine → fleet</h2><label>Hardware<select id="minerModel"><option value="s21pro">Bitmain Antminer S21 Pro · 234 TH/s</option><option value="s23hyd">Bitmain Antminer S23 Hydro · 580 TH/s</option><option value="m70s">MicroBT WhatsMiner M70S · 248 TH/s</option><option value="a16xp">Canaan Avalon A16XP · 300 TH/s</option></select></label><label>Units<input id="minerUnits" type="number" min="1" value="1"/></label><label>Electricity tariff (p/kWh)<input id="minerTariff" type="number" min="0" step="0.1" value="7"/></label><label>Pool fee (%)<input id="minerPool" type="number" min="0" step="0.1" value="2"/></label><label>Facility energy overhead (%)<input id="minerOverhead" type="number" min="0" step="0.1" value="7"/></label></article>
+      <article class="panel result-card"><div class="eyebrow">LIVE NETWORK ECONOMICS</div><div class="result-grid"><div><span>Revenue / day</span><strong id="mineRevenue">—</strong></div><div><span>Energy / day</span><strong id="mineEnergyCost">—</strong></div><div><span>Operating margin / day</span><strong id="mineMargin">—</strong></div><div><span>Operating profit / year</span><strong id="mineAnnual">—</strong></div><div><span>Break-even power</span><strong id="mineBreakEven">—</strong></div><div><span>Total facility load</span><strong id="mineLoad">—</strong></div></div><div class="verdict" id="mineVerdict">Waiting for live Bitcoin network state.</div><p class="disclaimer">Illustrative operating estimate. Hardware purchase cost, taxes, depreciation, repairs and financing are not included.</p></article>
+    </div>
+  </section>
+
+  <section class="tab-panel" data-panel="compute">
+    <div class="compute-grid">
+      <article class="panel controls-card"><div class="eyebrow">AI COMPUTE PLANT · REFERENCE MODEL</div><h2>Flexible compute simulator</h2><label>Facility capacity (MW)<input id="computeCapacity" type="number" min="0.1" step="0.1" value="20"/></label><label>IT utilisation (%)<input id="computeUtil" type="number" min="1" max="100" value="85"/></label><label>PUE<input id="computePue" type="number" min="1" step="0.01" value="1.18"/></label><label>Power price mode<select id="computePriceMode"><option value="wholesale">Current wholesale equivalent</option><option value="site">Custom site tariff</option></select></label><label>Custom site tariff (p/kWh)<input id="computeTariff" type="number" min="0" step="0.1" value="8"/></label></article>
+      <article class="panel result-card"><div class="eyebrow">COMPUTE ECONOMICS</div><div class="result-grid"><div><span>IT load</span><strong id="computeItLoad">—</strong></div><div><span>Facility load</span><strong id="computeFacilityLoad">—</strong></div><div><span>Energy / day</span><strong id="computeEnergyDay">—</strong></div><div><span>Power cost / day</span><strong id="computeCostDay">—</strong></div><div><span>Power cost / year</span><strong id="computeCostYear">—</strong></div><div><span>COBRA condition</span><strong id="computeCondition">—</strong></div></div><div class="verdict" id="computeAdvice">—</div><p class="disclaimer">Reference energy model only. GPU revenue, capex, cooling topology and workload SLAs are not estimated here.</p></article>
+      <article class="panel generation-card"><div class="eyebrow">GENERATION REFERENCE · ROLLS-ROYCE SMR</div><h2>470 MW nuclear reference plant</h2><div class="result-grid"><div><span>Nameplate</span><strong>470 MW</strong></div><div><span>Output setting</span><strong><input id="reactorOutputPct" class="inline-input" type="number" min="0" max="100" value="97"/>%</strong></div><div><span>Electrical output</span><strong id="reactorOutput">—</strong></div><div><span>Energy / day</span><strong id="reactorEnergyDay">—</strong></div><div><span>Wholesale gross value / day</span><strong id="reactorGrossValue">—</strong></div><div><span>20 MW AI plants supported</span><strong id="reactorComputeEquivalent">—</strong></div></div><p class="disclaimer">Reference simulation only. It is not connected reactor telemetry and gross market value is not plant profit.</p></article>
+    </div>
+  </section>
+
+  <section class="tab-panel" data-panel="home">
+    <div class="home-grid">
+      <article class="panel home-meter"><div class="eyebrow">COBRA HOME · DEMONSTRATION SMART METER</div><div class="meter-value"><strong id="homeLoad">—</strong><span>current load</span></div><div class="device-list" id="deviceList"></div></article>
+      <article class="panel controls-card"><div class="eyebrow">HOME TARIFF</div><h2>Shiftable load model</h2><label>Peak tariff (p/kWh)<input id="homePeak" type="number" min="0" step="0.1" value="28"/></label><label>Off-peak tariff (p/kWh)<input id="homeOffpeak" type="number" min="0" step="0.1" value="9"/></label><label>Washing machine<input id="washToggle" type="checkbox" checked/></label><label>Office + TV standby<input id="standbyToggle" type="checkbox" checked/></label><label>EV charging<input id="evToggle" type="checkbox"/></label></article>
+      <article class="panel result-card home-advice"><div class="eyebrow">COBRA ADVICE</div><div class="result-grid"><div><span>Current load</span><strong id="homeCurrentLoad">—</strong></div><div><span>Reducible now</span><strong id="homeReducible">—</strong></div><div><span>Potential reduction</span><strong id="homeReductionPct">—</strong></div><div><span>Shift washing saving</span><strong id="washSaving">—</strong></div><div><span>Standby saving / year</span><strong id="standbySaving">—</strong></div><div><span>Grid signal</span><strong id="homeGridSignal">—</strong></div></div><div class="verdict" id="homeAdviceText">—</div><p class="disclaimer">Demonstration profile, not a real connected meter. Real recommendations require the user's tariff, smart-meter/device data and consent.</p></article>
+    </div>
+  </section>
+</main>
+<footer><a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a><div class="footer-meta">Explorer V2 Terminal Preview<br/>data-platform-v1</div></footer>
+<script src="/site-ui.js" defer></script><script src="/explorer-v2-terminal.js" defer></script>
+</body></html>
