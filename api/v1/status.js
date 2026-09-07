@@ -3,6 +3,7 @@ import { getNesoConstraints } from "../../lib/data/connectors/neso-constraints.j
 import { getElexonDemand, getElexonMarketPrice } from "../../lib/data/connectors/elexon.js";
 import { getElexonGenerationMix, getElexonIndicatedMargin } from "../../lib/data/connectors/elexon-operations.js";
 import { getGbWeather } from "../../lib/data/connectors/weather.js";
+import { getBitcoinNetworkState } from "../../lib/data/connectors/bitcoin-network.js";
 import { persistObservations } from "../../lib/data/persistence.js";
 import { DATA_SOURCES } from "../../lib/data/sources.js";
 
@@ -14,6 +15,7 @@ const SOURCE_IDS = [
   "elexon-melngc",
   "neso-constraint-breakdown",
   "open-meteo",
+  "bitcoin-network",
 ];
 
 export default async function handler(_request, response) {
@@ -26,6 +28,7 @@ export default async function handler(_request, response) {
     getElexonIndicatedMargin(),
     getNesoConstraints(),
     getGbWeather(),
+    getBitcoinNetworkState(),
   ]);
 
   const connectors = settled.map((result, index) => {
