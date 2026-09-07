@@ -15,7 +15,7 @@ const SOURCE_IDS = [
   "elexon-fuelinst",
   "elexon-melngc",
   "elexon-system-price",
-  "elexon-ndz",
+  "elexon-ocnmfd",
   "neso-constraint-breakdown",
   "open-meteo",
   "bitcoin-network",
