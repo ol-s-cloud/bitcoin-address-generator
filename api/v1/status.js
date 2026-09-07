@@ -1,7 +1,20 @@
 import { getNesoCarbonIntensity } from "../../lib/data/connectors/neso-carbon.js";
+import { getNesoConstraints } from "../../lib/data/connectors/neso-constraints.js";
 import { getElexonDemand, getElexonMarketPrice } from "../../lib/data/connectors/elexon.js";
+import { getElexonGenerationMix, getElexonIndicatedMargin } from "../../lib/data/connectors/elexon-operations.js";
+import { getGbWeather } from "../../lib/data/connectors/weather.js";
 import { persistObservations } from "../../lib/data/persistence.js";
 import { DATA_SOURCES } from "../../lib/data/sources.js";
+
+const SOURCE_IDS = [
+  "neso-carbon-intensity",
+  "elexon-mid",
+  "elexon-itsdo",
+  "elexon-fuelinst",
+  "elexon-melngc",
+  "neso-constraint-breakdown",
+  "open-meteo",
+];
 
 export default async function handler(_request, response) {
   const checkedAt = new Date().toISOString();
@@ -9,13 +22,16 @@ export default async function handler(_request, response) {
     getNesoCarbonIntensity(),
     getElexonMarketPrice(),
     getElexonDemand(),
+    getElexonGenerationMix(),
+    getElexonIndicatedMargin(),
+    getNesoConstraints(),
+    getGbWeather(),
   ]);
 
   const connectors = settled.map((result, index) => {
     if (result.status === "fulfilled") return result.value;
-    const sourceIds = ["neso-carbon-intensity", "elexon-mid", "elexon-itsdo"];
     return {
-      source: { id: sourceIds[index] },
+      source: { id: SOURCE_IDS[index] },
       metric: null,
       health: {
         status: "unavailable",
