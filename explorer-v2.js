@@ -40,6 +40,7 @@
     const constraints = metrics.constraint_activity;
     const weather = metrics.weather_conditions;
     text("v2MarketPrice", market ? `${gbp(market.value)}/MWh` : "—");
+    text("v2MarketPriceKwh", market ? `${number(Number(market.value) / 10, 2)}p/kWh wholesale equivalent` : "—");
     text("v2ImbalancePrice", imbalance ? `${gbp(imbalance.value)}/MWh` : "—");
     text("v2Demand", demand ? `${number(demand.value)} MW` : "—");
     text("v2Generation", generation ? `${number(generation.value)} MW` : "—");
