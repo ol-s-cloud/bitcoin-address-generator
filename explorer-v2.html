@@ -3,12 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="COBRA Explorer V2 — live Bitcoin, energy, grid and compute intelligence." />
+  <meta name="description" content="COBRA Explorer V2 — Bitcoin explorer, energy, grid, mining and compute intelligence." />
   <meta name="theme-color" content="#f7f9f7" />
   <title>COBRA Explorer V2 — Intelligence Preview</title>
-  <script>
-    (()=>{try{const saved=localStorage.getItem('cobra-theme');const theme=saved==='dark'?'dark':'light';document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme}catch{}})();
-  </script>
+  <script>(()=>{try{const saved=localStorage.getItem('cobra-theme');const theme=saved==='dark'?'dark':'light';document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme}catch{}})();</script>
   <link rel="stylesheet" href="/styles.css" />
   <link rel="stylesheet" href="/explorer.css" />
   <link rel="stylesheet" href="/explorer-v2.css" />
@@ -16,37 +14,21 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="/" aria-label="COBRA home">COBRA</a>
-  <nav aria-label="Primary navigation">
-    <a href="/">Home</a><a href="/docs.html">Docs</a><a href="/explorer-v2.html" aria-current="page">Explorer V2</a><a href="/research.html">Research</a><a href="/offline.html">Offline</a><a href="/cli.html">CLI</a><a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-  </nav>
+  <a class="brand" href="/">COBRA</a>
+  <nav><a href="/">Home</a><a href="/docs.html">Docs</a><a href="/explorer-v2.html" aria-current="page">Explorer V2</a><a href="/research.html">Research</a><a href="/offline.html">Offline</a><a href="/cli.html">CLI</a><a href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
 </header>
 
 <main class="explorer-page">
   <section class="explorer-hero">
     <div class="eyebrow"><span class="live-dot"></span> COBRA EXPLORER V2 · PREVIEW</div>
     <div class="explorer-hero-grid">
-      <div>
-        <h1>Bitcoin meets<br/><span>energy intelligence.</span></h1>
-        <p>One live operating view across Bitcoin network state, Great Britain electricity conditions, COBRA-derived indicators and the first deterministic Ask COBRA intelligence layer.</p>
-      </div>
-      <div class="price-lockup">
-        <span>BTC / USD</span>
-        <strong id="v2BtcPrice">—</strong>
-        <small id="v2CheckedAt">Connecting to COBRA Data Platform…</small>
-      </div>
+      <div><h1>Bitcoin explorer.<br/><span>Energy intelligence.</span></h1><p>Explorer V2 keeps the complete Bitcoin explorer and COBRA registry, then adds live GB electricity, mining economics, COBRA Indicators and Ask COBRA.</p></div>
+      <div class="price-lockup"><span>BTC / USD</span><strong id="v2BtcPrice">—</strong><small id="v2CheckedAt">Connecting to COBRA Data Platform…</small></div>
     </div>
   </section>
 
   <section class="v2-intelligence" aria-labelledby="indicatorsTitle">
-    <div class="v2-intelligence-head">
-      <div>
-        <div class="eyebrow">COBRA INDICATORS · UNITED KINGDOM</div>
-        <h2 id="indicatorsTitle">From live data to operating context.</h2>
-      </div>
-      <div class="v2-intelligence-status"><strong id="v2DataStatus">CONNECTING</strong><span>Public V1 indicators · advanced scoring remains private.</span></div>
-    </div>
-
+    <div class="v2-intelligence-head"><div><div class="eyebrow">COBRA INDICATORS · UNITED KINGDOM</div><h2 id="indicatorsTitle">From live data to operating context.</h2></div><div class="v2-intelligence-status"><strong id="v2DataStatus">CONNECTING</strong><span>Public V1 indicators · advanced scoring remains private.</span></div></div>
     <div class="v2-indicator-grid">
       <article class="v2-indicator" id="indicatorEnergy"><span>ENERGY CONDITION</span><strong data-state>—</strong><small data-score>—</small></article>
       <article class="v2-indicator" id="indicatorGrid"><span>GRID FLEXIBILITY</span><strong data-state>—</strong><small data-score>—</small></article>
@@ -58,89 +40,59 @@
 
     <div class="v2-domain-grid">
       <article class="v2-panel">
-        <div class="eyebrow">COBRA ENERGY · GB</div>
-        <h3>Grid and electricity state</h3>
+        <div class="eyebrow">COBRA ENERGY · GB</div><h3>Grid and electricity state</h3>
         <div class="v2-stat-grid">
-          <div class="v2-stat"><span>MARKET PRICE</span><strong id="v2MarketPrice">—</strong></div>
-          <div class="v2-stat"><span>IMBALANCE PRICE</span><strong id="v2ImbalancePrice">—</strong></div>
-          <div class="v2-stat"><span>DEMAND</span><strong id="v2Demand">—</strong></div>
-          <div class="v2-stat"><span>GENERATION</span><strong id="v2Generation">—</strong></div>
-          <div class="v2-stat"><span>FORECAST SURPLUS</span><strong id="v2Surplus">—</strong></div>
-          <div class="v2-stat"><span>INDICATED MARGIN</span><strong id="v2Margin">—</strong></div>
-          <div class="v2-stat"><span>CARBON INTENSITY</span><strong id="v2Carbon">—</strong></div>
-          <div class="v2-stat"><span>CONSTRAINT COST</span><strong id="v2Constraints">—</strong></div>
-          <div class="v2-stat"><span>GB REFERENCE WEATHER</span><strong id="v2Weather">—</strong></div>
+          <div class="v2-stat"><span>MARKET PRICE</span><strong id="v2MarketPrice">—</strong></div><div class="v2-stat"><span>IMBALANCE PRICE</span><strong id="v2ImbalancePrice">—</strong></div><div class="v2-stat"><span>DEMAND</span><strong id="v2Demand">—</strong></div><div class="v2-stat"><span>GENERATION</span><strong id="v2Generation">—</strong></div><div class="v2-stat"><span>FORECAST SURPLUS</span><strong id="v2Surplus">—</strong></div><div class="v2-stat"><span>INDICATED MARGIN</span><strong id="v2Margin">—</strong></div><div class="v2-stat"><span>CARBON INTENSITY</span><strong id="v2Carbon">—</strong></div><div class="v2-stat"><span>CONSTRAINT COST</span><strong id="v2Constraints">—</strong></div><div class="v2-stat"><span>GB REFERENCE WEATHER</span><strong id="v2Weather">—</strong></div>
         </div>
-        <div class="v2-mix">
-          <span class="v2-mini-label">LEADING GENERATION SOURCES</span>
-          <div id="v2GenerationMix"><div class="v2-empty">Loading generation mix…</div></div>
-        </div>
+        <div class="v2-mix"><span class="v2-mini-label">LEADING GENERATION SOURCES</span><div id="v2GenerationMix"><div class="v2-empty">Loading generation mix…</div></div></div>
       </article>
-
       <article class="v2-panel">
-        <div class="eyebrow">COBRA BITCOIN NETWORK</div>
-        <h3>Network state</h3>
+        <div class="eyebrow">COBRA BITCOIN NETWORK</div><h3>Network and currency-normalized state</h3>
         <div class="v2-stat-grid">
-          <div class="v2-stat"><span>BLOCK HEIGHT</span><strong id="v2BtcHeight">—</strong></div>
-          <div class="v2-stat"><span>PRIORITY FEE</span><strong id="v2BtcFees">—</strong></div>
-          <div class="v2-stat"><span>MEMPOOL TX</span><strong id="v2BtcMempool">—</strong></div>
-          <div class="v2-stat"><span>AVG BLOCK TIME</span><strong id="v2BtcBlockTime">—</strong></div>
-          <div class="v2-stat"><span>BLOCK REWARD</span><strong id="v2BtcReward">—</strong></div>
+          <div class="v2-stat"><span>BTC / GBP</span><strong id="v2BtcGbp">—</strong></div><div class="v2-stat"><span>IMPLIED GBP / USD</span><strong id="v2FxRate">—</strong></div><div class="v2-stat"><span>BLOCK HEIGHT</span><strong id="v2BtcHeight">—</strong></div><div class="v2-stat"><span>PRIORITY FEE</span><strong id="v2BtcFees">—</strong></div><div class="v2-stat"><span>MEMPOOL TX</span><strong id="v2BtcMempool">—</strong></div><div class="v2-stat"><span>AVG BLOCK TIME</span><strong id="v2BtcBlockTime">—</strong></div><div class="v2-stat"><span>BLOCK REWARD</span><strong id="v2BtcReward">—</strong></div>
         </div>
-        <div class="v2-mix">
-          <span class="v2-mini-label">MINING ECONOMICS</span>
-          <strong class="v2-mining-state" id="v2MiningState">CALCULATING</strong>
-          <p class="v2-note" id="v2MiningNote">COBRA is checking whether sufficient same-currency and site inputs exist for a defensible profitability calculation.</p>
-        </div>
+        <div class="v2-mix"><span class="v2-mini-label">MINING ECONOMICS</span><strong class="v2-mining-state" id="v2MiningState">CALCULATING</strong><p class="v2-note" id="v2MiningNote">Loading live BTC/GBP and network state.</p></div>
       </article>
     </div>
-    <p class="v2-public-note"><strong>Public methodology boundary:</strong> Explorer V2 exposes a small transparent indicator set. Forecasting, adaptive thresholds, personalised site scoring, dispatch and optimisation remain outside the public calculation surface.</p>
+
+    <article class="v2-panel v2-simulator" aria-labelledby="simTitle">
+      <div class="eyebrow">COBRA MINING SIMULATOR · LIVE NETWORK</div><h3 id="simTitle">Test a miner against current conditions.</h3>
+      <div class="sim-controls">
+        <label>Miner<select id="simMiner"><option data-hashrate="200" data-power="3500">Antminer S21 · 200 TH/s · 3.50 kW</option><option selected data-hashrate="234" data-power="3510">Antminer S21 Pro · 234 TH/s · 3.51 kW</option><option data-hashrate="270" data-power="3645">Antminer S21 XP · 270 TH/s · 3.645 kW</option><option data-hashrate="473" data-power="5676">Antminer S21 XP Hydro · 473 TH/s · 5.676 kW</option></select></label>
+        <label>Units<input id="simUnits" type="number" min="1" value="1" /></label>
+        <label>Electricity tariff (p/kWh)<input id="simTariff" type="number" min="0" step="0.1" value="7" /></label>
+        <label>Pool fee (%)<input id="simPoolFee" type="number" min="0" step="0.1" value="2" /></label>
+        <label>Facility overhead (%)<input id="simOverhead" type="number" min="0" step="0.1" value="7" /></label>
+      </div>
+      <div class="sim-results">
+        <div><span>REVENUE / DAY</span><strong id="simRevenue">—</strong></div><div><span>ENERGY COST / DAY</span><strong id="simEnergyCost">—</strong></div><div><span>GROSS MARGIN / DAY</span><strong id="simMargin">—</strong></div><div><span>BTC / DAY</span><strong id="simBtcDay">—</strong></div><div><span>FACILITY ENERGY / DAY</span><strong id="simPower">—</strong></div><div><span>BREAK-EVEN ELECTRICITY</span><strong id="simBreakEven">—</strong></div><div><span>GROSS MARGIN</span><strong id="simMarginPct">—</strong></div>
+      </div>
+      <p class="v2-public-note">Illustrative operating estimate, not a promise of mining returns. The simulation uses live BTC/GBP, current network hashrate and recent BTC mined, plus the tariff and machine assumptions above.</p>
+    </article>
+    <p class="v2-public-note"><strong>Public methodology boundary:</strong> Explorer V2 exposes transparent calculations. Forecasting, adaptive thresholds, personalised dispatch and optimisation remain outside the public calculation surface.</p>
   </section>
 
   <section class="ask-cobra" aria-labelledby="askTitle">
-    <div class="ask-shell">
-      <div class="ask-copy">
-        <div class="eyebrow">ASK COBRA · V1</div>
-        <h2 id="askTitle">Ask the system what the data means.</h2>
-        <p>Ask COBRA reads the same live COBRA Data Platform state shown above and returns deterministic, explainable answers. V1 is not presented as a trained proprietary AI model.</p>
-        <div class="ask-mode">REGION · UNITED KINGDOM &nbsp; / &nbsp; MODE · LIVE DETERMINISTIC INTELLIGENCE</div>
-      </div>
-      <div class="ask-box">
-        <form id="askCobraForm" class="ask-controls">
-          <select aria-label="Country"><option>United Kingdom</option></select>
-          <input id="askCobraInput" autocomplete="off" placeholder="Ask about energy, Bitcoin, mining or the grid…" />
-          <button type="submit">Ask COBRA →</button>
-        </form>
-        <div class="ask-samples">
-          <button type="button" data-ask="Is electricity favourable right now?">Is electricity favourable now?</button>
-          <button type="button" data-ask="Is the grid currently in surplus?">Is the grid in surplus?</button>
-          <button type="button" data-ask="How is the Bitcoin network looking?">How is Bitcoin looking?</button>
-          <button type="button" data-ask="Why is the COBRA compute window open?">Why is the compute window open?</button>
-          <button type="button" data-ask="Is mining profitable right now?">Is mining profitable?</button>
-        </div>
-        <div class="ask-result" id="askCobraResult"><div class="v2-empty">Choose a sample question or ask COBRA something about the current system state.</div></div>
-      </div>
-    </div>
+    <div class="ask-shell"><div class="ask-copy"><div class="eyebrow">ASK COBRA · V1</div><h2 id="askTitle">Ask the system what the data means.</h2><p>Ask COBRA reads the same live state shown above and returns deterministic, explainable answers.</p><div class="ask-mode">REGION · UNITED KINGDOM / MODE · LIVE DETERMINISTIC INTELLIGENCE</div></div><div class="ask-box"><form id="askCobraForm" class="ask-controls"><select aria-label="Country"><option>United Kingdom</option></select><input id="askCobraInput" autocomplete="off" placeholder="Ask about energy, Bitcoin, mining or the grid…" /><button type="submit">Ask COBRA →</button></form><div class="ask-samples"><button type="button" data-ask="Is electricity favourable right now?">Is electricity favourable now?</button><button type="button" data-ask="Is the grid currently in surplus?">Is the grid in surplus?</button><button type="button" data-ask="How is the Bitcoin network looking?">How is Bitcoin looking?</button><button type="button" data-ask="Why is the COBRA compute window open?">Why is the compute window open?</button></div><div class="ask-result" id="askCobraResult"><div class="v2-empty">Choose a sample question or ask COBRA about the current system state.</div></div></div></div>
   </section>
 
-  <section class="ecosystem-links" aria-labelledby="ecosystem-title">
-    <div class="section-heading"><div class="eyebrow">COBRA SYSTEM</div><h2 id="ecosystem-title">Built on one intelligence stack.</h2></div>
-    <div class="ecosystem-grid">
-      <a href="/explorer.html"><span>01</span><strong>Explorer V1</strong><small>Compare the current production Explorer before promotion.</small></a>
-      <a href="/docs.html"><span>02</span><strong>Docs</strong><small>Cryptographic tools, APIs and technical documentation.</small></a>
-      <a href="/research.html"><span>03</span><strong>Research</strong><small>Research, provenance and technical investigation.</small></a>
-      <a href="/#developers"><span>04</span><strong>Build on COBRA</strong><small>Developer surface for the wider COBRA protocol.</small></a>
+  <section class="legacy-v2" aria-labelledby="bitcoinExplorerTitle">
+    <div class="section-heading"><div class="eyebrow">BITCOIN MAINNET · COMPLETE EXPLORER</div><h2 id="bitcoinExplorerTitle">Network, market and transaction intelligence.</h2></div>
+    <form class="address-search" id="addressSearchForm"><label for="addressSearch">Inspect a Bitcoin address</label><div><input id="addressSearch" name="address" autocomplete="off" spellcheck="false" placeholder="Enter a mainnet address" /><button type="submit">Open address ↗</button></div><p id="addressSearchError" role="status"></p></form>
+    <div class="market-metrics">
+      <article><span>BTC / USD</span><strong id="btcPrice">—</strong><small id="marketUpdated">Connecting…</small></article><article><span>24H HIGH</span><strong id="high24h">—</strong></article><article><span>24H LOW</span><strong id="low24h">—</strong></article><article><span>24H CHANGE</span><strong id="change24h">—</strong></article><article><span>MARKET CAP</span><strong id="marketCap">—</strong></article><article><span>CIRCULATING SUPPLY</span><strong id="circulatingSupply">—</strong></article><article><span>ALGORITHM</span><strong id="algorithm">SHA-256</strong></article><article><span>LATEST HEIGHT</span><strong id="blockHeight">—</strong></article><article><span>BLOCK REWARD</span><strong id="blockReward">—</strong></article><article><span>DIFFICULTY</span><strong id="difficulty">—</strong></article><article><span>HASH RATE</span><strong id="hashRate">—</strong></article><article><span>AVERAGE BLOCK TIME</span><strong id="blockTime">—</strong></article><article><span>TRANSACTIONS · 24H</span><strong id="transactions24h">—</strong></article>
     </div>
+    <section class="chart-grid"><article class="chart-panel"><div class="chart-heading"><div><span>30 DAYS</span><h2>BTC market price</h2></div><strong id="priceChange">—</strong></div><div class="chart-frame" id="priceChart"><div class="chart-loading">Loading price history…</div></div></article><article class="chart-panel"><div class="chart-heading"><div><span>30 DAYS</span><h2>Confirmed transactions</h2></div><strong id="txAverage">—</strong></div><div class="chart-frame" id="txChart"><div class="chart-loading">Loading network activity…</div></div></article><article class="chart-panel"><div class="chart-heading"><div><span>30 DAYS</span><h2>Network hash rate</h2></div><strong id="hashAverage">—</strong></div><div class="chart-frame" id="hashRateChart"><div class="chart-loading">Loading mining activity…</div></div></article><article class="chart-panel"><div class="chart-heading"><div><span>30 DAYS</span><h2>Transaction volume</h2></div><strong id="volumeAverage">—</strong></div><div class="chart-frame" id="volumeChart"><div class="chart-loading">Loading value movement…</div></div></article></section>
+    <section class="network-streams"><div class="stream-heading"><div><div class="eyebrow">LIVE MAINNET</div><h2>Latest blocks and transactions.</h2></div><p id="mempoolSummary">Connecting to the Bitcoin mempool…</p></div><div class="stream-grid"><article class="stream-panel"><div class="stream-panel-head"><h3>Latest blocks</h3><span>CONFIRMED</span></div><div id="latestBlocks" class="stream-list"><div class="chart-loading">Loading blocks…</div></div></article><article class="stream-panel"><div class="stream-panel-head"><h3>Latest transactions</h3><span>MEMPOOL</span></div><div id="latestTransactions" class="stream-list"><div class="chart-loading">Loading transactions…</div></div></article></div></section>
   </section>
+
+  <section class="cobra-metrics" aria-labelledby="registryTitle"><div class="section-heading"><div class="eyebrow" id="registryStatus">COBRA METRICS · CONNECTING</div><h2 id="registryTitle">COBRA live registry.</h2></div><div class="cobra-metric-grid"><article><span>COBRA ADDRESSES CREATED</span><strong id="cobraAddressCount">0</strong></article><article><span>PRIVATE / DEVICE-ONLY</span><strong id="cobraPrivateCount">0</strong></article><article><span>SHARED PUBLICLY</span><strong id="cobraPublicCount">0</strong></article><article><span>GLOBAL POLL VOTES</span><strong id="cobraVoteCount">0</strong></article><article><span>LAST CREATED</span><strong id="cobraLastCreated">—</strong></article></div><div class="local-addresses"><div class="local-addresses-head"><h3>Recently shared COBRA addresses</h3><a href="/#tools">Create an address →</a></div><div id="cobraAddressList" class="address-list"></div></div></section>
+
+  <section class="v2-polls" aria-labelledby="pollTitle"><div class="section-heading"><div class="eyebrow">COBRA COMMUNITY · LIVE POLLS</div><h2 id="pollTitle">Help shape what COBRA builds next.</h2></div><div class="poll-v2-grid"><article class="v2-panel"><h3>Which network should COBRA support next?</h3><div id="networkPollState" class="poll-state">Connecting…</div><div id="networkPollOptions" class="poll-options"></div><p id="networkPollNote" class="v2-note"></p></article><article class="v2-panel"><h3>Which feature should COBRA prioritise?</h3><div id="featurePollState" class="poll-state">Connecting…</div><div id="featurePollOptions" class="poll-options"></div><p id="featurePollNote" class="v2-note"></p></article></div></section>
+
+  <section class="ecosystem-links"><div class="section-heading"><div class="eyebrow">COBRA SYSTEM</div><h2>Built on one intelligence stack.</h2></div><div class="ecosystem-grid"><a href="/offline.html"><span>01</span><strong>Offline</strong><small>Operate beyond a continuous network connection.</small></a><a href="/cli.html"><span>02</span><strong>CLI</strong><small>Run COBRA from the command line.</small></a><a href="/research.html"><span>03</span><strong>Research</strong><small>Research and technical investigation.</small></a><a href="/#developers"><span>04</span><strong>Build on COBRA</strong><small>Developer surface for the wider protocol.</small></a></div></section>
 </main>
 
-<footer>
-  <a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a>
-  <div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div>
-  <div class="footer-meta">Explorer V2 Preview<br/>COBRA Data Platform V1<br/>2026</div>
-</footer>
-<script src="/site-ui.js" defer></script>
-<script src="/surface-i18n.js" defer></script>
-<script src="/explorer-v2.js" defer></script>
-</body>
-</html>
+<footer><a class="footer-brand" href="https://github.com/ol-s-cloud/bitcoin-address-generator" target="_blank" rel="noopener noreferrer">COBRA by ols-cloud</a><div class="footer-sovereignty"><strong>Cryptographic sovereignty.</strong><span>Your keys. Your mathematics. Your authority.</span></div><div class="footer-meta">Explorer V2 Preview<br/>COBRA Data Platform V1<br/>2026</div></footer>
+<script src="/site-ui.js" defer></script><script src="/surface-i18n.js" defer></script><script src="/explorer.js" defer></script><script src="/home-live.js" defer></script><script src="/explorer-v2.js" defer></script>
+</body></html>
