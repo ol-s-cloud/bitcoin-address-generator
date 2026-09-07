@@ -1,61 +1,16 @@
-import { getNesoCarbonIntensity } from "../../lib/data/connectors/neso-carbon.js";
-import { getNesoConstraints } from "../../lib/data/connectors/neso-constraints.js";
-import { getElexonDemand, getElexonMarketPrice } from "../../lib/data/connectors/elexon.js";
-import { getElexonGenerationMix, getElexonIndicatedMargin } from "../../lib/data/connectors/elexon-operations.js";
-import { getElexonSystemPrice, getElexonSurplus } from "../../lib/data/connectors/elexon-market-signals.js";
-import { getGbWeather } from "../../lib/data/connectors/weather.js";
-import { getBitcoinNetworkState } from "../../lib/data/connectors/bitcoin-network.js";
 import { persistObservations } from "../../lib/data/persistence.js";
 import { DATA_SOURCES } from "../../lib/data/sources.js";
-
-const SOURCE_IDS = [
-  "neso-carbon-intensity",
-  "elexon-mid",
-  "elexon-itsdo",
-  "elexon-fuelinst",
-  "elexon-melngc",
-  "elexon-system-price",
-  "elexon-ocnmfd",
-  "neso-constraint-breakdown",
-  "open-meteo",
-  "bitcoin-network",
-];
+import { collectLiveSnapshot, metricMap } from "../../lib/data/snapshot.js";
+import { derivePublicIndicatorsFromMetrics } from "../../lib/indicators/public.js";
 
 export default async function handler(_request, response) {
-  const checkedAt = new Date().toISOString();
-  const settled = await Promise.allSettled([
-    getNesoCarbonIntensity(),
-    getElexonMarketPrice(),
-    getElexonDemand(),
-    getElexonGenerationMix(),
-    getElexonIndicatedMargin(),
-    getElexonSystemPrice(),
-    getElexonSurplus(),
-    getNesoConstraints(),
-    getGbWeather(),
-    getBitcoinNetworkState(),
-  ]);
-
-  const connectors = settled.map((result, index) => {
-    if (result.status === "fulfilled") return result.value;
-    return {
-      source: { id: SOURCE_IDS[index] },
-      metric: null,
-      health: {
-        status: "unavailable",
-        lastAttemptAt: checkedAt,
-        lastSuccessAt: null,
-        latencyMs: 0,
-        latestDataTimestamp: null,
-        stale: true,
-        lastError: String(result.reason?.message || "connector_failed"),
-      },
-    };
-  });
+  const snapshot = await collectLiveSnapshot();
+  const metrics = metricMap(snapshot.connectors);
+  const indicators = derivePublicIndicatorsFromMetrics(metrics, { region: "GB" });
 
   let persistence;
   try {
-    persistence = await persistObservations(connectors);
+    persistence = await persistObservations(snapshot.connectors);
   } catch (error) {
     console.error("COBRA observation persistence failed", {
       name: error?.name,
@@ -64,30 +19,24 @@ export default async function handler(_request, response) {
     persistence = {
       enabled: true,
       saved: 0,
-      skipped: connectors.length,
+      skipped: snapshot.connectors.length,
       error: "persistence_unavailable",
     };
   }
 
-  const operational = connectors.filter((item) => item.health.status === "operational").length;
-  const stale = connectors.filter((item) => item.health.stale).length;
-  const overall = operational === connectors.length ? (stale ? "degraded" : "operational") : operational ? "degraded" : "unavailable";
-
   response.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=120");
-  return response.status(overall === "unavailable" ? 503 : 200).json({
+  return response.status(snapshot.status === "unavailable" ? 503 : 200).json({
     platform: "COBRA Data Platform",
     version: "v1",
-    checkedAt,
-    status: overall,
+    checkedAt: snapshot.checkedAt,
+    status: snapshot.status,
     summary: {
-      connected: connectors.length,
-      operational,
-      unavailable: connectors.length - operational,
-      stale,
+      ...snapshot.summary,
       registeredSources: DATA_SOURCES.length,
     },
+    indicators,
     persistence,
-    connectors,
+    connectors: snapshot.connectors,
     sources: DATA_SOURCES,
   });
 }
