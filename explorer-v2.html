@@ -11,6 +11,15 @@
   <link rel="stylesheet" href="/explorer.css" />
   <link rel="stylesheet" href="/explorer-v2.css" />
   <link rel="stylesheet" href="/site-ui.css" />
+  <style>
+    .v2-context-bar{display:grid;grid-template-columns:minmax(180px,240px) minmax(220px,300px) 1fr;gap:14px;align-items:end;margin:0 0 28px;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+    .v2-context-bar label{display:grid;gap:8px;color:var(--muted);font:800 9px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase}
+    .v2-context-bar select{min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);padding:0 12px;font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace}
+    .v2-context-note{justify-self:end;text-align:right;color:var(--muted);font-size:10px;line-height:1.5}.v2-context-note strong{display:block;color:var(--accent);font:800 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em}
+    .v2-stat-highlight{background:color-mix(in srgb,var(--accent) 6%,transparent)}.v2-stat-highlight strong{font-size:22px}.v2-stat-highlight small{display:block;margin-top:5px;color:var(--muted);font-size:10px}
+    @media(max-width:900px){.v2-context-bar{grid-template-columns:1fr 1fr}.v2-context-note{grid-column:1/-1;justify-self:start;text-align:left}}
+    @media(max-width:620px){.v2-context-bar{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
 <header class="site-header">
@@ -29,6 +38,25 @@
 
   <section class="v2-intelligence" aria-labelledby="indicatorsTitle">
     <div class="v2-intelligence-head"><div><div class="eyebrow">COBRA INDICATORS · UNITED KINGDOM</div><h2 id="indicatorsTitle">From live data to operating context.</h2></div><div class="v2-intelligence-status"><strong id="v2DataStatus">CONNECTING</strong><span>Public V1 indicators · advanced scoring remains private.</span></div></div>
+
+    <div class="v2-context-bar" aria-label="COBRA intelligence context">
+      <label>Country
+        <select id="cobraCountry">
+          <option value="GB" selected>United Kingdom · Live</option>
+          <option value="FI" disabled>Finland · Coming soon</option>
+        </select>
+      </label>
+      <label>Application
+        <select id="cobraApplication">
+          <option value="mining" selected>Bitcoin Mining · Live</option>
+          <option value="compute-center" disabled>Compute Center · Coming soon</option>
+          <option value="reactor-plant" disabled>Reactor Plant · Coming soon</option>
+          <option value="home-appliances" disabled>Home &amp; Appliances · Coming soon</option>
+        </select>
+      </label>
+      <div class="v2-context-note"><strong id="cobraContextStatus">UNITED KINGDOM · BITCOIN MINING</strong><span>Country-specific power intelligence + application-specific economics.</span></div>
+    </div>
+
     <div class="v2-indicator-grid">
       <article class="v2-indicator" id="indicatorEnergy"><span>ENERGY CONDITION</span><strong data-state>—</strong><small data-score>—</small></article>
       <article class="v2-indicator" id="indicatorGrid"><span>GRID FLEXIBILITY</span><strong data-state>—</strong><small data-score>—</small></article>
@@ -42,7 +70,7 @@
       <article class="v2-panel">
         <div class="eyebrow">COBRA ENERGY · GB</div><h3>Grid and electricity state</h3>
         <div class="v2-stat-grid">
-          <div class="v2-stat"><span>MARKET PRICE</span><strong id="v2MarketPrice">—</strong></div><div class="v2-stat"><span>IMBALANCE PRICE</span><strong id="v2ImbalancePrice">—</strong></div><div class="v2-stat"><span>DEMAND</span><strong id="v2Demand">—</strong></div><div class="v2-stat"><span>GENERATION</span><strong id="v2Generation">—</strong></div><div class="v2-stat"><span>FORECAST SURPLUS</span><strong id="v2Surplus">—</strong></div><div class="v2-stat"><span>INDICATED MARGIN</span><strong id="v2Margin">—</strong></div><div class="v2-stat"><span>CARBON INTENSITY</span><strong id="v2Carbon">—</strong></div><div class="v2-stat"><span>CONSTRAINT COST</span><strong id="v2Constraints">—</strong></div><div class="v2-stat"><span>GB REFERENCE WEATHER</span><strong id="v2Weather">—</strong></div>
+          <div class="v2-stat v2-stat-highlight"><span>WHOLESALE MARKET PRICE</span><strong id="v2MarketPrice">—</strong><small id="v2MarketPriceKwh">—</small></div><div class="v2-stat"><span>IMBALANCE PRICE</span><strong id="v2ImbalancePrice">—</strong></div><div class="v2-stat"><span>DEMAND</span><strong id="v2Demand">—</strong></div><div class="v2-stat"><span>GENERATION</span><strong id="v2Generation">—</strong></div><div class="v2-stat"><span>FORECAST SURPLUS</span><strong id="v2Surplus">—</strong></div><div class="v2-stat"><span>INDICATED MARGIN</span><strong id="v2Margin">—</strong></div><div class="v2-stat"><span>CARBON INTENSITY</span><strong id="v2Carbon">—</strong></div><div class="v2-stat"><span>CONSTRAINT COST</span><strong id="v2Constraints">—</strong></div><div class="v2-stat"><span>GB REFERENCE WEATHER</span><strong id="v2Weather">—</strong></div>
         </div>
         <div class="v2-mix"><span class="v2-mini-label">LEADING GENERATION SOURCES</span><div id="v2GenerationMix"><div class="v2-empty">Loading generation mix…</div></div></div>
       </article>
@@ -73,7 +101,7 @@
   </section>
 
   <section class="ask-cobra" aria-labelledby="askTitle">
-    <div class="ask-shell"><div class="ask-copy"><div class="eyebrow">ASK COBRA · V1</div><h2 id="askTitle">Ask the system what the data means.</h2><p>Ask COBRA reads the same live state shown above and returns deterministic, explainable answers.</p><div class="ask-mode">REGION · UNITED KINGDOM / MODE · LIVE DETERMINISTIC INTELLIGENCE</div></div><div class="ask-box"><form id="askCobraForm" class="ask-controls"><select aria-label="Country"><option>United Kingdom</option></select><input id="askCobraInput" autocomplete="off" placeholder="Ask about energy, Bitcoin, mining or the grid…" /><button type="submit">Ask COBRA →</button></form><div class="ask-samples"><button type="button" data-ask="Is electricity favourable right now?">Is electricity favourable now?</button><button type="button" data-ask="Is the grid currently in surplus?">Is the grid in surplus?</button><button type="button" data-ask="How is the Bitcoin network looking?">How is Bitcoin looking?</button><button type="button" data-ask="Why is the COBRA compute window open?">Why is the compute window open?</button></div><div class="ask-result" id="askCobraResult"><div class="v2-empty">Choose a sample question or ask COBRA about the current system state.</div></div></div></div>
+    <div class="ask-shell"><div class="ask-copy"><div class="eyebrow">ASK COBRA · V1</div><h2 id="askTitle">Ask the system what the data means.</h2><p>Ask COBRA reads the same live state shown above and returns deterministic, explainable answers.</p><div class="ask-mode">REGION · UNITED KINGDOM / MODE · LIVE DETERMINISTIC INTELLIGENCE</div></div><div class="ask-box"><form id="askCobraForm" class="ask-controls"><select aria-label="Country" id="askCountry"><option selected>United Kingdom · Live</option><option disabled>Finland · Coming soon</option></select><input id="askCobraInput" autocomplete="off" placeholder="Ask about energy, Bitcoin, mining or the grid…" /><button type="submit">Ask COBRA →</button></form><div class="ask-samples"><button type="button" data-ask="Is electricity favourable right now?">Is electricity favourable now?</button><button type="button" data-ask="Is the grid currently in surplus?">Is the grid in surplus?</button><button type="button" data-ask="How is the Bitcoin network looking?">How is Bitcoin looking?</button><button type="button" data-ask="Why is the COBRA compute window open?">Why is the compute window open?</button></div><div class="ask-result" id="askCobraResult"><div class="v2-empty">Choose a sample question or ask COBRA about the current system state.</div></div></div></div>
   </section>
 
   <section class="legacy-v2" aria-labelledby="bitcoinExplorerTitle">
