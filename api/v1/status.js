@@ -1,5 +1,6 @@
 import { getNesoCarbonIntensity } from "../../lib/data/connectors/neso-carbon.js";
 import { getElexonDemand, getElexonMarketPrice } from "../../lib/data/connectors/elexon.js";
+import { persistObservations } from "../../lib/data/persistence.js";
 import { DATA_SOURCES } from "../../lib/data/sources.js";
 
 export default async function handler(_request, response) {
@@ -28,6 +29,22 @@ export default async function handler(_request, response) {
     };
   });
 
+  let persistence;
+  try {
+    persistence = await persistObservations(connectors);
+  } catch (error) {
+    console.error("COBRA observation persistence failed", {
+      name: error?.name,
+      code: error?.code,
+    });
+    persistence = {
+      enabled: true,
+      saved: 0,
+      skipped: connectors.length,
+      error: "persistence_unavailable",
+    };
+  }
+
   const operational = connectors.filter((item) => item.health.status === "operational").length;
   const stale = connectors.filter((item) => item.health.stale).length;
   const overall = operational === connectors.length ? (stale ? "degraded" : "operational") : operational ? "degraded" : "unavailable";
@@ -45,6 +62,7 @@ export default async function handler(_request, response) {
       stale,
       registeredSources: DATA_SOURCES.length,
     },
+    persistence,
     connectors,
     sources: DATA_SOURCES,
   });
