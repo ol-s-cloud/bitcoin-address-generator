@@ -36,10 +36,10 @@
         <div>
           <div class="eyebrow">COBRA+ · PRIVATE ACCESS</div>
           <h2>Connect your site to the COBRA ecosystem.</h2>
-          <p>COBRA Intelligence is the primary product. COBRA+ is the access layer for advanced site intelligence, metering and telemetry, private deployment, engineering pathways and future equipment sourcing.</p>
+          <p>COBRA Intelligence provides the operating layer for energy-aware compute and power assets. COBRA+ adds private site intelligence, metering and telemetry, deployment support, engineering services and selected equipment pathways.</p>
         </div>
         <div class="cobra-plus-actions">
-          <button type="button" id="cobraPlusWhitelist">Request whitelist</button>
+          <button type="button" id="cobraPlusWhitelist">Request access</button>
           <button type="button" id="cobraPlusWaitlist" class="secondary">Join waitlist</button>
         </div>
       </div>
@@ -55,9 +55,9 @@
 
       <div class="cobra-plus-commercial">
         <div>
-          <div class="eyebrow">FUTURE COMMERCIAL LAYER</div>
-          <h3>Intelligence first. Hardware and engineering around it.</h3>
-          <p>COBRA can evolve into a marketplace and project-integration layer around the intelligence engine: metering, telemetry, miners, batteries, solar, generation equipment, site engineering, commissioning and lifecycle services. Equipment would remain subject to project fit, regulation, OEM availability and qualified delivery partners.</p>
+          <div class="eyebrow">COBRA+ · SITE & EQUIPMENT</div>
+          <h3>From site data to deployed infrastructure.</h3>
+          <p>Metering, telemetry, miners, batteries, solar, onsite generation and engineering services are specified around each site's operating requirements. Equipment supply, installation and commissioning remain subject to project scope, regulation, manufacturer availability and qualified delivery partners.</p>
         </div>
         <div class="cobra-plus-tags">
           <span>Smart metering</span><span>Telemetry</span><span>Bitcoin miners</span><span>Battery storage</span><span>Solar</span><span>Gas turbines / power islands</span><span>SMR / nuclear pathway</span><span>Site engineering</span><span>Installation & commissioning</span><span>Maintenance</span>
@@ -66,7 +66,7 @@
 
       <form id="cobraPlusForm" class="cobra-plus-form" hidden>
         <div class="cobra-plus-form-head">
-          <div><div class="eyebrow">COBRA+ ACCESS INTAKE</div><h3>How would you use COBRA?</h3></div>
+          <div><div class="eyebrow">COBRA+ ACCESS INTAKE</div><h3>Tell us about your site.</h3></div>
           <button type="button" id="cobraPlusClose" aria-label="Close COBRA+ form">×</button>
         </div>
         <div class="cobra-plus-fields">
@@ -96,7 +96,7 @@
           </select></label>
         </div>
         <fieldset class="cobra-plus-interests">
-          <legend>What are you interested in?</legend>
+          <legend>Services and systems of interest</legend>
           ${[
             ["cobra_intelligence", "COBRA Intelligence"],
             ["private_deployment", "Private site deployment"],
@@ -112,7 +112,7 @@
             ["api_data", "API / data access"],
           ].map(([value, label]) => `<label><input type="checkbox" name="plusInterest" value="${value}" />${label}</label>`).join("")}
         </fieldset>
-        <label class="cobra-plus-notes">Tell us what you are trying to build or operate<textarea id="plusNotes" maxlength="1500" rows="5" placeholder="Site, energy problem, equipment, compute load, mining fleet, home-energy objective, project stage…"></textarea></label>
+        <label class="cobra-plus-notes">Project brief<textarea id="plusNotes" maxlength="1500" rows="5" placeholder="Site, energy requirement, equipment, compute load, mining fleet, home-energy objective or project stage…"></textarea></label>
         <div class="cobra-plus-submit">
           <p>Submitting this form requests access only. It does not create a commercial agreement, equipment order or partnership.</p>
           <button type="submit">Request COBRA+ access</button>
@@ -157,7 +157,7 @@
       sourcePath: location.pathname,
     };
 
-    status.textContent = "Submitting COBRA+ access request…";
+    status.textContent = "Submitting access request…";
     button.disabled = true;
     try {
       const response = await fetch("/api/registry", {
@@ -168,7 +168,7 @@
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || "request_failed");
-      status.innerHTML = `<strong>Request recorded.</strong> COBRA+ access is currently reviewed manually. Your reference is ${escapeHtml(data.requestId || "recorded")}.`;
+      status.innerHTML = `<strong>Request recorded.</strong> COBRA+ access is reviewed manually. Reference: ${escapeHtml(data.requestId || "recorded")}.`;
       event.currentTarget.reset();
     } catch (error) {
       status.textContent = error.message === "invalid_email" ? "Enter a valid email address." : "COBRA+ intake is temporarily unavailable. Please try again.";
