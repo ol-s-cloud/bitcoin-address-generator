@@ -6,10 +6,26 @@ import { normalizeSiteProfile } from "../../lib/intelligence/site-profile.js";
 import { deriveMiningDecision } from "../../lib/intelligence/decision-engine.js";
 import { buildMiningSensitivity } from "../../lib/intelligence/sensitivity.js";
 import { persistDecisionSnapshot } from "../../lib/intelligence/decision-persistence.js";
+import { readDecisionHistory } from "../../lib/intelligence/history.js";
 
 export default async function handler(request, response) {
   try {
     const query = request?.query || {};
+
+    if (String(query.mode || "").toLowerCase() === "history") {
+      const history = await readDecisionHistory({
+        siteId: query.siteId,
+        assetId: query.assetId,
+        hours: query.hours,
+        limit: query.limit,
+      });
+      response.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=60");
+      return response.status(history.databaseAvailable ? 200 : 503).json({
+        product: "COBRA Intelligence History",
+        ...history,
+      });
+    }
+
     const site = normalizeSiteProfile({
       country: query.country,
       siteName: query.siteName,
