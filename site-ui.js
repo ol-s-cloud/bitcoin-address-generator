@@ -114,7 +114,7 @@
 
 (() => {
   if (!location.pathname.endsWith("/explorer-v2-terminal.html")) return;
-  ["/explorer-v2-decision.js", "/explorer-v2-scenarios.js"].forEach((src) => {
+  ["/explorer-v2-decision.js", "/explorer-v2-scenarios.js", "/explorer-v2-home-data.js"].forEach((src) => {
     const script = document.createElement("script");
     script.src = src;
     script.defer = true;
