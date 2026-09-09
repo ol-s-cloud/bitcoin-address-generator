@@ -4,6 +4,8 @@ import { getComputeAsset } from "../../lib/compute/assets.js";
 import { calculateMiningEconomics } from "../../lib/mining/economics.js";
 import { normalizeSiteProfile } from "../../lib/intelligence/site-profile.js";
 import { deriveMiningDecision } from "../../lib/intelligence/decision-engine.js";
+import { buildMiningSensitivity } from "../../lib/intelligence/sensitivity.js";
+import { persistDecisionSnapshot } from "../../lib/intelligence/decision-persistence.js";
 
 export default async function handler(request, response) {
   try {
@@ -52,10 +54,6 @@ export default async function handler(request, response) {
       connectorHealth: snapshot.connectors.map((item) => item.health || {}),
     });
 
-    try { await persistObservations(snapshot.connectors); } catch (error) {
-      console.error("COBRA intelligence observation persistence failed", { name: error?.name, code: error?.code });
-    }
-
     const out = economics.output;
     const market = {
       wholesaleGbpMwh: value(metrics.market_index_price),
@@ -80,8 +78,22 @@ export default async function handler(request, response) {
       fastestFeeSatVb: bitcoin.fastestFeeSatVb,
     };
 
-    response.setHeader("Cache-Control", "s-maxage=45, stale-while-revalidate=90");
-    return response.status(200).json({
+    const economicsOutput = {
+      expectedBtcDay: out.expectedBtcDayNet,
+      revenueGbpDay: out.revenueDay,
+      electricityCostGbpDay: out.electricityCostDay,
+      netContributionGbpDay: out.grossMarginDay,
+      netContributionGbpMonth: out.grossMarginDay * 30,
+      netContributionGbpYear: out.grossMarginDay * 365,
+      revenuePerThDayGbp: out.revenueDay / (asset.output * site.fleet.units),
+      facilityEnergyKwhDay: out.facilityKwhDay,
+      grossMarginPct: out.grossMarginPct,
+      breakEvenGbpMwh: out.breakEvenElectricityPerMwh,
+      breakEvenPenceKwh: out.breakEvenElectricityPerMwh / 10,
+    };
+
+    const sensitivity = buildMiningSensitivity({ site, asset, bitcoin: bitcoinState });
+    const payload = {
       product: "COBRA Intelligence",
       version: "v1-preview",
       checkedAt: snapshot.checkedAt,
@@ -90,20 +102,9 @@ export default async function handler(request, response) {
       asset,
       market,
       bitcoin: bitcoinState,
-      economics: {
-        expectedBtcDay: out.expectedBtcDayNet,
-        revenueGbpDay: out.revenueDay,
-        electricityCostGbpDay: out.electricityCostDay,
-        netContributionGbpDay: out.grossMarginDay,
-        netContributionGbpMonth: out.grossMarginDay * 30,
-        netContributionGbpYear: out.grossMarginDay * 365,
-        revenuePerThDayGbp: out.revenueDay / (asset.output * site.fleet.units),
-        facilityEnergyKwhDay: out.facilityKwhDay,
-        grossMarginPct: out.grossMarginPct,
-        breakEvenGbpMwh: out.breakEvenElectricityPerMwh,
-        breakEvenPenceKwh: out.breakEvenElectricityPerMwh / 10,
-      },
+      economics: economicsOutput,
       decision,
+      sensitivity,
       sources: snapshot.connectors.map((item) => ({
         sourceId: item.source?.id || null,
         metricCode: item.metric?.code || null,
@@ -112,7 +113,20 @@ export default async function handler(request, response) {
         status: item.health?.status || "unknown",
         stale: Boolean(item.health?.stale),
       })),
-    });
+    };
+
+    try { await persistObservations(snapshot.connectors); } catch (error) {
+      console.error("COBRA intelligence observation persistence failed", { name: error?.name, code: error?.code });
+    }
+
+    let decisionPersistence = { enabled: false, saved: false };
+    try { decisionPersistence = await persistDecisionSnapshot(payload); } catch (error) {
+      console.error("COBRA intelligence decision persistence failed", { name: error?.name, code: error?.code });
+      decisionPersistence = { enabled: true, saved: false, error: "decision_persistence_unavailable" };
+    }
+
+    response.setHeader("Cache-Control", "s-maxage=45, stale-while-revalidate=90");
+    return response.status(200).json({ ...payload, persistence: { decision: decisionPersistence } });
   } catch (error) {
     const clientErrors = ["unsupported_country", "invalid_tariffPenceKwh", "invalid_units", "invalid_poolFeePct", "invalid_uptimePct", "invalid_facilityEnergyOverheadPct"];
     const message = String(error?.message || "intelligence_failed");
