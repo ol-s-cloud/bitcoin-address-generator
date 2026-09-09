@@ -111,3 +111,11 @@
     });
   });
 })();
+
+(() => {
+  if (!location.pathname.endsWith("/explorer-v2-terminal.html")) return;
+  const script = document.createElement("script");
+  script.src = "/explorer-v2-decision.js";
+  script.defer = true;
+  document.head.appendChild(script);
+})();
