@@ -114,11 +114,13 @@
 
 (() => {
   if (!location.pathname.endsWith("/explorer-v2-terminal.html")) return;
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = "/explorer-v2-applications.css";
-  document.head.appendChild(link);
-  ["/explorer-v2-decision.js", "/explorer-v2-scenarios.js", "/explorer-v2-home-data.js", "/explorer-v2-applications.js"].forEach((src) => {
+  ["/explorer-v2-applications.css", "/explorer-v2-live-depth.css"].forEach((href) => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.appendChild(link);
+  });
+  ["/explorer-v2-decision.js", "/explorer-v2-scenarios.js", "/explorer-v2-home-data.js", "/explorer-v2-applications.js", "/explorer-v2-live-depth.js"].forEach((src) => {
     const script = document.createElement("script");
     script.src = src;
     script.defer = true;
