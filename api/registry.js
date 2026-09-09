@@ -20,7 +20,28 @@ const ALLOWED_KEYS = new Set([
   "sourceType",
   "cobraVersion",
 ]);
+const PLUS_ALLOWED_KEYS = new Set([
+  "action",
+  "email",
+  "organization",
+  "country",
+  "useCase",
+  "siteType",
+  "powerRange",
+  "interests",
+  "notes",
+  "sourcePath",
+]);
 const CREATION_TYPES = new Set(["created", "derived", "random-derived"]);
+const PLUS_USE_CASES = new Set([
+  "bitcoin_mining",
+  "industrial_site",
+  "data_center_compute",
+  "home_energy",
+  "generation_project",
+  "developer_platform",
+  "other",
+]);
 
 export default async function handler(request, response) {
   noStore(response);
@@ -31,7 +52,7 @@ export default async function handler(request, response) {
   try {
     await ensureSchema();
     if (request.method === "GET") return getRegistry(request, response);
-    if (request.method === "POST") return recordCreation(request, response);
+    if (request.method === "POST") return handlePost(request, response);
     response.setHeader("Allow", "GET, POST");
     return response.status(405).json({ error: "method_not_allowed" });
   } catch (error) {
@@ -53,7 +74,7 @@ async function getRegistry(request, response) {
   });
 }
 
-async function recordCreation(request, response) {
+async function handlePost(request, response) {
   if (rejectLargeBody(request)) {
     return response.status(413).json({ error: "payload_too_large" });
   }
@@ -67,6 +88,91 @@ async function recordCreation(request, response) {
   if (!body || Array.isArray(body) || typeof body !== "object") {
     return response.status(400).json({ error: "invalid_payload" });
   }
+
+  if (body.action === "cobra_plus_waitlist") {
+    return recordCobraPlusRequest(body, response);
+  }
+  return recordCreation(body, response);
+}
+
+async function recordCobraPlusRequest(body, response) {
+  if (Object.keys(body).some((key) => !PLUS_ALLOWED_KEYS.has(key))) {
+    return response.status(400).json({ error: "unsupported_field" });
+  }
+
+  const email = String(body.email || "").trim().toLowerCase();
+  const organization = cleanOptional(body.organization, 160);
+  const country = cleanOptional(body.country, 120);
+  const useCase = PLUS_USE_CASES.has(body.useCase) ? body.useCase : "other";
+  const siteType = cleanOptional(body.siteType, 160);
+  const powerRange = cleanOptional(body.powerRange, 80);
+  const notes = cleanOptional(body.notes, 1500);
+  const sourcePath = /^\/[A-Za-z0-9/_\-.]{0,180}$/.test(String(body.sourcePath || ""))
+    ? String(body.sourcePath)
+    : "/explorer-v2-terminal.html";
+  const interests = Array.isArray(body.interests)
+    ? body.interests
+        .map((value) => cleanOptional(value, 80))
+        .filter(Boolean)
+        .slice(0, 20)
+    : [];
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
+    return response.status(400).json({ error: "invalid_email" });
+  }
+
+  const sql = database();
+  const rows = await sql`
+    insert into cobra_plus_waitlist (
+      email,
+      organization,
+      country,
+      use_case,
+      site_type,
+      power_range,
+      interests,
+      notes,
+      source_path,
+      status,
+      updated_at
+    ) values (
+      ${email},
+      ${organization},
+      ${country},
+      ${useCase},
+      ${siteType},
+      ${powerRange},
+      ${JSON.stringify(interests)}::jsonb,
+      ${notes},
+      ${sourcePath},
+      'waitlist',
+      now()
+    )
+    on conflict (lower(email)) do update set
+      organization = excluded.organization,
+      country = excluded.country,
+      use_case = excluded.use_case,
+      site_type = excluded.site_type,
+      power_range = excluded.power_range,
+      interests = excluded.interests,
+      notes = excluded.notes,
+      source_path = excluded.source_path,
+      updated_at = now()
+    returning id, status, created_at, updated_at
+  `;
+
+  const entry = rows[0] || {};
+  return response.status(201).json({
+    recorded: true,
+    product: "COBRA+",
+    status: entry.status || "waitlist",
+    requestId: entry.id || null,
+    createdAt: entry.created_at || null,
+    updatedAt: entry.updated_at || null,
+  });
+}
+
+async function recordCreation(body, response) {
   if (Object.keys(body).some((key) => !ALLOWED_KEYS.has(key))) {
     return response.status(400).json({ error: "unsupported_field" });
   }
@@ -145,4 +251,10 @@ async function recordCreation(request, response) {
     network: "bitcoin-mainnet",
     ...state,
   });
+}
+
+function cleanOptional(value, maxLength) {
+  const text = String(value || "").trim();
+  if (!text) return null;
+  return text.slice(0, maxLength);
 }
