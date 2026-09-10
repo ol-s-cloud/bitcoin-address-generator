@@ -22,9 +22,13 @@ export async function handleAccountPost(request, response, body) {
   return response.status(400).json({ error: "unsupported_account_action" });
 }
 
-export async function readAccountSession(request, response) {
+export async function getAccountSession(request) {
   await ensureAccountSchema();
-  const session = await sessionFromRequest(request);
+  return sessionFromRequest(request);
+}
+
+export async function readAccountSession(request, response) {
+  const session = await getAccountSession(request);
   if (!session) return response.status(401).json({ authenticated: false });
   return response.status(200).json({ authenticated: true, ...session });
 }
