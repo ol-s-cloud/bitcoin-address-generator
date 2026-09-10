@@ -1,130 +1,188 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <meta name="description" content="COBRA UK — register a home, business, compute site or energy project and bring energy data, tariffs and assets into one operating profile."/>
-  <meta name="theme-color" content="#f7f9f7"/>
-  <title>COBRA UK — Homes, Businesses & Energy Sites</title>
-  <link rel="stylesheet" href="/styles.css"/>
-  <link rel="stylesheet" href="/site-ui.css"/>
-  <link rel="stylesheet" href="/cobra-commercial.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="COBRA UK — register a home, business, compute site or energy project and bring smart-meter, tariff, generation and device data into one operating profile." />
+  <meta name="theme-color" content="#f7f9f7" />
+  <title>COBRA UK — Homes, Businesses & Connected Energy</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/site-ui.css" />
+  <link rel="stylesheet" href="/cobra-commercial.css" />
 </head>
 <body>
-  <header class="site-header"><a class="brand" href="/">COBRA</a><nav aria-label="Primary navigation"></nav></header>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="COBRA home">COBRA</a>
+    <nav aria-label="Primary navigation"></nav>
+  </header>
+
   <main class="commercial-shell">
     <section class="commercial-hero">
       <div class="eyebrow">COBRA UK</div>
-      <h1>Register your site.<br/><span>Understand your electricity.</span></h1>
-      <p>For UK homes, businesses, compute sites and energy projects. Build one operating profile around meters, tariffs, consumption, generation and flexible electrical assets.</p>
-      <div class="commercial-actions"><a href="#register">Register free</a><a class="secondary" href="/explorer-v2-terminal.html">Open UK intelligence →</a></div>
-      <div class="commercial-tabs"><a href="#profiles">Who it is for</a><a href="#value">What COBRA does</a><a href="#connected">Connected assets</a><a href="#register">Register</a></div>
-    </section>
-
-    <section class="commercial-section" id="profiles">
-      <div class="commercial-section-head"><div><div class="eyebrow">UK SITES</div><h2>One account model across the energy system.</h2></div><p>The site is the core object. A site can be a home, shop, office, factory, mine, data centre, renewable project or private generation facility.</p></div>
-      <div class="commercial-grid">
-        <article class="commercial-card"><span>Home</span><strong>COBRA Home</strong><p>Consumption, tariffs, costs, solar, batteries, EVs, heat pumps and flexible household loads in one profile.</p></article>
-        <article class="commercial-card"><span>Business</span><strong>COBRA Business</strong><p>Metered sites, electricity spend, operating hours, multiple locations, flexible demand and onsite generation.</p></article>
-        <article class="commercial-card"><span>Mining</span><strong>Bitcoin Mining</strong><p>Miner and fleet power demand, site tariff, break-even electricity price and operating economics.</p></article>
-        <article class="commercial-card"><span>Compute</span><strong>AI & Data Centres</strong><p>Facility load, PUE, utilisation, workload economics and power availability.</p></article>
-        <article class="commercial-card"><span>Generation</span><strong>Energy Projects</strong><p>Solar, storage, gas generation, microgrids and project-scale energy systems against site demand.</p></article>
-        <article class="commercial-card"><span>Developer</span><strong>Systems & API</strong><p>Energy data, site models and device integrations for developers, operators and technical teams.</p></article>
+      <h1>Connect your home.<br /><span>Connect your business.</span></h1>
+      <p>Register a UK property or operating site with COBRA. Bring smart-meter, tariff, generation and compatible device data into one site profile, then use COBRA to understand where electricity is being consumed, what it costs and where flexibility creates value.</p>
+      <div class="commercial-actions">
+        <a href="#register">Register free</a>
+        <a class="secondary" href="#homes">For homes →</a>
+        <a class="secondary" href="#business">For businesses →</a>
+      </div>
+      <div class="commercial-tabs">
+        <a href="#homes">Homes</a>
+        <a href="#business">Businesses</a>
+        <a href="#connected">Connected assets</a>
+        <a href="#register">Register</a>
       </div>
     </section>
 
-    <section class="commercial-section" id="value">
-      <div class="commercial-section-head"><div><div class="eyebrow">COBRA HOME & BUSINESS</div><h2>Measure. Compare. Model. Act.</h2></div><p>COBRA turns meter, tariff and asset data into an operating view centred on the economic use of electricity.</p></div>
-      <div class="commercial-grid four">
-        <article class="commercial-card"><span>01</span><strong>Measure</strong><p>Bring consumption, generation and tariff information into one site history.</p></article>
-        <article class="commercial-card"><span>02</span><strong>Compare</strong><p>See when electricity is expensive, cheap, carbon-intensive or unusually high for the site.</p></article>
-        <article class="commercial-card"><span>03</span><strong>Model</strong><p>Test tariff changes, solar, storage, EV charging, heat pumps, compute loads and generation scenarios.</p></article>
-        <article class="commercial-card"><span>04</span><strong>Act</strong><p>Identify when flexible loads should run, shift, store, export, wait or curtail.</p></article>
+    <section class="commercial-section" id="homes">
+      <div class="commercial-section-head">
+        <div><div class="eyebrow">COBRA HOME</div><h2>Your electricity, in context.</h2></div>
+        <p>COBRA Home combines household energy data with tariff, grid and asset information so a meter reading becomes an operating picture rather than another chart.</p>
+      </div>
+      <div class="commercial-grid">
+        <article class="commercial-card"><span>Usage</span><strong>See what your home uses</strong><p>Track electricity and gas consumption by day, week and month, with half-hourly detail where the connected data source supports it.</p></article>
+        <article class="commercial-card"><span>Cost</span><strong>See what it costs</strong><p>Apply your tariff to consumption, identify expensive periods and compare how timing changes the cost of the same electricity.</p></article>
+        <article class="commercial-card"><span>Flexibility</span><strong>Find better operating windows</strong><p>Identify loads that can move to lower-cost periods and quantify the value of shifting them.</p></article>
+        <article class="commercial-card"><span>Assets</span><strong>Model before you buy</strong><p>Test solar, batteries, EV charging, heat pumps and flexible compute against your own consumption profile.</p></article>
+        <article class="commercial-card"><span>Devices</span><strong>Connect compatible equipment</strong><p>Bring meters, batteries, EVs, solar, controllable loads and COBRA Appliances into the same site view.</p></article>
+        <article class="commercial-card"><span>Economics</span><strong>Test alternative uses of power</strong><p>Compare household consumption with storage, export, flexible loads and compute scenarios using explicit energy economics.</p></article>
       </div>
     </section>
 
-    <section class="commercial-section">
-      <div class="commercial-section-head"><div><div class="eyebrow">UK SMART ENERGY</div><h2>Start with the meter you already have.</h2></div><p>Register the supplier, meter status and preferred connection route for your site. COBRA keeps the energy profile independent from any single supplier or device manufacturer.</p></div>
+    <section class="commercial-section" id="business">
+      <div class="commercial-section-head">
+        <div><div class="eyebrow">COBRA BUSINESS</div><h2>Turn site energy into an operating variable.</h2></div>
+        <p>Register shops, offices, workshops, warehouses, industrial sites, mining facilities, data centres and generation projects against their actual energy conditions.</p>
+      </div>
       <div class="commercial-grid">
-        <article class="commercial-card"><span>Supplier data</span><strong>Energy account connection</strong><p>Use supplier-authorised account data where supported, including half-hourly consumption and tariff information.</p></article>
-        <article class="commercial-card"><span>Smart meter</span><strong>Consented meter data</strong><p>Use authorised smart-meter data for household and smaller-business consumption histories.</p></article>
-        <article class="commercial-card"><span>Site data</span><strong>CSV & metering</strong><p>Bring interval data from existing exports, meters and site systems into the same COBRA profile.</p></article>
+        <article class="commercial-card"><span>Load</span><strong>Half-hourly site profile</strong><p>Understand demand shape, baseload, peak periods, operating hours and the loads driving electricity cost.</p></article>
+        <article class="commercial-card"><span>Tariff</span><strong>Cost and contract context</strong><p>Separate wholesale market conditions from the tariff that actually determines your site economics.</p></article>
+        <article class="commercial-card"><span>Flex</span><strong>Shift, store or curtail</strong><p>Quantify when flexible equipment, batteries, EV fleets, miners or compute loads should consume, wait or move.</p></article>
+        <article class="commercial-card"><span>Generation</span><strong>On-site power economics</strong><p>Compare grid imports with solar, storage, gas generation and hybrid energy configurations under explicit assumptions.</p></article>
+        <article class="commercial-card"><span>Compute</span><strong>Mining and data-centre economics</strong><p>Connect machine and facility characteristics to power cost, market state and workload or mining value.</p></article>
+        <article class="commercial-card"><span>Sites</span><strong>One model per operating site</strong><p>Keep each property's tariff, assets, meters, generation and constraints attached to the site that produces the data.</p></article>
       </div>
     </section>
 
     <section class="commercial-section" id="connected">
-      <div class="commercial-section-head"><div><div class="eyebrow">CONNECTED SITE</div><h2>Meter first. Assets around it.</h2></div><p>A COBRA site can hold the devices that consume, store or produce electricity, with measurement and control permissions kept separate.</p></div>
-      <div class="commercial-grid four">
-        <article class="commercial-card"><span>Meter</span><strong>Smart meter & site meter</strong><p>Electricity history, tariff context and the baseline for site-level decisions.</p></article>
-        <article class="commercial-card"><span>Home energy</span><strong>Solar, battery, EV & heat pump</strong><p>Bring distributed energy assets into the same household or business operating view.</p></article>
-        <article class="commercial-card"><span>IoT</span><strong>Connected appliances & controls</strong><p>Register compatible sockets, controllers, sensors and equipment against the site and its operating profile.</p></article>
-        <article class="commercial-card"><span>Compute</span><strong>Miners & servers</strong><p>Compare flexible compute against tariff, network and site conditions before deciding when it should run.</p></article>
+      <div class="commercial-section-head">
+        <div><div class="eyebrow">CONNECTED ENERGY</div><h2>From smart meter to IoT asset.</h2></div>
+        <p>COBRA treats each meter or device as an asset attached to a site, with a defined identity, data source, operating state and permitted actions.</p>
       </div>
+      <div class="hardware-flow">
+        <div><span>01</span><strong>Site</strong><small>Home, office, shop, warehouse, mine, data centre or project.</small></div>
+        <div><span>02</span><strong>Connection</strong><small>Smart meter, supplier API, interval file, gateway or device API.</small></div>
+        <div><span>03</span><strong>Asset</strong><small>Solar, battery, EV, heat pump, appliance, miner, server or generation.</small></div>
+        <div><span>04</span><strong>COBRA</strong><small>Tariff, grid, market, telemetry and site economics.</small></div>
+        <div><span>05</span><strong>Decision</strong><small>RUN · WAIT · SHIFT · STORE · EXPORT · CURTAIL.</small></div>
+      </div>
+      <p class="commercial-note">Household smart-meter access requires the customer's permission and a compatible supplier or authorised data route. Device connectivity depends on the supported meter, gateway or manufacturer interface.</p>
+    </section>
+
+    <section class="commercial-section">
+      <div class="commercial-section-head">
+        <div><div class="eyebrow">START WITH DATA</div><h2>No hardware purchase required to register.</h2></div>
+        <p>A COBRA site can begin with supplier or smart-meter data and add connected assets where they are relevant to the site's economics.</p>
+      </div>
+      <table class="commercial-table">
+        <thead><tr><th>Connection</th><th>Best for</th><th>What COBRA can use</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Octopus account data</strong></td><td>Octopus households and small sites</td><td>Meter identifiers, tariff and half-hourly consumption using customer-authorised credentials.</td></tr>
+          <tr><td><strong>UK smart-meter data</strong></td><td>Compatible UK homes and businesses</td><td>Consumption history through an authorised smart-meter data route with customer consent.</td></tr>
+          <tr><td><strong>CSV / interval data</strong></td><td>Any supplier or business meter</td><td>Half-hourly or interval history for cost, load-shape and flexibility analysis.</td></tr>
+          <tr><td><strong>Device / gateway data</strong></td><td>Connected assets</td><td>Telemetry from compatible batteries, EVs, solar, appliances, meters and compute equipment.</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <section class="commercial-section" id="register">
-      <div class="commercial-section-head"><div><div class="eyebrow">REGISTER</div><h2>Register a UK home or business.</h2></div><p>Registration is free. Tell COBRA what the site is, how it is metered and what you want to understand or connect.</p></div>
+      <div class="commercial-section-head">
+        <div><div class="eyebrow">UK SITE REGISTRATION</div><h2>Register your site.</h2></div>
+        <p>Registration is free. Tell COBRA what you operate, how you receive energy data and which assets matter to you.</p>
+      </div>
       <form id="cobraUkForm" class="commercial-form">
         <div class="commercial-fields">
-          <label>Your profile<select id="ukProfileType" required>
-            <option value="home">Home</option>
-            <option value="business">Business / commercial site</option>
-            <option value="mining">Bitcoin mining</option>
-            <option value="compute">AI / data centre compute</option>
-            <option value="generation">Generation / microgrid project</option>
-            <option value="developer">Developer / integrator</option>
-            <option value="other">Other</option>
-          </select></label>
-          <label>Name<input id="ukName" maxlength="160" autocomplete="name"/></label>
-          <label>Email<input type="email" id="ukEmail" required maxlength="254" autocomplete="email"/></label>
-          <label>Organisation / household<input id="ukOrg" maxlength="160"/></label>
-          <label>UK postcode<input id="ukPostcode" maxlength="24" autocomplete="postal-code" placeholder="e.g. G2 1AA"/></label>
-          <label>Energy supplier<select id="ukSupplier">
-            <option value="">Select supplier</option>
-            <option>Octopus Energy</option><option>British Gas</option><option>EDF</option><option>E.ON Next</option><option>OVO Energy</option><option>ScottishPower</option><option>So Energy</option><option>Fuse Energy</option><option>Utility Warehouse</option><option>Other / not sure</option>
-          </select></label>
-          <label>Smart meter status<select id="ukSmartMeter">
-            <option value="smart_meter_connected">Yes — operating in smart mode</option>
-            <option value="smart_meter_issue">Yes — but not communicating correctly</option>
-            <option value="no_smart_meter">No smart meter</option>
-            <option value="not_sure">Not sure</option>
-          </select></label>
-          <label>Preferred data connection<select id="ukConnection">
-            <option value="supplier_account">Energy supplier account</option>
-            <option value="smart_meter">Smart-meter data</option>
-            <option value="csv">CSV / interval-data import</option>
-            <option value="site_metering">Site metering / telemetry</option>
-            <option value="not_sure">Not sure</option>
-          </select></label>
-          <label>Site type<input id="ukSiteType" maxlength="160" placeholder="Flat, house, shop, office, factory, mine, data centre…"/></label>
-          <label>Approx electrical scale<select id="ukPowerRange"><option value="">Not sure</option><option>Under 20 kW</option><option>20–100 kW</option><option>100–500 kW</option><option>500 kW–1 MW</option><option>1–5 MW</option><option>5–20 MW</option><option>20–100 MW</option><option>100 MW+</option></select></label>
+          <label>Name<input id="ukName" maxlength="160" autocomplete="name" /></label>
+          <label>Email<input id="ukEmail" type="email" maxlength="254" required autocomplete="email" /></label>
+          <label>Organisation / business<input id="ukOrg" maxlength="160" autocomplete="organization" /></label>
+          <label>UK postcode<input id="ukPostcode" maxlength="24" autocomplete="postal-code" placeholder="e.g. G1 1AA" /></label>
+          <label>Registering as
+            <select id="ukSegment" required>
+              <option value="home">Home</option>
+              <option value="small_business">Small business</option>
+              <option value="commercial_industrial">Commercial / industrial site</option>
+              <option value="mining_compute">Bitcoin mining / compute</option>
+              <option value="generation_project">Generation / energy project</option>
+              <option value="developer_integration">Developer / integration</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>Energy supplier<input id="ukSupplier" maxlength="120" placeholder="e.g. Octopus, British Gas, EDF" /></label>
+          <label>Smart meter
+            <select id="ukSmartMeter">
+              <option value="connected">Yes — connected and sending readings</option>
+              <option value="installed_unsure">Yes — installed, not sure of status</option>
+              <option value="business_interval_meter">Business / interval meter</option>
+              <option value="none">No smart meter</option>
+              <option value="unknown">Not sure</option>
+            </select>
+          </label>
+          <label>Preferred data connection
+            <select id="ukConnection">
+              <option value="octopus_api">Octopus account / API</option>
+              <option value="smart_meter_consent">UK smart-meter connection</option>
+              <option value="csv_interval">CSV / interval data</option>
+              <option value="device_gateway">Device / gateway integration</option>
+              <option value="not_sure">Not sure — recommend a route</option>
+            </select>
+          </label>
+          <label>Site type<input id="ukSiteType" maxlength="160" placeholder="Flat, house, shop, office, warehouse, mine…" /></label>
+          <label>Electrical scale
+            <select id="ukPowerRange">
+              <option value="">Not sure</option>
+              <option>Under 20 kW</option><option>20–100 kW</option><option>100–500 kW</option><option>500 kW–1 MW</option><option>1–5 MW</option><option>5–20 MW</option><option>20–100 MW</option><option>100 MW+</option>
+            </select>
+          </label>
         </div>
 
-        <fieldset class="commercial-checks">
-          <legend>What do you want from COBRA?</legend>
-          <label><input type="checkbox" name="ukInterest" value="smart_meter_connection"/>Smart-meter connection</label>
-          <label><input type="checkbox" name="ukInterest" value="bill_cost_intelligence"/>Bill & cost intelligence</label>
-          <label><input type="checkbox" name="ukInterest" value="tariff_analysis"/>Tariff analysis</label>
-          <label><input type="checkbox" name="ukInterest" value="usage_dashboard"/>Usage dashboard</label>
-          <label><input type="checkbox" name="ukInterest" value="solar"/>Solar</label>
-          <label><input type="checkbox" name="ukInterest" value="battery_storage"/>Battery storage</label>
-          <label><input type="checkbox" name="ukInterest" value="ev_charging"/>EV charging</label>
-          <label><input type="checkbox" name="ukInterest" value="heat_pump"/>Heat pump</label>
-          <label><input type="checkbox" name="ukInterest" value="flexible_loads"/>Flexible loads</label>
-          <label><input type="checkbox" name="ukInterest" value="bitcoin_miners"/>Bitcoin mining</label>
-          <label><input type="checkbox" name="ukInterest" value="compute"/>AI / compute loads</label>
-          <label><input type="checkbox" name="ukInterest" value="cobra_appliances"/>COBRA Appliances</label>
-          <label><input type="checkbox" name="ukInterest" value="generation"/>Onsite generation</label>
-          <label><input type="checkbox" name="ukInterest" value="api_data"/>API / data access</label>
-        </fieldset>
+        <div class="eyebrow" style="margin-top:24px">ASSETS AT YOUR SITE</div>
+        <div class="commercial-checks">
+          <label><input type="checkbox" name="ukAsset" value="smart_meter" />Smart meter</label>
+          <label><input type="checkbox" name="ukAsset" value="solar" />Solar</label>
+          <label><input type="checkbox" name="ukAsset" value="battery" />Battery</label>
+          <label><input type="checkbox" name="ukAsset" value="ev_charger" />EV / charger</label>
+          <label><input type="checkbox" name="ukAsset" value="heat_pump" />Heat pump</label>
+          <label><input type="checkbox" name="ukAsset" value="flexible_appliances" />Flexible appliances</label>
+          <label><input type="checkbox" name="ukAsset" value="bitcoin_miner" />Bitcoin miner</label>
+          <label><input type="checkbox" name="ukAsset" value="servers_compute" />Servers / compute</label>
+          <label><input type="checkbox" name="ukAsset" value="onsite_generation" />On-site generation</label>
+          <label><input type="checkbox" name="ukAsset" value="generator_turbine" />Generator / turbine</label>
+          <label><input type="checkbox" name="ukAsset" value="other_iot" />Other IoT / controllable equipment</label>
+        </div>
 
-        <label>Site brief<textarea id="ukNotes" maxlength="1500" rows="5" placeholder="Tell us about your electricity use, tariff, devices, energy costs, site operation or what you want COBRA to analyse."></textarea></label>
+        <div class="eyebrow" style="margin-top:24px">WHAT DO YOU WANT COBRA TO HELP WITH?</div>
+        <div class="commercial-checks">
+          <label><input type="checkbox" name="ukInterest" value="usage_cost" />Usage & cost</label>
+          <label><input type="checkbox" name="ukInterest" value="tariff_optimisation" />Tariff optimisation</label>
+          <label><input type="checkbox" name="ukInterest" value="bill_savings" />Bill savings</label>
+          <label><input type="checkbox" name="ukInterest" value="solar_storage" />Solar & storage</label>
+          <label><input type="checkbox" name="ukInterest" value="ev_flex" />EV / flexible demand</label>
+          <label><input type="checkbox" name="ukInterest" value="mining_compute" />Mining / compute economics</label>
+          <label><input type="checkbox" name="ukInterest" value="generation" />Generation economics</label>
+          <label><input type="checkbox" name="ukInterest" value="device_control" />Connected devices & control</label>
+          <label><input type="checkbox" name="ukInterest" value="api_data" />API / data integration</label>
+        </div>
+
+        <label>Anything COBRA should know about your site?
+          <textarea id="ukNotes" maxlength="1500" rows="5" placeholder="Your tariff, meter, equipment, energy problem, operating hours or what you want to improve."></textarea>
+        </label>
         <div class="commercial-actions"><button type="submit">Register with COBRA UK</button></div>
-        <p class="commercial-note">Do not include passwords, private keys or payment-card details.</p>
+        <p class="partner-note">Submitting this form registers your site profile with COBRA. It does not give COBRA access to your smart meter or supplier account; data access requires a separate customer-authorised connection.</p>
         <div id="cobraUkStatus" class="commercial-form-status" role="status" aria-live="polite"></div>
       </form>
     </section>
   </main>
+
   <script src="/site-ui.js"></script>
   <script src="/uk-register.js"></script>
 </body>
