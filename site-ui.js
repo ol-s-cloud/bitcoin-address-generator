@@ -44,6 +44,7 @@
     ["/store.html", "Store"],
     ["/services.html", "Services"],
     ["/calculators.html", "Calculators"],
+    ["/uk.html", "UK"],
   ];
   const githubUrl = "https://github.com/ol-s-cloud/bitcoin-address-generator";
   const currentPath = location.pathname.replace(/index\.html$/, "").replace(/\/$/, "") || "/";
@@ -117,22 +118,23 @@
       <div class="cobra-footer-grid">
         <div class="cobra-footer-brand">
           <strong>COBRA</strong>
-          <p>Cryptographic, energy and compute infrastructure by ol-s-cloud. Public tools remain open; private operating capabilities sit behind COBRA+.</p>
+          <p><b>Cryptographic sovereignty.</b><br>Your keys. Your mathematics. Your authority.</p>
+          <p>Energy-aware compute and electrical intelligence by ol-s-cloud.</p>
         </div>
         <div class="cobra-footer-col"><strong>PRODUCT</strong>
-          <a href="/explorer-v2-terminal.html">Explorer</a><a href="/plus.html">COBRA+</a><a href="/store.html">Store</a><a href="/services.html">Services</a><a href="/calculators.html">Calculators</a>
+          <a href="/explorer-v2-terminal.html">Explorer</a><a href="/plus.html">COBRA+</a><a href="/uk.html">UK Homes & Businesses</a><a href="/store.html">Store</a><a href="/services.html">Services</a><a href="/calculators.html">Calculators</a>
         </div>
         <div class="cobra-footer-col"><strong>CRYPTOGRAPHY</strong>
           <a href="/#tools">Create</a><a href="/offline.html">Offline</a><a href="/cli.html">CLI</a><a href="/docs.html">Docs</a><a href="${githubUrl}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
         </div>
         <div class="cobra-footer-col"><strong>INTELLIGENCE</strong>
-          <a href="/explorer-v2-terminal.html">Bitcoin & Mining</a><a href="/explorer-v2-terminal.html">Power & Grid</a><a href="/explorer-v2-terminal.html">Compute</a><a href="/explorer-v2-terminal.html">Generation</a><a href="/explorer-v2-terminal.html">Home & Flex</a>
+          <a href="/explorer-v2-terminal.html">Bitcoin & Mining</a><a href="/explorer-v2-terminal.html">Power & Grid</a><a href="/explorer-v2-terminal.html">Compute</a><a href="/explorer-v2-terminal.html">Generation</a><a href="/uk.html">Home & Business</a>
         </div>
         <div class="cobra-footer-col"><strong>BUILD & RESEARCH</strong>
-          <a href="/research.html">Research</a><a href="/#developers">Build on COBRA</a><a href="/SECURITY.md">Security</a><a href="/terms.html">Terms</a><a href="/calculators.html#reference">Reference tools</a>
+          <a href="/research.html">Research</a><a href="/#developers">Build on COBRA</a><a href="/SECURITY.md">Security</a><a href="/terms.html">Terms</a><a href="/calculators.html">Models & Calculators</a>
         </div>
       </div>
-      <div class="cobra-footer-bottom"><span>COBRA by ol-s-cloud · First rollout 2023 · Updated 2026</span><span>Public references and manufacturer names do not imply partnership unless stated.</span></div>`;
+      <div class="cobra-footer-bottom"><span>COBRA by ol-s-cloud · First roll out 2023 · Last Updated 2026 · v1.0.0.1</span><span>Public references and manufacturer names do not imply partnership unless stated.</span></div>`;
     document.body.appendChild(footer);
   }
 
