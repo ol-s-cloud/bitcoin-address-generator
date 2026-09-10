@@ -3,36 +3,25 @@
   const status = document.getElementById('cobraUkStatus');
   if (!form || !status) return;
 
-  const useCaseMap = {
-    home: 'home_energy',
-    business: 'industrial_site',
-    mining: 'bitcoin_mining',
-    compute: 'data_center_compute',
-    generation: 'generation_project',
-    developer: 'developer_platform',
-    other: 'other',
-  };
+  const readChecked = (name) => [...form.querySelectorAll(`input[name="${name}"]:checked`)].map((input) => input.value);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const submit = form.querySelector('button[type="submit"]');
-    const profileType = document.getElementById('ukProfileType').value;
-    const interests = [...form.querySelectorAll('input[name="ukInterest"]:checked')].map((input) => input.value);
-
     const payload = {
-      action: 'cobra_plus_waitlist',
+      action: 'cobra_uk_registration',
       contactName: document.getElementById('ukName').value.trim(),
       email: document.getElementById('ukEmail').value.trim(),
       organization: document.getElementById('ukOrg').value.trim(),
-      country: 'United Kingdom',
+      segment: document.getElementById('ukSegment').value,
       postcode: document.getElementById('ukPostcode').value.trim().toUpperCase(),
-      energySupplier: document.getElementById('ukSupplier').value,
+      energySupplier: document.getElementById('ukSupplier').value.trim(),
       smartMeterStatus: document.getElementById('ukSmartMeter').value,
       connectionPreference: document.getElementById('ukConnection').value,
-      useCase: useCaseMap[profileType] || 'other',
-      siteType: document.getElementById('ukSiteType').value.trim() || profileType,
+      siteType: document.getElementById('ukSiteType').value.trim(),
       powerRange: document.getElementById('ukPowerRange').value,
-      interests,
+      assets: readChecked('ukAsset'),
+      interests: readChecked('ukInterest'),
       notes: document.getElementById('ukNotes').value.trim(),
       sourcePath: '/uk.html',
     };
@@ -43,7 +32,7 @@
     }
 
     submit.disabled = true;
-    status.textContent = 'Registering site…';
+    status.textContent = 'Registering your site…';
     try {
       const response = await fetch('/api/registry', {
         method: 'POST',
@@ -52,7 +41,7 @@
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'registration_failed');
-      status.textContent = `Registration recorded. Reference: ${data.requestId ?? 'COBRA-UK'}.`;
+      status.textContent = `Site registered. COBRA reference: ${data.reference || 'CBR-UK'}.`;
       form.reset();
     } catch (error) {
       status.textContent = 'Registration could not be recorded. Please try again.';
