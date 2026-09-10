@@ -118,11 +118,11 @@
         </section>
 
         <section class="home-panel" id="digital-twin"><div class="home-app-eyebrow">HOME DIGITAL TWIN</div><h2>Current state and scenario model.</h2><p>The Home Digital Twin is anchored to meter history, tariff, Appliance Passports and energy assets. Estimated, supplier-reported and measured values remain explicitly labelled.</p><div class="home-zero" id="twinState"><strong>Waiting for site data.</strong><span>Energy and appliance records establish the first home state.</span></div></section>
-        <section class="home-panel" id="grid"><div class="home-app-eyebrow">GRID</div><h2>Put household decisions in system context.</h2><p>GB market and system conditions sit alongside the household tariff without treating wholesale electricity as the price the customer actually pays.</p><div class="home-zero"><strong>GB system context is available through COBRA Explorer.</strong><span>Home decisions remain anchored to the household's own tariff and connection data.</span></div></section>
+        <section class="home-panel" id="grid"><div class="home-app-eyebrow">GRID</div><h2>Your home in the electricity system.</h2><p>COBRA uses your Home site's postcode to place household consumption beside official regional grid conditions. Grid conditions inform timing; your own tariff remains the authoritative retail price.</p><div class="home-zero" id="gridState"><strong>Loading regional grid context…</strong><span>National Energy System Operator data.</span></div></section>
         <section class="home-panel" id="optimise"><div class="home-app-eyebrow">OPTIMISE</div><h2>Reduce cost. Shift load. Increase autonomy.</h2><p>COBRA quantifies an opportunity only when the required inputs are available.</p><div id="opportunityList" class="home-record-list"></div><div class="home-zero" id="optimiseState"><strong>No quantified opportunities yet.</strong><span>Meter history and tariff data establish the household baseline.</span></div></section>
       </div>
     </div>
   </main>
-  <script src="/site-ui.js"></script><script src="/home-dashboard.js"></script><script src="/home-csv-import.js"></script>
+  <script src="/site-ui.js"></script><script src="/home-dashboard.js"></script><script src="/home-csv-import.js"></script><script src="/home-grid.js"></script>
 </body>
 </html>
