@@ -7,6 +7,7 @@ import {
 import { handleAccountPost, readAccountSession } from "../server/auth.js";
 import { handleHomePost, readHomeSnapshot } from "../server/home-service.js";
 import { readHomeHistory } from "../server/home-history.js";
+import { readHomeGridContext } from "../server/home-grid-context.js";
 import { isMainnetP2pkhAddress } from "../server/bitcoin-address.js";
 import {
   noStore,
@@ -90,6 +91,7 @@ export default async function handler(request, response) {
       if (mode === "account_session") return readAccountSession(request, response);
       if (mode === "home_snapshot") return readHomeSnapshot(request, response);
       if (mode === "home_history") return readHomeHistory(request, response);
+      if (mode === "home_grid") return readHomeGridContext(request, response);
       return getRegistry(request, response);
     }
     if (request.method === "POST") return handlePost(request, response);
