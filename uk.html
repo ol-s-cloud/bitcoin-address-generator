@@ -16,9 +16,9 @@
     <section class="commercial-hero">
       <div class="eyebrow">COBRA UK</div>
       <h1>Register your site.<br/><span>Understand your electricity.</span></h1>
-      <p>For UK homes, businesses, compute sites and energy projects. Build one site profile around meters, tariffs, consumption, generation and flexible electrical assets.</p>
-      <div class="commercial-actions"><a href="#register">Register your site</a><a class="secondary" href="/explorer-v2-terminal.html">Open UK intelligence →</a></div>
-      <div class="commercial-tabs"><a href="#profiles">Who it is for</a><a href="#value">What COBRA does</a><a href="#register">Register</a></div>
+      <p>For UK homes, businesses, compute sites and energy projects. Build one operating profile around meters, tariffs, consumption, generation and flexible electrical assets.</p>
+      <div class="commercial-actions"><a href="#register">Register free</a><a class="secondary" href="/explorer-v2-terminal.html">Open UK intelligence →</a></div>
+      <div class="commercial-tabs"><a href="#profiles">Who it is for</a><a href="#value">What COBRA does</a><a href="#connected">Connected assets</a><a href="#register">Register</a></div>
     </section>
 
     <section class="commercial-section" id="profiles">
@@ -44,7 +44,7 @@
     </section>
 
     <section class="commercial-section">
-      <div class="commercial-section-head"><div><div class="eyebrow">UK SMART ENERGY</div><h2>Start with the meter you already have.</h2></div><p>Register the supplier, meter status and connection route for your site. COBRA keeps the energy profile independent from any single supplier or device manufacturer.</p></div>
+      <div class="commercial-section-head"><div><div class="eyebrow">UK SMART ENERGY</div><h2>Start with the meter you already have.</h2></div><p>Register the supplier, meter status and preferred connection route for your site. COBRA keeps the energy profile independent from any single supplier or device manufacturer.</p></div>
       <div class="commercial-grid">
         <article class="commercial-card"><span>Supplier data</span><strong>Energy account connection</strong><p>Use supplier-authorised account data where supported, including half-hourly consumption and tariff information.</p></article>
         <article class="commercial-card"><span>Smart meter</span><strong>Consented meter data</strong><p>Use authorised smart-meter data for household and smaller-business consumption histories.</p></article>
@@ -52,8 +52,18 @@
       </div>
     </section>
 
+    <section class="commercial-section" id="connected">
+      <div class="commercial-section-head"><div><div class="eyebrow">CONNECTED SITE</div><h2>Meter first. Assets around it.</h2></div><p>A COBRA site can hold the devices that consume, store or produce electricity, with measurement and control permissions kept separate.</p></div>
+      <div class="commercial-grid four">
+        <article class="commercial-card"><span>Meter</span><strong>Smart meter & site meter</strong><p>Electricity history, tariff context and the baseline for site-level decisions.</p></article>
+        <article class="commercial-card"><span>Home energy</span><strong>Solar, battery, EV & heat pump</strong><p>Bring distributed energy assets into the same household or business operating view.</p></article>
+        <article class="commercial-card"><span>IoT</span><strong>Connected appliances & controls</strong><p>Register compatible sockets, controllers, sensors and equipment against the site and its operating profile.</p></article>
+        <article class="commercial-card"><span>Compute</span><strong>Miners & servers</strong><p>Compare flexible compute against tariff, network and site conditions before deciding when it should run.</p></article>
+      </div>
+    </section>
+
     <section class="commercial-section" id="register">
-      <div class="commercial-section-head"><div><div class="eyebrow">REGISTER</div><h2>Register a UK home or business.</h2></div><p>Tell COBRA what the site is, how it is metered and what you want to understand or connect.</p></div>
+      <div class="commercial-section-head"><div><div class="eyebrow">REGISTER</div><h2>Register a UK home or business.</h2></div><p>Registration is free. Tell COBRA what the site is, how it is metered and what you want to understand or connect.</p></div>
       <form id="cobraUkForm" class="commercial-form">
         <div class="commercial-fields">
           <label>Your profile<select id="ukProfileType" required>
@@ -110,7 +120,7 @@
 
         <label>Site brief<textarea id="ukNotes" maxlength="1500" rows="5" placeholder="Tell us about your electricity use, tariff, devices, energy costs, site operation or what you want COBRA to analyse."></textarea></label>
         <div class="commercial-actions"><button type="submit">Register with COBRA UK</button></div>
-        <p class="commercial-note">Registration stores the site information you submit so COBRA can use it for this access request. Do not include passwords, private keys or payment-card details.</p>
+        <p class="commercial-note">Do not include passwords, private keys or payment-card details.</p>
         <div id="cobraUkStatus" class="commercial-form-status" role="status" aria-live="polite"></div>
       </form>
     </section>
