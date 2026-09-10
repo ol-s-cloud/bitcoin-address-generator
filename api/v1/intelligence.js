@@ -11,8 +11,9 @@ import { readDecisionHistory } from "../../lib/intelligence/history.js";
 export default async function handler(request, response) {
   try {
     const query = request?.query || {};
+    const mode = String(query.mode || "").toLowerCase();
 
-    if (String(query.mode || "").toLowerCase() === "history") {
+    if (mode === "history") {
       const history = await readDecisionHistory({
         siteId: query.siteId,
         assetId: query.assetId,
@@ -24,6 +25,10 @@ export default async function handler(request, response) {
         product: "COBRA Intelligence History",
         ...history,
       });
+    }
+
+    if (mode === "solar") {
+      return handleSolarEstimate(query, response);
     }
 
     const site = normalizeSiteProfile({
@@ -148,6 +153,96 @@ export default async function handler(request, response) {
     const message = String(error?.message || "intelligence_failed");
     return response.status(clientErrors.includes(message) ? 400 : 500).json({ error: message });
   }
+}
+
+async function handleSolarEstimate(query, response) {
+  const lat = bounded(query.lat, -90, 90, "invalid_latitude");
+  const lon = bounded(query.lon, -180, 180, "invalid_longitude");
+  const peakPowerKw = bounded(query.peakPowerKw ?? 10, 0.05, 500000, "invalid_peak_power");
+  const lossPct = bounded(query.lossPct ?? 14, -5, 99, "invalid_loss");
+  const mounting = String(query.mounting || "free") === "building" ? "building" : "free";
+
+  const params = new URLSearchParams({
+    lat: String(lat),
+    lon: String(lon),
+    peakpower: String(peakPowerKw),
+    loss: String(lossPct),
+    mountingplace: mounting,
+    pvtechchoice: "crystSi",
+    optimalangles: "1",
+    outputformat: "json",
+  });
+  const sourceUrl = `https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?${params.toString()}`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 9000);
+  let upstream;
+  try {
+    upstream = await fetch(sourceUrl, {
+      headers: { Accept: "application/json", "User-Agent": "COBRA/1.0 ol-s-cloud" },
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!upstream?.ok) {
+    return response.status(upstream?.status === 529 ? 503 : 502).json({
+      error: "solar_source_unavailable",
+      source: "European Commission JRC PVGIS 5.3",
+      upstreamStatus: upstream?.status || null,
+    });
+  }
+
+  const data = await upstream.json();
+  const totals = data?.outputs?.totals?.fixed || {};
+  const monthly = Array.isArray(data?.outputs?.monthly?.fixed) ? data.outputs.monthly.fixed : [];
+  const system = data?.inputs?.mounting_system?.fixed || {};
+  const meteo = data?.inputs?.meteo_data || {};
+
+  const payload = {
+    product: "COBRA Solar Calculator",
+    checkedAt: new Date().toISOString(),
+    inputs: { lat, lon, peakPowerKw, lossPct, mounting },
+    outputs: {
+      annualEnergyKwh: finite(totals.E_y),
+      averageDailyEnergyKwh: finite(totals.E_d),
+      annualPlaneIrradiationKwhM2: finite(totals["H(i)_y"]),
+      annualVariabilityKwh: finite(totals.SD_y),
+      totalLossPct: finite(totals.l_total),
+      optimalSlopeDeg: finite(system?.slope?.value),
+      optimalAzimuthDeg: finite(system?.azimuth?.value),
+      specificYieldKwhKwp: finite(totals.E_y) != null ? finite(totals.E_y) / peakPowerKw : null,
+      capacityFactorPct: finite(totals.E_y) != null ? (finite(totals.E_y) / (peakPowerKw * 8760)) * 100 : null,
+      monthly: monthly.map((row) => ({
+        month: Number(row.month),
+        energyKwh: finite(row.E_m),
+        dailyKwh: finite(row.E_d),
+        irradiationKwhM2: finite(row["H(i)_m"]),
+      })),
+    },
+    source: {
+      provider: "European Commission Joint Research Centre",
+      model: "PVGIS 5.3 · PVcalc",
+      radiationDatabase: meteo.radiation_db || null,
+      meteoDatabase: meteo.meteo_db || null,
+      yearMin: meteo.year_min || null,
+      yearMax: meteo.year_max || null,
+      methodologyUrl: "https://joint-research-centre.ec.europa.eu/photovoltaic-geographical-information-system-pvgis_en",
+    },
+  };
+
+  response.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=86400");
+  return response.status(200).json(payload);
+}
+
+function bounded(input, min, max, error) {
+  const number = Number(input);
+  if (!Number.isFinite(number) || number < min || number > max) throw new Error(error);
+  return number;
+}
+
+function finite(input) {
+  const number = Number(input);
+  return Number.isFinite(number) ? number : null;
 }
 
 function value(metric) {
