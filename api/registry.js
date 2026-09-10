@@ -4,6 +4,7 @@ import {
   ensureSchema,
   registryState,
 } from "../server/database.js";
+import { handleAccountPost, readAccountSession } from "../server/auth.js";
 import { isMainnetP2pkhAddress } from "../server/bitcoin-address.js";
 import {
   noStore,
@@ -82,7 +83,12 @@ export default async function handler(request, response) {
 
   try {
     await ensureSchema();
-    if (request.method === "GET") return getRegistry(request, response);
+    if (request.method === "GET") {
+      if (String(request.query?.mode || "").toLowerCase() === "account_session") {
+        return readAccountSession(request, response);
+      }
+      return getRegistry(request, response);
+    }
     if (request.method === "POST") return handlePost(request, response);
     response.setHeader("Allow", "GET, POST");
     return response.status(405).json({ error: "method_not_allowed" });
@@ -99,10 +105,7 @@ export default async function handler(request, response) {
 async function getRegistry(request, response) {
   const limit = Number(request.query?.limit || 10);
   const state = await registryState(limit);
-  return response.status(200).json({
-    network: "bitcoin-mainnet",
-    ...state,
-  });
+  return response.status(200).json({ network: "bitcoin-mainnet", ...state });
 }
 
 async function handlePost(request, response) {
@@ -120,6 +123,9 @@ async function handlePost(request, response) {
     return response.status(400).json({ error: "invalid_payload" });
   }
 
+  if (String(body.action || "").startsWith("account_")) {
+    return handleAccountPost(request, response, body);
+  }
   if (body.action === "cobra_plus_waitlist") {
     return recordCobraPlusRequest(body, response);
   }
@@ -158,39 +164,14 @@ async function recordCobraUkRegistration(body, response) {
   const sql = database();
   const rows = await sql`
     insert into cobra_uk_site_registrations (
-      contact_name,
-      email,
-      organization,
-      segment,
-      postcode,
-      energy_supplier,
-      smart_meter_status,
-      connection_preference,
-      site_type,
-      power_range,
-      assets,
-      interests,
-      notes,
-      source_path,
-      status,
-      updated_at
+      contact_name, email, organization, segment, postcode, energy_supplier,
+      smart_meter_status, connection_preference, site_type, power_range,
+      assets, interests, notes, source_path, status, updated_at
     ) values (
-      ${contactName},
-      ${email},
-      ${organization},
-      ${segment},
-      ${postcode},
-      ${energySupplier},
-      ${smartMeterStatus},
-      ${connectionPreference},
-      ${siteType},
-      ${powerRange},
-      ${JSON.stringify(assets)}::jsonb,
-      ${JSON.stringify(interests)}::jsonb,
-      ${notes},
-      ${sourcePath},
-      'registered',
-      now()
+      ${contactName}, ${email}, ${organization}, ${segment}, ${postcode}, ${energySupplier},
+      ${smartMeterStatus}, ${connectionPreference}, ${siteType}, ${powerRange},
+      ${JSON.stringify(assets)}::jsonb, ${JSON.stringify(interests)}::jsonb,
+      ${notes}, ${sourcePath}, 'registered', now()
     )
     returning id, status, created_at
   `;
@@ -235,39 +216,14 @@ async function recordCobraPlusRequest(body, response) {
   const sql = database();
   const rows = await sql`
     insert into cobra_plus_waitlist (
-      email,
-      organization,
-      country,
-      use_case,
-      site_type,
-      power_range,
-      interests,
-      notes,
-      source_path,
-      status,
-      contact_name,
-      postcode,
-      energy_supplier,
-      smart_meter_status,
-      connection_preference,
-      updated_at
+      email, organization, country, use_case, site_type, power_range,
+      interests, notes, source_path, status, contact_name, postcode,
+      energy_supplier, smart_meter_status, connection_preference, updated_at
     ) values (
-      ${email},
-      ${organization},
-      ${country},
-      ${useCase},
-      ${siteType},
-      ${powerRange},
-      ${JSON.stringify(interests)}::jsonb,
-      ${notes},
-      ${sourcePath},
-      'waitlist',
-      ${contactName},
-      ${postcode},
-      ${energySupplier},
-      ${smartMeterStatus},
-      ${connectionPreference},
-      now()
+      ${email}, ${organization}, ${country}, ${useCase}, ${siteType}, ${powerRange},
+      ${JSON.stringify(interests)}::jsonb, ${notes}, ${sourcePath}, 'waitlist',
+      ${contactName}, ${postcode}, ${energySupplier}, ${smartMeterStatus},
+      ${connectionPreference}, now()
     )
     on conflict (lower(email)) do update set
       organization = excluded.organization,
@@ -304,16 +260,10 @@ async function recordCreation(body, response) {
   }
 
   const visibility = body.visibility === "public" ? "public" : "private";
-  const creationType = CREATION_TYPES.has(body.creationType)
-    ? body.creationType
-    : "derived";
-  const addressType = body.addressType === "p2pkh" ? "p2pkh" : "p2pkh";
-  const sourceType = ["browser", "cli", "api"].includes(body.sourceType)
-    ? body.sourceType
-    : "browser";
-  const cobraVersion = /^v?[0-9][0-9A-Za-z.-]{0,31}$/.test(
-    String(body.cobraVersion || ""),
-  )
+  const creationType = CREATION_TYPES.has(body.creationType) ? body.creationType : "derived";
+  const addressType = "p2pkh";
+  const sourceType = ["browser", "cli", "api"].includes(body.sourceType) ? body.sourceType : "browser";
+  const cobraVersion = /^v?[0-9][0-9A-Za-z.-]{0,31}$/.test(String(body.cobraVersion || ""))
     ? String(body.cobraVersion)
     : "v1.0.0.1";
   const address = String(body.address || "").trim();
@@ -323,42 +273,23 @@ async function recordCreation(body, response) {
     return response.status(400).json({ error: "invalid_mainnet_address" });
   }
   if (!isPublic && address) {
-    return response
-      .status(400)
-      .json({ error: "private_event_must_not_include_address" });
+    return response.status(400).json({ error: "private_event_must_not_include_address" });
   }
 
   const sql = database();
   await sql`
     with creation as (
       insert into cobra_creation_events (
-        network,
-        creation_type,
-        address_type,
-        is_public,
-        cobra_version
+        network, creation_type, address_type, is_public, cobra_version
       ) values (
-        'bitcoin-mainnet',
-        ${creationType},
-        ${addressType},
-        ${isPublic},
-        ${cobraVersion}
+        'bitcoin-mainnet', ${creationType}, ${addressType}, ${isPublic}, ${cobraVersion}
       )
       returning created_at
     ), published as (
       insert into cobra_public_addresses (
-        address,
-        network,
-        address_type,
-        cobra_version,
-        source_type
+        address, network, address_type, cobra_version, source_type
       )
-      select
-        ${address},
-        'bitcoin-mainnet',
-        ${addressType},
-        ${cobraVersion},
-        ${sourceType}
+      select ${address}, 'bitcoin-mainnet', ${addressType}, ${cobraVersion}, ${sourceType}
       where ${isPublic}
       on conflict (address) do update set
         cobra_version = excluded.cobra_version,
@@ -381,15 +312,11 @@ async function recordCreation(body, response) {
 
 function cleanOptional(value, maxLength) {
   const text = String(value || "").trim();
-  if (!text) return null;
-  return text.slice(0, maxLength);
+  return text ? text.slice(0, maxLength) : null;
 }
 
 function cleanStringArray(value, maxItems, maxLength) {
   return Array.isArray(value)
-    ? value
-        .map((item) => cleanOptional(item, maxLength))
-        .filter(Boolean)
-        .slice(0, maxItems)
+    ? value.map((item) => cleanOptional(item, maxLength)).filter(Boolean).slice(0, maxItems)
     : [];
 }
