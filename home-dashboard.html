@@ -22,7 +22,6 @@
         <div class="home-app-user"><span id="homeUserEmail">Loading account…</span><button id="signOutButton" type="button">Sign out</button></div>
       </div>
       <p>Your household energy account, meters, bills, tariffs, appliances and generation assets in one site profile.</p>
-      <div class="home-product-switch"><span class="current">Home</span><span>Mining</span><span>Compute</span><span>Generation</span></div>
     </section>
 
     <div class="home-app-grid">
@@ -39,52 +38,52 @@
 
       <div class="home-dashboard">
         <section class="home-summary-grid" id="overview">
-          <article class="home-metric"><span>Energy account</span><strong>—</strong><small>No supplier connected</small></article>
-          <article class="home-metric"><span>Smart meter</span><strong>—</strong><small>No meter data connected</small></article>
-          <article class="home-metric"><span>This month</span><strong>—</strong><small>Connect usage to calculate cost</small></article>
-          <article class="home-metric"><span>COBRA opportunities</span><strong>—</strong><small>No energy history yet</small></article>
+          <article class="home-metric"><span>Energy account</span><strong id="energyAccountValue">—</strong><small id="energyAccountNote">No supplier connected</small></article>
+          <article class="home-metric"><span>Smart meter</span><strong id="smartMeterValue">—</strong><small id="smartMeterNote">No meter data connected</small></article>
+          <article class="home-metric"><span>This month</span><strong id="monthUsageValue">—</strong><small id="monthUsageNote">Connect usage to establish a baseline</small></article>
+          <article class="home-metric"><span>COBRA opportunities</span><strong id="opportunityValue">—</strong><small id="opportunityNote">No quantified opportunities yet</small></article>
         </section>
 
         <section class="home-panel" id="energy-account">
           <div class="home-app-eyebrow">ENERGY ACCOUNT</div>
           <h2>Supplier, bills, tariff and meter history.</h2>
-          <p>The Energy Account is the reconciliation layer between what your supplier reports and the energy activity attached to this home.</p>
-          <div class="home-zero"><strong>No energy account connected.</strong><span>Supplier and smart-meter connections will attach to this site, not to a separate COBRA identity.</span></div>
+          <p>The Energy Account reconciles what your supplier reports with the energy activity attached to this home.</p>
+          <div class="home-zero" id="energyAccountState"><strong>No energy account connected.</strong><span>Supplier and smart-meter connections attach to this Home site, not to a separate COBRA identity.</span></div>
         </section>
 
         <section class="home-panel" id="devices">
           <div class="home-app-eyebrow">DEVICES</div>
           <h2>Appliance passports and connected loads.</h2>
           <p>Add major electrical appliances and energy assets to build a structured picture of what consumes electricity inside the property.</p>
-          <div class="home-zero"><strong>No appliances registered.</strong><span>Appliance model, manufacturer specifications and observed consumption will remain separate fields so estimated and measured data are never confused.</span></div>
+          <div class="home-zero" id="deviceState"><strong>No appliances registered.</strong><span>Manufacturer specifications and observed consumption remain separate so estimated and measured data are never confused.</span></div>
         </section>
 
         <section class="home-panel" id="generation">
           <div class="home-app-eyebrow">GENERATION & STORAGE</div>
           <h2>Solar, battery, EV, wind and other systems.</h2>
-          <p>Generation and storage belong to the same site model as household demand so COBRA can compare import, self-consumption, storage and export.</p>
-          <div class="home-zero"><strong>No generation or storage assets registered.</strong></div>
+          <p>Generation and storage belong to the same Home site model as household demand so COBRA can compare import, self-consumption, storage and export.</p>
+          <div class="home-zero" id="assetState"><strong>No generation or storage assets registered.</strong></div>
         </section>
 
         <section class="home-panel" id="digital-twin">
           <div class="home-app-eyebrow">HOME DIGITAL TWIN</div>
           <h2>Current state and scenario model.</h2>
-          <p>The digital twin is built from the home's meter history, tariff, appliances and energy assets. It is not populated until real or explicitly entered data exists.</p>
-          <div class="home-zero"><strong>Waiting for site data.</strong><span>Energy flows and simulations will use this site's own inputs.</span></div>
+          <p>The digital twin is built from this home's meter history, tariff, appliances and energy assets. It is not populated until real or explicitly entered data exists.</p>
+          <div class="home-zero" id="twinState"><strong>Waiting for site data.</strong><span>Energy flows and simulations use this site's own inputs.</span></div>
         </section>
 
         <section class="home-panel" id="grid">
           <div class="home-app-eyebrow">GRID</div>
           <h2>Put household decisions in system context.</h2>
-          <p>National and market conditions can be shown alongside the household tariff without treating wholesale electricity as the price the customer actually pays.</p>
-          <div class="home-zero"><strong>GB system context is available through COBRA Explorer.</strong><span>Site decisions remain anchored to the household's own tariff and connection data.</span></div>
+          <p>National and market conditions sit alongside the household tariff without treating wholesale electricity as the price the customer actually pays.</p>
+          <div class="home-zero"><strong>GB system context is available through COBRA Explorer.</strong><span>Home decisions remain anchored to the household's own tariff and connection data.</span></div>
         </section>
 
         <section class="home-panel" id="optimise">
           <div class="home-app-eyebrow">OPTIMISE</div>
           <h2>Reduce cost. Shift load. Increase autonomy.</h2>
           <p>COBRA only quantifies an opportunity after the inputs required for the calculation are available.</p>
-          <div class="home-zero"><strong>No quantified opportunities yet.</strong><span>Connect consumption and tariff data to establish the first household baseline.</span></div>
+          <div class="home-zero" id="optimiseState"><strong>No quantified opportunities yet.</strong><span>Connect consumption and tariff data to establish the first household baseline.</span></div>
         </section>
       </div>
     </div>
