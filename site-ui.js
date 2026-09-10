@@ -2,6 +2,11 @@
   const root = document.documentElement;
   const storageKey = "cobra-theme";
 
+  const globalStyles = document.createElement("link");
+  globalStyles.rel = "stylesheet";
+  globalStyles.href = "/cobra-global-shell.css";
+  document.head.appendChild(globalStyles);
+
   const readPreference = () => {
     try {
       const value = localStorage.getItem(storageKey);
@@ -27,37 +32,28 @@
   };
 
   applyTheme(readPreference() || "light");
+
+  const coreNavigation = [
+    ["/", "Home"],
+    ["/docs.html", "Docs"],
+    ["/explorer-v2-terminal.html", "Explorer"],
+    ["/research.html", "Research"],
+    ["/offline.html", "Offline"],
+    ["/cli.html", "CLI"],
+    ["/plus.html", "COBRA+"],
+    ["/store.html", "Store"],
+    ["/services.html", "Services"],
+    ["/calculators.html", "Calculators"],
+  ];
+  const githubUrl = "https://github.com/ol-s-cloud/bitcoin-address-generator";
   const currentPath = location.pathname.replace(/index\.html$/, "").replace(/\/$/, "") || "/";
 
   document.querySelectorAll(".site-header").forEach((header, headerIndex) => {
     const nav = header.querySelector("nav");
     if (!nav) return;
 
-    const commercialLinks = [
-      ["/plus.html", "COBRA+"],
-      ["/store.html", "Store"],
-      ["/services.html", "Services"],
-    ];
-    let insertAfter = [...nav.querySelectorAll('a[href]')].find((link) => {
-      try { return new URL(link.href, location.href).pathname.includes('explorer'); } catch { return false; }
-    });
-    for (const [href, label] of commercialLinks) {
-      const exists = [...nav.querySelectorAll('a[href]')].some((link) => {
-        try { return new URL(link.href, location.href).pathname === href; } catch { return false; }
-      });
-      if (exists) {
-        insertAfter = [...nav.querySelectorAll('a[href]')].find((link) => {
-          try { return new URL(link.href, location.href).pathname === href; } catch { return false; }
-        }) || insertAfter;
-        continue;
-      }
-      const link = document.createElement('a');
-      link.href = href;
-      link.textContent = label;
-      if (insertAfter) insertAfter.insertAdjacentElement('afterend', link);
-      else nav.appendChild(link);
-      insertAfter = link;
-    }
+    nav.innerHTML = coreNavigation.map(([href, label]) => `<a href="${href}">${label}</a>`).join("") +
+      `<a href="${githubUrl}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>`;
 
     const navId = nav.id || `site-navigation-${headerIndex + 1}`;
     nav.id = navId;
@@ -103,6 +99,44 @@
     document.addEventListener("click", (event) => { if (!header.contains(event.target)) closeNavigation(); });
     window.addEventListener("resize", () => { if (window.innerWidth > 920) closeNavigation(); });
   });
+
+  const oldPlus = document.querySelector("section.sovereignty#cobra-plus");
+  if (oldPlus) {
+    oldPlus.id = "cobra-core";
+    const eyebrow = oldPlus.querySelector(".eyebrow");
+    if (eyebrow) eyebrow.textContent = "COBRA CORE";
+  }
+
+  function buildGlobalFooter() {
+    if (document.getElementById("cobraGlobalFooter")) return;
+    document.querySelectorAll("body > footer, main > footer").forEach((footer) => footer.remove());
+    const footer = document.createElement("footer");
+    footer.id = "cobraGlobalFooter";
+    footer.className = "cobra-global-footer";
+    footer.innerHTML = `
+      <div class="cobra-footer-grid">
+        <div class="cobra-footer-brand">
+          <strong>COBRA</strong>
+          <p>Cryptographic, energy and compute infrastructure by ol-s-cloud. Public tools remain open; private operating capabilities sit behind COBRA+.</p>
+        </div>
+        <div class="cobra-footer-col"><strong>PRODUCT</strong>
+          <a href="/explorer-v2-terminal.html">Explorer</a><a href="/plus.html">COBRA+</a><a href="/store.html">Store</a><a href="/services.html">Services</a><a href="/calculators.html">Calculators</a>
+        </div>
+        <div class="cobra-footer-col"><strong>CRYPTOGRAPHY</strong>
+          <a href="/#tools">Create</a><a href="/offline.html">Offline</a><a href="/cli.html">CLI</a><a href="/docs.html">Docs</a><a href="${githubUrl}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        </div>
+        <div class="cobra-footer-col"><strong>INTELLIGENCE</strong>
+          <a href="/explorer-v2-terminal.html">Bitcoin & Mining</a><a href="/explorer-v2-terminal.html">Power & Grid</a><a href="/explorer-v2-terminal.html">Compute</a><a href="/explorer-v2-terminal.html">Generation</a><a href="/explorer-v2-terminal.html">Home & Flex</a>
+        </div>
+        <div class="cobra-footer-col"><strong>BUILD & RESEARCH</strong>
+          <a href="/research.html">Research</a><a href="/#developers">Build on COBRA</a><a href="/SECURITY.md">Security</a><a href="/terms.html">Terms</a><a href="/calculators.html#reference">Reference tools</a>
+        </div>
+      </div>
+      <div class="cobra-footer-bottom"><span>COBRA by ol-s-cloud · First rollout 2023 · Updated 2026</span><span>Public references and manufacturer names do not imply partnership unless stated.</span></div>`;
+    document.body.appendChild(footer);
+  }
+
+  buildGlobalFooter();
 })();
 
 (() => {
