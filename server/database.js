@@ -1,6 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 
-const SCHEMA_VERSION = 4;
+const SCHEMA_VERSION = 5;
 let sqlClient;
 let schemaReady;
 
@@ -188,6 +188,42 @@ async function prepareSchema() {
     transaction`
       create index if not exists cobra_plus_waitlist_supplier_idx
         on cobra_plus_waitlist (energy_supplier, smart_meter_status, created_at desc)
+    `,
+    transaction`
+      create table if not exists cobra_uk_site_registrations (
+        id bigserial primary key,
+        contact_name text,
+        email text not null check (length(email) between 3 and 254),
+        organization text,
+        segment text not null
+          check (segment in ('home', 'small_business', 'commercial_industrial', 'mining_compute', 'generation_project', 'developer_integration', 'other')),
+        postcode text,
+        energy_supplier text,
+        smart_meter_status text,
+        connection_preference text,
+        site_type text,
+        power_range text,
+        assets jsonb not null default '[]'::jsonb,
+        interests jsonb not null default '[]'::jsonb,
+        notes text,
+        source_path text not null default '/uk.html',
+        status text not null default 'registered'
+          check (status in ('registered', 'connection_ready', 'connected', 'review', 'closed')),
+        created_at timestamptz not null default now(),
+        updated_at timestamptz not null default now()
+      )
+    `,
+    transaction`
+      create index if not exists cobra_uk_site_registrations_segment_idx
+        on cobra_uk_site_registrations (segment, created_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_uk_site_registrations_supplier_idx
+        on cobra_uk_site_registrations (energy_supplier, smart_meter_status, created_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_uk_site_registrations_email_idx
+        on cobra_uk_site_registrations (lower(email), created_at desc)
     `,
     transaction`
       insert into cobra_polls (slug, question)
