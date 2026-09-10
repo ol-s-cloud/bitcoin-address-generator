@@ -5,6 +5,7 @@ import {
   registryState,
 } from "../server/database.js";
 import { handleAccountPost, readAccountSession } from "../server/auth.js";
+import { handleHomePost, readHomeSnapshot } from "../server/home-service.js";
 import { isMainnetP2pkhAddress } from "../server/bitcoin-address.js";
 import {
   noStore,
@@ -84,9 +85,9 @@ export default async function handler(request, response) {
   try {
     await ensureSchema();
     if (request.method === "GET") {
-      if (String(request.query?.mode || "").toLowerCase() === "account_session") {
-        return readAccountSession(request, response);
-      }
+      const mode = String(request.query?.mode || "").toLowerCase();
+      if (mode === "account_session") return readAccountSession(request, response);
+      if (mode === "home_snapshot") return readHomeSnapshot(request, response);
       return getRegistry(request, response);
     }
     if (request.method === "POST") return handlePost(request, response);
@@ -123,15 +124,11 @@ async function handlePost(request, response) {
     return response.status(400).json({ error: "invalid_payload" });
   }
 
-  if (String(body.action || "").startsWith("account_")) {
-    return handleAccountPost(request, response, body);
-  }
-  if (body.action === "cobra_plus_waitlist") {
-    return recordCobraPlusRequest(body, response);
-  }
-  if (body.action === "cobra_uk_registration") {
-    return recordCobraUkRegistration(body, response);
-  }
+  const action = String(body.action || "");
+  if (action.startsWith("account_")) return handleAccountPost(request, response, body);
+  if (action.startsWith("home_")) return handleHomePost(request, response, body);
+  if (body.action === "cobra_plus_waitlist") return recordCobraPlusRequest(body, response);
+  if (body.action === "cobra_uk_registration") return recordCobraUkRegistration(body, response);
   return recordCreation(body, response);
 }
 
