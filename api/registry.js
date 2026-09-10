@@ -37,6 +37,23 @@ const PLUS_ALLOWED_KEYS = new Set([
   "smartMeterStatus",
   "connectionPreference",
 ]);
+const UK_ALLOWED_KEYS = new Set([
+  "action",
+  "contactName",
+  "email",
+  "organization",
+  "segment",
+  "postcode",
+  "energySupplier",
+  "smartMeterStatus",
+  "connectionPreference",
+  "siteType",
+  "powerRange",
+  "assets",
+  "interests",
+  "notes",
+  "sourcePath",
+]);
 const CREATION_TYPES = new Set(["created", "derived", "random-derived"]);
 const PLUS_USE_CASES = new Set([
   "bitcoin_mining",
@@ -45,6 +62,15 @@ const PLUS_USE_CASES = new Set([
   "home_energy",
   "generation_project",
   "developer_platform",
+  "other",
+]);
+const UK_SEGMENTS = new Set([
+  "home",
+  "small_business",
+  "commercial_industrial",
+  "mining_compute",
+  "generation_project",
+  "developer_integration",
   "other",
 ]);
 
@@ -97,7 +123,87 @@ async function handlePost(request, response) {
   if (body.action === "cobra_plus_waitlist") {
     return recordCobraPlusRequest(body, response);
   }
+  if (body.action === "cobra_uk_registration") {
+    return recordCobraUkRegistration(body, response);
+  }
   return recordCreation(body, response);
+}
+
+async function recordCobraUkRegistration(body, response) {
+  if (Object.keys(body).some((key) => !UK_ALLOWED_KEYS.has(key))) {
+    return response.status(400).json({ error: "unsupported_field" });
+  }
+
+  const email = String(body.email || "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
+    return response.status(400).json({ error: "invalid_email" });
+  }
+
+  const segment = UK_SEGMENTS.has(body.segment) ? body.segment : "other";
+  const contactName = cleanOptional(body.contactName, 160);
+  const organization = cleanOptional(body.organization, 160);
+  const postcode = cleanOptional(body.postcode, 24);
+  const energySupplier = cleanOptional(body.energySupplier, 120);
+  const smartMeterStatus = cleanOptional(body.smartMeterStatus, 80);
+  const connectionPreference = cleanOptional(body.connectionPreference, 120);
+  const siteType = cleanOptional(body.siteType, 160);
+  const powerRange = cleanOptional(body.powerRange, 80);
+  const notes = cleanOptional(body.notes, 1500);
+  const sourcePath = /^\/[A-Za-z0-9/_\-.]{0,180}$/.test(String(body.sourcePath || ""))
+    ? String(body.sourcePath)
+    : "/uk.html";
+  const assets = cleanStringArray(body.assets, 30, 80);
+  const interests = cleanStringArray(body.interests, 30, 80);
+
+  const sql = database();
+  const rows = await sql`
+    insert into cobra_uk_site_registrations (
+      contact_name,
+      email,
+      organization,
+      segment,
+      postcode,
+      energy_supplier,
+      smart_meter_status,
+      connection_preference,
+      site_type,
+      power_range,
+      assets,
+      interests,
+      notes,
+      source_path,
+      status,
+      updated_at
+    ) values (
+      ${contactName},
+      ${email},
+      ${organization},
+      ${segment},
+      ${postcode},
+      ${energySupplier},
+      ${smartMeterStatus},
+      ${connectionPreference},
+      ${siteType},
+      ${powerRange},
+      ${JSON.stringify(assets)}::jsonb,
+      ${JSON.stringify(interests)}::jsonb,
+      ${notes},
+      ${sourcePath},
+      'registered',
+      now()
+    )
+    returning id, status, created_at
+  `;
+
+  const entry = rows[0] || {};
+  return response.status(201).json({
+    recorded: true,
+    product: "COBRA UK",
+    status: entry.status || "registered",
+    registrationId: entry.id || null,
+    reference: entry.id ? `CBR-UK-${String(entry.id).padStart(6, "0")}` : null,
+    createdAt: entry.created_at || null,
+  });
 }
 
 async function recordCobraPlusRequest(body, response) {
@@ -120,12 +226,7 @@ async function recordCobraPlusRequest(body, response) {
   const sourcePath = /^\/[A-Za-z0-9/_\-.]{0,180}$/.test(String(body.sourcePath || ""))
     ? String(body.sourcePath)
     : "/explorer-v2-terminal.html";
-  const interests = Array.isArray(body.interests)
-    ? body.interests
-        .map((value) => cleanOptional(value, 80))
-        .filter(Boolean)
-        .slice(0, 20)
-    : [];
+  const interests = cleanStringArray(body.interests, 20, 80);
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
     return response.status(400).json({ error: "invalid_email" });
@@ -282,4 +383,13 @@ function cleanOptional(value, maxLength) {
   const text = String(value || "").trim();
   if (!text) return null;
   return text.slice(0, maxLength);
+}
+
+function cleanStringArray(value, maxItems, maxLength) {
+  return Array.isArray(value)
+    ? value
+        .map((item) => cleanOptional(item, maxLength))
+        .filter(Boolean)
+        .slice(0, maxItems)
+    : [];
 }
