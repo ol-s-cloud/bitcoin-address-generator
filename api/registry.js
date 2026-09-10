@@ -31,6 +31,11 @@ const PLUS_ALLOWED_KEYS = new Set([
   "interests",
   "notes",
   "sourcePath",
+  "contactName",
+  "postcode",
+  "energySupplier",
+  "smartMeterStatus",
+  "connectionPreference",
 ]);
 const CREATION_TYPES = new Set(["created", "derived", "random-derived"]);
 const PLUS_USE_CASES = new Set([
@@ -107,6 +112,11 @@ async function recordCobraPlusRequest(body, response) {
   const siteType = cleanOptional(body.siteType, 160);
   const powerRange = cleanOptional(body.powerRange, 80);
   const notes = cleanOptional(body.notes, 1500);
+  const contactName = cleanOptional(body.contactName, 160);
+  const postcode = cleanOptional(body.postcode, 24);
+  const energySupplier = cleanOptional(body.energySupplier, 120);
+  const smartMeterStatus = cleanOptional(body.smartMeterStatus, 80);
+  const connectionPreference = cleanOptional(body.connectionPreference, 120);
   const sourcePath = /^\/[A-Za-z0-9/_\-.]{0,180}$/.test(String(body.sourcePath || ""))
     ? String(body.sourcePath)
     : "/explorer-v2-terminal.html";
@@ -134,6 +144,11 @@ async function recordCobraPlusRequest(body, response) {
       notes,
       source_path,
       status,
+      contact_name,
+      postcode,
+      energy_supplier,
+      smart_meter_status,
+      connection_preference,
       updated_at
     ) values (
       ${email},
@@ -146,6 +161,11 @@ async function recordCobraPlusRequest(body, response) {
       ${notes},
       ${sourcePath},
       'waitlist',
+      ${contactName},
+      ${postcode},
+      ${energySupplier},
+      ${smartMeterStatus},
+      ${connectionPreference},
       now()
     )
     on conflict (lower(email)) do update set
@@ -157,6 +177,11 @@ async function recordCobraPlusRequest(body, response) {
       interests = excluded.interests,
       notes = excluded.notes,
       source_path = excluded.source_path,
+      contact_name = excluded.contact_name,
+      postcode = excluded.postcode,
+      energy_supplier = excluded.energy_supplier,
+      smart_meter_status = excluded.smart_meter_status,
+      connection_preference = excluded.connection_preference,
       updated_at = now()
     returning id, status, created_at, updated_at
   `;
