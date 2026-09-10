@@ -144,10 +144,7 @@ async function loginAccount(request, response, body) {
 
   const token = await createSession(user.id);
   setSessionCookie(request, response, token);
-  await sql`
-    insert into cobra_auth_events (user_id, event_type)
-    values (${user.id}, 'login')
-  `;
+  await sql`insert into cobra_auth_events (user_id, event_type) values (${user.id}, 'login')`;
   const session = await buildSession(user.id);
   return response.status(200).json({ authenticated: true, ...session });
 }
@@ -156,8 +153,8 @@ async function logoutAccount(request, response) {
   const token = readCookie(request, COOKIE_NAME);
   if (token) {
     const sql = database();
-    await sql`delete from cobra_sessions where token_hash = ${hashToken(token)}`;
     const user = await userIdFromToken(token);
+    await sql`delete from cobra_sessions where token_hash = ${hashToken(token)}`;
     if (user) {
       await sql`insert into cobra_auth_events (user_id, event_type) values (${user}, 'logout')`;
     }
@@ -170,20 +167,17 @@ async function sessionFromRequest(request) {
   const token = readCookie(request, COOKIE_NAME);
   if (!token) return null;
   const sql = database();
+  const tokenHash = hashToken(token);
   const rows = await sql`
     select user_id
     from cobra_sessions
-    where token_hash = ${hashToken(token)}
+    where token_hash = ${tokenHash}
       and expires_at > now()
     limit 1
   `;
   const userId = rows[0]?.user_id;
   if (!userId) return null;
-  await sql`
-    update cobra_sessions
-    set last_seen_at = now()
-    where token_hash = ${hashToken(token)}
-  `;
+  await sql`update cobra_sessions set last_seen_at = now() where token_hash = ${tokenHash}`;
   return buildSession(userId);
 }
 
@@ -205,23 +199,21 @@ async function buildSession(userId) {
     where m.user_id = ${userId}
     order by a.created_at asc
   `;
-  const accountIds = accounts.map((row) => row.id);
-  let sites = [];
-  let products = [];
-  if (accountIds.length) {
-    sites = await sql`
-      select id, account_id, product, site_type, name, country_code, postcode, timezone, currency, status, created_at
-      from cobra_sites
-      where account_id = any(${accountIds})
-      order by created_at asc
-    `;
-    products = await sql`
-      select account_id, product, plan, status, metadata
-      from cobra_product_access
-      where account_id = any(${accountIds})
-      order by product asc
-    `;
-  }
+  const sites = await sql`
+    select s.id, s.account_id, s.product, s.site_type, s.name, s.country_code,
+           s.postcode, s.timezone, s.currency, s.status, s.created_at
+    from cobra_sites s
+    join cobra_account_members m on m.account_id = s.account_id
+    where m.user_id = ${userId}
+    order by s.created_at asc
+  `;
+  const products = await sql`
+    select p.account_id, p.product, p.plan, p.status, p.metadata
+    from cobra_product_access p
+    join cobra_account_members m on m.account_id = p.account_id
+    where m.user_id = ${userId}
+    order by p.product asc
+  `;
 
   return {
     user: {
@@ -250,9 +242,7 @@ async function createSession(userId) {
 
 async function userIdFromToken(token) {
   const sql = database();
-  const rows = await sql`
-    select user_id from cobra_sessions where token_hash = ${hashToken(token)} limit 1
-  `;
+  const rows = await sql`select user_id from cobra_sessions where token_hash = ${hashToken(token)} limit 1`;
   return rows[0]?.user_id || null;
 }
 
@@ -288,7 +278,10 @@ function clearSessionCookie(request, response) {
 }
 
 function serializeCookie(request, value, maxAge) {
-  const host = String(request.headers?.["x-forwarded-host"] || request.headers?.host || "").split(",")[0].trim().split(":")[0];
+  const host = String(request.headers?.["x-forwarded-host"] || request.headers?.host || "")
+    .split(",")[0]
+    .trim()
+    .split(":")[0];
   const productionDomain = host === "cobra-protocol.org" || host.endsWith(".cobra-protocol.org");
   const secure = !/^localhost$|^127\.0\.0\.1$/.test(host);
   const parts = [
@@ -310,7 +303,11 @@ function readCookie(request, name) {
     if (index < 0) continue;
     const key = part.slice(0, index).trim();
     if (key !== name) continue;
-    try { return decodeURIComponent(part.slice(index + 1).trim()); } catch { return null; }
+    try {
+      return decodeURIComponent(part.slice(index + 1).trim());
+    } catch {
+      return null;
+    }
   }
   return null;
 }
