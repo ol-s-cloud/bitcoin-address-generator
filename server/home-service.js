@@ -7,6 +7,8 @@ const CONNECTION_TYPES = new Set(["octopus", "smart_meter", "csv", "manual", "de
 const SOURCE_TYPES = new Set(["manual", "octopus", "smart_meter", "csv", "device_gateway"]);
 const CONNECTIVITY = new Set(["none", "manual", "matter", "mqtt", "home_assistant", "manufacturer_api", "cobra"]);
 const ASSET_TYPES = new Set(["solar", "battery", "ev", "ev_charger", "heat_pump", "wind", "generator", "other"]);
+const RATE_TYPES = new Set(["flat", "tou", "dynamic", "unknown"]);
+const FUELS = new Set(["electricity", "gas"]);
 
 export async function readHomeSnapshot(request, response) {
   await ensureHomeSchema();
@@ -16,7 +18,7 @@ export async function readHomeSnapshot(request, response) {
 
   const sql = database();
   const siteId = context.site.id;
-  const [energyAccounts, connections, meters, tariffs, bills, appliances, assets, opportunities, readingStats] = await Promise.all([
+  const [energyAccounts, connections, meters, tariffs, tariffRates, bills, appliances, assets, opportunities, readingStats] = await Promise.all([
     sql`
       select id, supplier, account_label, source_type, connection_status,
              external_account_ref_masked, is_primary, metadata, created_at, updated_at
@@ -48,6 +50,14 @@ export async function readHomeSnapshot(request, response) {
       limit 20
     `,
     sql`
+      select id, tariff_id, direction, rate_label, value_p_per_kwh,
+             valid_from, valid_to, source, metadata, created_at
+      from cobra_home_tariff_rates
+      where site_id = ${siteId}
+      order by valid_from desc nulls last, created_at desc
+      limit 100
+    `,
+    sql`
       select id, energy_account_id, supplier, bill_reference_masked, period_start,
              period_end, currency, total_amount, energy_charge, standing_charge,
              tax_amount, electricity_kwh, gas_kwh, source, metadata, created_at, updated_at
@@ -57,8 +67,8 @@ export async function readHomeSnapshot(request, response) {
       limit 24
     `,
     sql`
-      select id, category, name, manufacturer, model, rated_power_w,
-             energy_per_cycle_kwh, flexible, connectivity, spec_source,
+      select id, category, name, manufacturer, model, gtin, rated_power_w,
+             annual_energy_kwh, energy_per_cycle_kwh, flexible, connectivity, spec_source,
              spec_verified, metadata, created_at, updated_at
       from cobra_home_appliances
       where site_id = ${siteId}
@@ -114,6 +124,7 @@ export async function readHomeSnapshot(request, response) {
     connections,
     meters,
     tariffs,
+    tariffRates,
     bills,
     appliances,
     assets,
@@ -142,8 +153,13 @@ export async function handleHomePost(request, response, body) {
 
   const action = String(body?.action || "");
   if (action === "home_energy_account_upsert") return upsertEnergyAccount(context, body, response);
+  if (action === "home_tariff_add") return addTariff(context, body, response);
+  if (action === "home_bill_add") return addBill(context, body, response);
   if (action === "home_appliance_add") return addAppliance(context, body, response);
+  if (action === "home_appliance_update") return updateAppliance(context, body, response);
+  if (action === "home_appliance_delete") return deleteAppliance(context, body, response);
   if (action === "home_asset_add") return addAsset(context, body, response);
+  if (action === "home_asset_delete") return deleteAsset(context, body, response);
   return response.status(400).json({ error: "unsupported_home_action" });
 }
 
@@ -154,7 +170,11 @@ async function upsertEnergyAccount(context, body, response) {
   const supplier = cleanOptional(body.supplier, 120);
   const accountLabel = cleanOptional(body.accountLabel, 120);
   const sourceType = SOURCE_TYPES.has(body.sourceType) ? body.sourceType : "manual";
-  const connectionType = CONNECTION_TYPES.has(body.connectionType) ? body.connectionType : sourceType === "octopus" ? "octopus" : "manual";
+  const connectionType = CONNECTION_TYPES.has(body.connectionType)
+    ? body.connectionType
+    : sourceType === "octopus"
+      ? "octopus"
+      : "manual";
   const sql = database();
   const existing = await sql`
     select id from cobra_home_energy_accounts
@@ -178,7 +198,9 @@ async function upsertEnergyAccount(context, body, response) {
 
   const connections = await sql`
     select id from cobra_home_connections
-    where site_id = ${context.site.id} and energy_account_id = ${energyAccountId} and connection_type = ${connectionType}
+    where site_id = ${context.site.id}
+      and energy_account_id = ${energyAccountId}
+      and connection_type = ${connectionType}
     limit 1
   `;
   if (!connections.length) {
@@ -194,32 +216,128 @@ async function upsertEnergyAccount(context, body, response) {
   return response.status(200).json({ recorded: true, siteId: context.site.id, energyAccountId });
 }
 
-async function addAppliance(context, body, response) {
+async function addTariff(context, body, response) {
   const allowed = new Set([
-    "action", "siteId", "category", "name", "manufacturer", "model",
-    "ratedPowerW", "energyPerCycleKwh", "flexible", "connectivity", "specSource",
+    "action", "siteId", "fuel", "supplier", "tariffName", "productCode", "rateType",
+    "unitRatePPerKwh", "standingChargePPerDay", "validFrom", "validTo", "source",
   ]);
+  if (Object.keys(body).some((key) => !allowed.has(key))) return response.status(400).json({ error: "unsupported_field" });
+
+  const fuel = FUELS.has(body.fuel) ? body.fuel : null;
+  if (!fuel) return response.status(400).json({ error: "invalid_fuel" });
+  const energyAccountId = await primaryEnergyAccountId(context.site.id);
+  const id = `htr_${randomUUID()}`;
+  const sql = database();
+  await sql`
+    insert into cobra_home_tariffs (
+      id, site_id, energy_account_id, fuel, supplier, tariff_name, product_code,
+      rate_type, unit_rate_p_per_kwh, standing_charge_p_per_day,
+      valid_from, valid_to, source
+    ) values (
+      ${id}, ${context.site.id}, ${energyAccountId}, ${fuel}, ${cleanOptional(body.supplier, 120)},
+      ${cleanOptional(body.tariffName, 180)}, ${cleanOptional(body.productCode, 180)},
+      ${RATE_TYPES.has(body.rateType) ? body.rateType : "unknown"},
+      ${numericOrNull(body.unitRatePPerKwh, -1000, 10000)},
+      ${numericOrNull(body.standingChargePPerDay, 0, 10000)},
+      ${dateOrNull(body.validFrom)}, ${dateOrNull(body.validTo)}, ${cleanOptional(body.source, 120) || "manual"}
+    )
+  `;
+  return response.status(201).json({ recorded: true, siteId: context.site.id, tariffId: id });
+}
+
+async function addBill(context, body, response) {
+  const allowed = new Set([
+    "action", "siteId", "supplier", "periodStart", "periodEnd", "totalAmount",
+    "electricityKwh", "gasKwh", "energyCharge", "standingCharge", "taxAmount", "source",
+  ]);
+  if (Object.keys(body).some((key) => !allowed.has(key))) return response.status(400).json({ error: "unsupported_field" });
+
+  const energyAccountId = await primaryEnergyAccountId(context.site.id);
+  const id = `hbl_${randomUUID()}`;
+  const sql = database();
+  await sql`
+    insert into cobra_home_bills (
+      id, site_id, energy_account_id, supplier, period_start, period_end,
+      total_amount, electricity_kwh, gas_kwh, energy_charge, standing_charge,
+      tax_amount, source
+    ) values (
+      ${id}, ${context.site.id}, ${energyAccountId}, ${cleanOptional(body.supplier, 120)},
+      ${dateOnlyOrNull(body.periodStart)}, ${dateOnlyOrNull(body.periodEnd)},
+      ${numericOrNull(body.totalAmount, -1000000, 1000000)},
+      ${numericOrNull(body.electricityKwh, 0, 10000000)}, ${numericOrNull(body.gasKwh, 0, 10000000)},
+      ${numericOrNull(body.energyCharge, -1000000, 1000000)}, ${numericOrNull(body.standingCharge, -1000000, 1000000)},
+      ${numericOrNull(body.taxAmount, -1000000, 1000000)}, ${cleanOptional(body.source, 120) || "manual"}
+    )
+  `;
+  return response.status(201).json({ recorded: true, siteId: context.site.id, billId: id });
+}
+
+async function addAppliance(context, body, response) {
+  const allowed = applianceAllowedFields(false);
   if (Object.keys(body).some((key) => !allowed.has(key))) return response.status(400).json({ error: "unsupported_field" });
 
   const category = cleanOptional(body.category, 80);
   if (!category) return response.status(400).json({ error: "category_required" });
-  const connectivity = CONNECTIVITY.has(body.connectivity) ? body.connectivity : "none";
-  const ratedPowerW = numericOrNull(body.ratedPowerW, 0, 1000000);
-  const energyPerCycleKwh = numericOrNull(body.energyPerCycleKwh, 0, 10000);
   const id = `hap_${randomUUID()}`;
   const sql = database();
   await sql`
     insert into cobra_home_appliances (
-      id, site_id, category, name, manufacturer, model, rated_power_w,
-      energy_per_cycle_kwh, flexible, connectivity, spec_source
+      id, site_id, category, name, manufacturer, model, gtin, rated_power_w,
+      annual_energy_kwh, energy_per_cycle_kwh, flexible, connectivity, spec_source
     ) values (
       ${id}, ${context.site.id}, ${category}, ${cleanOptional(body.name, 160)},
       ${cleanOptional(body.manufacturer, 120)}, ${cleanOptional(body.model, 160)},
-      ${ratedPowerW}, ${energyPerCycleKwh}, ${Boolean(body.flexible)}, ${connectivity},
+      ${cleanOptional(body.gtin, 40)}, ${numericOrNull(body.ratedPowerW, 0, 1000000)},
+      ${numericOrNull(body.annualEnergyKwh, 0, 10000000)}, ${numericOrNull(body.energyPerCycleKwh, 0, 10000)},
+      ${Boolean(body.flexible)}, ${CONNECTIVITY.has(body.connectivity) ? body.connectivity : "none"},
       ${cleanOptional(body.specSource, 240)}
     )
   `;
   return response.status(201).json({ recorded: true, siteId: context.site.id, applianceId: id });
+}
+
+async function updateAppliance(context, body, response) {
+  const allowed = applianceAllowedFields(true);
+  if (Object.keys(body).some((key) => !allowed.has(key))) return response.status(400).json({ error: "unsupported_field" });
+  const applianceId = cleanOptional(body.applianceId, 120);
+  const category = cleanOptional(body.category, 80);
+  if (!applianceId || !category) return response.status(400).json({ error: "invalid_appliance" });
+
+  const sql = database();
+  const rows = await sql`
+    update cobra_home_appliances
+    set category = ${category},
+        name = ${cleanOptional(body.name, 160)},
+        manufacturer = ${cleanOptional(body.manufacturer, 120)},
+        model = ${cleanOptional(body.model, 160)},
+        gtin = ${cleanOptional(body.gtin, 40)},
+        rated_power_w = ${numericOrNull(body.ratedPowerW, 0, 1000000)},
+        annual_energy_kwh = ${numericOrNull(body.annualEnergyKwh, 0, 10000000)},
+        energy_per_cycle_kwh = ${numericOrNull(body.energyPerCycleKwh, 0, 10000)},
+        flexible = ${Boolean(body.flexible)},
+        connectivity = ${CONNECTIVITY.has(body.connectivity) ? body.connectivity : "none"},
+        spec_source = ${cleanOptional(body.specSource, 240)},
+        updated_at = now()
+    where id = ${applianceId} and site_id = ${context.site.id}
+    returning id
+  `;
+  if (!rows.length) return response.status(404).json({ error: "appliance_not_found" });
+  return response.status(200).json({ recorded: true, applianceId });
+}
+
+async function deleteAppliance(context, body, response) {
+  const allowed = new Set(["action", "siteId", "applianceId"]);
+  if (Object.keys(body).some((key) => !allowed.has(key))) return response.status(400).json({ error: "unsupported_field" });
+  const applianceId = cleanOptional(body.applianceId, 120);
+  if (!applianceId) return response.status(400).json({ error: "invalid_appliance" });
+  const sql = database();
+  const rows = await sql`
+    delete from cobra_home_appliances
+    where id = ${applianceId} and site_id = ${context.site.id}
+    returning id
+  `;
+  if (!rows.length) return response.status(404).json({ error: "appliance_not_found" });
+  return response.status(200).json({ deleted: true, applianceId });
 }
 
 async function addAsset(context, body, response) {
@@ -246,6 +364,40 @@ async function addAsset(context, body, response) {
   return response.status(201).json({ recorded: true, siteId: context.site.id, assetId: id });
 }
 
+async function deleteAsset(context, body, response) {
+  const allowed = new Set(["action", "siteId", "assetId"]);
+  if (Object.keys(body).some((key) => !allowed.has(key))) return response.status(400).json({ error: "unsupported_field" });
+  const assetId = cleanOptional(body.assetId, 120);
+  if (!assetId) return response.status(400).json({ error: "invalid_asset" });
+  const sql = database();
+  const rows = await sql`
+    delete from cobra_home_assets
+    where id = ${assetId} and site_id = ${context.site.id}
+    returning id
+  `;
+  if (!rows.length) return response.status(404).json({ error: "asset_not_found" });
+  return response.status(200).json({ deleted: true, assetId });
+}
+
+async function primaryEnergyAccountId(siteId) {
+  const sql = database();
+  const rows = await sql`
+    select id from cobra_home_energy_accounts
+    where site_id = ${siteId} and is_primary = true
+    limit 1
+  `;
+  return rows[0]?.id || null;
+}
+
+function applianceAllowedFields(includeId) {
+  const fields = new Set([
+    "action", "siteId", "category", "name", "manufacturer", "model", "gtin",
+    "ratedPowerW", "annualEnergyKwh", "energyPerCycleKwh", "flexible", "connectivity", "specSource",
+  ]);
+  if (includeId) fields.add("applianceId");
+  return fields;
+}
+
 async function homeContext(request, requestedSiteId) {
   const session = await getAccountSession(request);
   if (!session) return null;
@@ -269,4 +421,16 @@ function numericOrNull(value, minimum, maximum) {
   const number = Number(value);
   if (!Number.isFinite(number) || number < minimum || number > maximum) return null;
   return number;
+}
+
+function dateOrNull(value) {
+  const text = cleanOptional(value, 40);
+  if (!text) return null;
+  const date = new Date(text);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function dateOnlyOrNull(value) {
+  const text = cleanOptional(value, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(text || "") ? text : null;
 }
