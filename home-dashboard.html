@@ -50,6 +50,20 @@
           </form>
 
           <div class="home-subsection">
+            <div class="home-subsection-head"><div><div class="home-app-eyebrow">INTERVAL DATA</div><h3>Bring half-hourly usage into this home.</h3></div><span id="intervalCount" class="home-site-pill">0 readings</span></div>
+            <p>Import a CSV containing a timestamp and energy-use column. COBRA reads the file locally in your browser and stores normalized interval values against this Home site.</p>
+            <form id="intervalImportForm" class="home-data-form compact">
+              <div class="home-form-grid">
+                <label>CSV file<input id="intervalFile" type="file" accept=".csv,text/csv,text/plain" required /></label>
+                <label>Fuel<select id="intervalFuel"><option value="electricity">Electricity</option><option value="gas">Gas</option></select></label>
+                <label>Direction<select id="intervalDirection"><option value="import">Import / consumption</option><option value="export">Export</option><option value="generation">Generation</option></select></label>
+              </div>
+              <div class="home-form-actions"><button type="submit">Import interval data</button><span id="intervalImportStatus" class="home-inline-status"></span></div>
+              <small class="home-form-note">Recognised timestamp labels include interval_start, timestamp, start and datetime. Recognised energy labels include consumption, consumption_kwh, usage, quantity_kwh and kwh.</small>
+            </form>
+          </div>
+
+          <div class="home-subsection">
             <div class="home-subsection-head"><div><div class="home-app-eyebrow">TARIFF</div><h3>Your actual retail rate.</h3></div><span id="tariffCount" class="home-site-pill">0 tariffs</span></div>
             <div id="tariffList" class="home-record-list"></div>
             <form id="tariffForm" class="home-data-form compact">
@@ -109,6 +123,6 @@
       </div>
     </div>
   </main>
-  <script src="/site-ui.js"></script><script src="/home-dashboard.js"></script>
+  <script src="/site-ui.js"></script><script src="/home-dashboard.js"></script><script src="/home-csv-import.js"></script>
 </body>
 </html>
