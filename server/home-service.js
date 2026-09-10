@@ -9,6 +9,7 @@ const CONNECTIVITY = new Set(["none", "manual", "matter", "mqtt", "home_assistan
 const ASSET_TYPES = new Set(["solar", "battery", "ev", "ev_charger", "heat_pump", "wind", "generator", "other"]);
 const RATE_TYPES = new Set(["flat", "tou", "dynamic", "unknown"]);
 const FUELS = new Set(["electricity", "gas"]);
+const DIRECTIONS = new Set(["import", "export", "generation"]);
 
 export async function readHomeSnapshot(request, response) {
   await ensureHomeSchema();
@@ -155,6 +156,7 @@ export async function handleHomePost(request, response, body) {
   if (action === "home_energy_account_upsert") return upsertEnergyAccount(context, body, response);
   if (action === "home_tariff_add") return addTariff(context, body, response);
   if (action === "home_bill_add") return addBill(context, body, response);
+  if (action === "home_interval_import") return importIntervals(context, body, response);
   if (action === "home_appliance_add") return addAppliance(context, body, response);
   if (action === "home_appliance_update") return updateAppliance(context, body, response);
   if (action === "home_appliance_delete") return deleteAppliance(context, body, response);
@@ -172,9 +174,7 @@ async function upsertEnergyAccount(context, body, response) {
   const sourceType = SOURCE_TYPES.has(body.sourceType) ? body.sourceType : "manual";
   const connectionType = CONNECTION_TYPES.has(body.connectionType)
     ? body.connectionType
-    : sourceType === "octopus"
-      ? "octopus"
-      : "manual";
+    : sourceType === "octopus" ? "octopus" : "manual";
   const sql = database();
   const existing = await sql`
     select id from cobra_home_energy_accounts
@@ -270,6 +270,87 @@ async function addBill(context, body, response) {
     )
   `;
   return response.status(201).json({ recorded: true, siteId: context.site.id, billId: id });
+}
+
+async function importIntervals(context, body, response) {
+  const allowed = new Set(["action", "siteId", "fuel", "direction", "rows"]);
+  if (Object.keys(body).some((key) => !allowed.has(key))) return response.status(400).json({ error: "unsupported_field" });
+  const fuel = FUELS.has(body.fuel) ? body.fuel : null;
+  const direction = DIRECTIONS.has(body.direction) ? body.direction : null;
+  const rows = Array.isArray(body.rows) ? body.rows.slice(0, 24) : [];
+  if (!fuel || !direction || !rows.length) return response.status(400).json({ error: "invalid_interval_batch" });
+
+  const normalized = rows.map((row) => {
+    const intervalStart = dateOrNull(row?.intervalStart);
+    const quantityKwh = numericOrNull(row?.quantityKwh, 0, 1000000);
+    const intervalMinutes = numericOrNull(row?.intervalMinutes, 1, 1440) || 30;
+    return intervalStart && quantityKwh !== null ? { intervalStart, quantityKwh, intervalMinutes } : null;
+  }).filter(Boolean);
+  if (!normalized.length) return response.status(400).json({ error: "invalid_interval_batch" });
+
+  const sql = database();
+  const energyAccountId = await primaryEnergyAccountId(context.site.id);
+  const existingMeter = await sql`
+    select id from cobra_home_meters
+    where site_id = ${context.site.id} and fuel = ${fuel} and direction = ${direction}
+    order by created_at asc
+    limit 1
+  `;
+  const meterId = existingMeter[0]?.id || `hmr_${randomUUID()}`;
+  if (!existingMeter.length) {
+    await sql`
+      insert into cobra_home_meters (id, site_id, energy_account_id, fuel, direction, interval_minutes, status, metadata)
+      values (${meterId}, ${context.site.id}, ${energyAccountId}, ${fuel}, ${direction}, 30, 'active', ${JSON.stringify({ source: "csv" })}::jsonb)
+    `;
+  }
+
+  for (const row of normalized) {
+    await sql`
+      insert into cobra_home_interval_readings (
+        site_id, meter_id, fuel, direction, interval_start, interval_minutes,
+        quantity_kwh, source, quality
+      ) values (
+        ${context.site.id}, ${meterId}, ${fuel}, ${direction}, ${row.intervalStart}, ${row.intervalMinutes},
+        ${row.quantityKwh}, 'csv', 'reported'
+      )
+      on conflict (site_id, meter_id, direction, interval_start) do update set
+        quantity_kwh = excluded.quantity_kwh,
+        interval_minutes = excluded.interval_minutes,
+        source = excluded.source,
+        quality = excluded.quality
+    `;
+  }
+
+  const connectionRows = await sql`
+    select id from cobra_home_connections
+    where site_id = ${context.site.id} and connection_type = 'csv'
+    order by created_at asc
+    limit 1
+  `;
+  if (connectionRows.length) {
+    await sql`
+      update cobra_home_connections
+      set status = 'connected', last_sync_at = now(), updated_at = now()
+      where id = ${connectionRows[0].id}
+    `;
+  } else {
+    await sql`
+      insert into cobra_home_connections (
+        id, site_id, energy_account_id, connection_type, provider, status, last_sync_at
+      ) values (
+        ${`hcn_${randomUUID()}`}, ${context.site.id}, ${energyAccountId}, 'csv', 'CSV import', 'connected', now()
+      )
+    `;
+  }
+  if (energyAccountId) {
+    await sql`
+      update cobra_home_energy_accounts
+      set connection_status = 'connected', updated_at = now()
+      where id = ${energyAccountId}
+    `;
+  }
+
+  return response.status(201).json({ recorded: true, siteId: context.site.id, meterId, imported: normalized.length });
 }
 
 async function addAppliance(context, body, response) {
