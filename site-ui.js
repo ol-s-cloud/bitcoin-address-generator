@@ -156,3 +156,15 @@
     document.head.appendChild(script);
   });
 })();
+
+(() => {
+  if (!location.pathname.endsWith("/home-dashboard.html")) return;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = "/home-history.css";
+  document.head.appendChild(link);
+  const script = document.createElement("script");
+  script.src = "/home-history-ui.js";
+  script.defer = true;
+  document.head.appendChild(script);
+})();
