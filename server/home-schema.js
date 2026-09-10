@@ -108,6 +108,25 @@ async function prepareHomeSchema() {
         on cobra_home_tariffs (site_id, fuel, valid_from desc nulls last)
     `,
     transaction`
+      create table if not exists cobra_home_tariff_rates (
+        id text primary key,
+        tariff_id text not null references cobra_home_tariffs(id) on delete cascade,
+        site_id text not null references cobra_sites(id) on delete cascade,
+        direction text not null default 'import' check (direction in ('import', 'export')),
+        rate_label text,
+        value_p_per_kwh numeric not null,
+        valid_from timestamptz,
+        valid_to timestamptz,
+        source text,
+        metadata jsonb not null default '{}'::jsonb,
+        created_at timestamptz not null default now()
+      )
+    `,
+    transaction`
+      create index if not exists cobra_home_tariff_rates_site_time_idx
+        on cobra_home_tariff_rates (site_id, valid_from desc nulls last)
+    `,
+    transaction`
       create table if not exists cobra_home_interval_readings (
         id bigserial primary key,
         site_id text not null references cobra_sites(id) on delete cascade,
@@ -163,7 +182,9 @@ async function prepareHomeSchema() {
         name text,
         manufacturer text,
         model text,
+        gtin text,
         rated_power_w numeric,
+        annual_energy_kwh numeric,
         energy_per_cycle_kwh numeric,
         flexible boolean not null default false,
         connectivity text not null default 'none'
@@ -175,9 +196,15 @@ async function prepareHomeSchema() {
         updated_at timestamptz not null default now()
       )
     `,
+    transaction`alter table cobra_home_appliances add column if not exists gtin text`,
+    transaction`alter table cobra_home_appliances add column if not exists annual_energy_kwh numeric`,
     transaction`
       create index if not exists cobra_home_appliances_site_idx
         on cobra_home_appliances (site_id, created_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_home_appliances_model_idx
+        on cobra_home_appliances (manufacturer, model)
     `,
     transaction`
       create table if not exists cobra_home_assets (
