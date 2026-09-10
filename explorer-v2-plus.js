@@ -25,7 +25,7 @@
         <div>
           <div class="eyebrow">COBRA+</div>
           <h2>Private site intelligence and connected operations.</h2>
-          <p>Connect sites, meters and electrical assets to COBRA for private telemetry, operating history, alerts, advanced models and approved device integrations.</p>
+          <p>Connect your site, meters and approved electrical assets to COBRA for private telemetry, operating history, alerts, advanced models and device integrations.</p>
         </div>
         <div class="cobra-plus-actions">
           <a href="/plus.html">Explore COBRA+</a>
@@ -34,9 +34,9 @@
       </div>
       <div class="cobra-plus-usecases" aria-label="COBRA+ platform areas">
         <article><span>01</span><strong>Connected sites</strong><small>Site profiles, tariffs, meters, generation and flexible loads.</small></article>
-        <article><span>02</span><strong>Devices</strong><small>Miners, meters, sockets, batteries and controllable electrical assets.</small></article>
+        <article><span>02</span><strong>Connected assets</strong><small>Miners, meters, batteries, EVs, servers and approved flexible electrical assets.</small></article>
         <article><span>03</span><strong>Operations</strong><small>History, alerts, digital twins and operating decisions.</small></article>
-        <article><span>04</span><strong>Deployment</strong><small>Store, equipment specification and engineering services.</small></article>
+        <article><span>04</span><strong>Deployment</strong><small>COBRA Appliances, equipment specification and engineering services.</small></article>
       </div>
       <div class="cobra-plus-actions">
         <a href="/store.html" class="secondary">COBRA Store →</a>
