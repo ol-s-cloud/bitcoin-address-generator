@@ -1,6 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
 let sqlClient;
 let schemaReady;
 
@@ -163,10 +163,20 @@ async function prepareSchema() {
         source_path text not null default '/explorer-v2-terminal.html',
         status text not null default 'waitlist'
           check (status in ('waitlist', 'review', 'whitelisted', 'declined')),
+        contact_name text,
+        postcode text,
+        energy_supplier text,
+        smart_meter_status text,
+        connection_preference text,
         created_at timestamptz not null default now(),
         updated_at timestamptz not null default now()
       )
     `,
+    transaction`alter table cobra_plus_waitlist add column if not exists contact_name text`,
+    transaction`alter table cobra_plus_waitlist add column if not exists postcode text`,
+    transaction`alter table cobra_plus_waitlist add column if not exists energy_supplier text`,
+    transaction`alter table cobra_plus_waitlist add column if not exists smart_meter_status text`,
+    transaction`alter table cobra_plus_waitlist add column if not exists connection_preference text`,
     transaction`
       create unique index if not exists cobra_plus_waitlist_email_idx
         on cobra_plus_waitlist (lower(email))
@@ -174,6 +184,10 @@ async function prepareSchema() {
     transaction`
       create index if not exists cobra_plus_waitlist_use_case_idx
         on cobra_plus_waitlist (use_case, created_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_plus_waitlist_supplier_idx
+        on cobra_plus_waitlist (energy_supplier, smart_meter_status, created_at desc)
     `,
     transaction`
       insert into cobra_polls (slug, question)
