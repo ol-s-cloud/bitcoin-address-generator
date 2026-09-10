@@ -282,7 +282,6 @@ function serializeCookie(request, value, maxAge) {
     .split(",")[0]
     .trim()
     .split(":")[0];
-  const productionDomain = host === "cobra-protocol.org" || host.endsWith(".cobra-protocol.org");
   const secure = !/^localhost$|^127\.0\.0\.1$/.test(host);
   const parts = [
     `${COOKIE_NAME}=${encodeURIComponent(value)}`,
@@ -292,7 +291,6 @@ function serializeCookie(request, value, maxAge) {
     "SameSite=Lax",
   ];
   if (secure) parts.push("Secure");
-  if (productionDomain) parts.push("Domain=.cobra-protocol.org");
   return parts.join("; ");
 }
 
