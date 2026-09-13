@@ -12,6 +12,8 @@ COBRA integrates electricity-system, market, site and compute data for monitorin
 
 The public repository contains inspectable software, reference implementations, cryptographic utilities, public interfaces and developer tooling. Hosted customer infrastructure, customer data and protected analytical components are maintained separately.
 
+> **Project lineage:** COBRA began as a university cryptography project focused on Bitcoin address generation and subsequently expanded into compute and energy intelligence. Some retained pages, repository paths and historical materials reflect the earlier scope while documentation and links are progressively aligned with the current platform. Historical components are preserved for provenance; current technical direction is documented in this README and the [Technical Overview](docs/TECHNICAL.md).
+
 [Website](https://cobra-protocol.org) · [Explorer](https://cobra-protocol.org/explorer.html) · [Research](https://cobra-protocol.org/research.html) · [Technical](docs/TECHNICAL.md) · [Provenance](docs/PROVENANCE.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
