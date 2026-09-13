@@ -12,9 +12,9 @@ COBRA integrates electricity-system, market, site and compute data for monitorin
 
 The public repository contains inspectable software, reference implementations, cryptographic utilities, public interfaces and developer tooling. Hosted customer infrastructure, customer data and protected analytical components are maintained separately.
 
-> **Project lineage:** COBRA began as a university cryptography project focused on Bitcoin address generation and subsequently expanded into compute and energy intelligence. Some retained pages, repository paths and historical materials reflect the earlier scope while documentation and links are progressively aligned with the current platform. Historical components are preserved for provenance; current technical direction is documented in this README and the [Technical Overview](docs/TECHNICAL.md).
+> **Project lineage:** COBRA began as a university cryptography project focused on Bitcoin address generation and subsequently expanded into compute and energy intelligence. Earlier public deployments, repository paths and documentation remain available as part of the project record while current pages are progressively aligned with the present platform. See the [archived original README](archive/README-bitcoin-address-generator-2025.md), [Project Provenance](docs/PROVENANCE.md) and [Technical Overview](docs/TECHNICAL.md).
 
-[Website](https://cobra-protocol.org) · [Explorer](https://cobra-protocol.org/explorer.html) · [Research](https://cobra-protocol.org/research.html) · [Technical](docs/TECHNICAL.md) · [Provenance](docs/PROVENANCE.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
+[Website](https://cobra-protocol.org) · [Explorer](https://cobra-protocol.org/explorer.html) · [Research](https://cobra-protocol.org/research.html) · [Technical](docs/TECHNICAL.md) · [Legacy README](archive/README-bitcoin-address-generator-2025.md) · [Provenance](docs/PROVENANCE.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python Package](https://github.com/ol-s-cloud/bitcoin-address-generator/actions/workflows/python-package.yml/badge.svg)](https://github.com/ol-s-cloud/bitcoin-address-generator/actions)
@@ -23,21 +23,62 @@ The public repository contains inspectable software, reference implementations, 
 
 ## System overview
 
-```mermaid
-flowchart LR
-    A["External data<br/>Grid · Market · Weather · Network"] --> C["Data layer"]
-    B["Site data<br/>Tariff · Meter · Assets · Limits"] --> C
-    C --> D["Analysis & models"]
-    D --> E["Explorer"]
-    D --> F["COBRA Home"]
-    D --> G["COBRA Mining"]
-    D --> H["Developer interfaces"]
-    I["Cryptographic utilities"] --> H
-```
+| Layer | Current role |
+| --- | --- |
+| **External data** | Grid, market, tariff, property, weather, Bitcoin-network and mining-market inputs |
+| **Site data** | Tariffs, meters, assets, capacity limits and operating assumptions |
+| **Data layer** | Acquisition, normalisation, timestamps, units and availability state |
+| **Analysis** | Engineering calculations, economic models and site-level evaluation |
+| **Applications** | Explorer, COBRA Home and COBRA Mining |
+| **Developer interfaces** | Public APIs, CLI, local tooling and reproducible technical interfaces |
+| **Cryptographic utilities** | Bitcoin-oriented address generation, validation and offline/local workflows |
 
-COBRA separates external observations, site-specific data and calculated outputs. Provider data is normalised before use by higher-level calculations. Missing or unavailable inputs are represented through explicit availability states.
+COBRA separates external observations, site-specific inputs and calculated outputs. Provider data is normalised before use by higher-level calculations. Missing or unavailable inputs are represented through explicit availability states.
 
 Detailed architecture is maintained in the [Technical Overview](docs/TECHNICAL.md).
+
+---
+
+## Developer access
+
+### Git
+
+```bash
+git clone https://github.com/ol-s-cloud/bitcoin-address-generator.git
+cd bitcoin-address-generator
+```
+
+### Python / COBRA CLI
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+
+cobra --version
+cobra status
+```
+
+Current CLI commands include:
+
+```bash
+cobra status
+cobra random --bytes 32
+cobra generate
+cobra generate --network testnet
+cobra validate <address> --network testnet
+```
+
+The CLI is currently `0.3.0-alpha` and testnet-first. Full usage is documented in the [CLI Guide](docs/CLI.md).
+
+### Web / Node.js
+
+```bash
+npm install
+npm test
+```
+
+Database-backed routes use the server-side environment configuration documented in [`.env.example`](.env.example).
 
 ---
 
@@ -111,8 +152,6 @@ The public repository contains components implemented across:
 - automated Node.js and Python testing;
 - GitHub Actions continuous integration.
 
-Database-backed components use server-side environment configuration. Environment variables are documented in [`.env.example`](.env.example).
-
 ---
 
 ## Engineering standards and frameworks
@@ -144,32 +183,19 @@ See [Technical Overview](docs/TECHNICAL.md), [Security](SECURITY.md) and [Projec
 
 ---
 
-## Repository provenance
+## Repository provenance and previous scope
 
-COBRA originated from the `ol-s-cloud/bitcoin-address-generator` repository. The original cryptographic implementation, notebook and Git history remain part of the project's public development provenance.
+COBRA originated from the `ol-s-cloud/bitcoin-address-generator` repository. The original cryptographic implementation, notebook, earlier deployments and Git history remain part of the project's public development record.
 
-- [Project provenance](docs/PROVENANCE.md)
-- [Archived original README](archive/README-bitcoin-address-generator-2025.md)
+Historical material includes:
+
+- [Archived Bitcoin Address Generator README](archive/README-bitcoin-address-generator-2025.md)
+- [Pre-COBRA README](archive/README-pre-COBRA-2026.md)
+- [Project Provenance](docs/PROVENANCE.md)
 - [Original Bitcoin-address notebook](How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb)
+- [Legacy technical guide](archive/TECHNICAL-bitcoin-address-generator-2025.md)
 
----
-
-## Local development
-
-```bash
-git clone https://github.com/ol-s-cloud/bitcoin-address-generator.git
-cd bitcoin-address-generator
-npm install
-npm test
-```
-
-For Python development:
-
-```bash
-pip install -e .
-```
-
-CLI usage is documented in the [CLI Guide](docs/CLI.md). Public API functions are documented in the [API Reference](docs/API.md). Offline cryptographic workflows are documented in the [Offline Guide](COBRA_OFFLINE_GUIDE.md).
+Some retained public pages still reflect the earlier cryptography and Bitcoin-focused scope. These materials remain accessible for continuity and provenance while the active website, documentation and interfaces are updated around COBRA's current energy and compute work.
 
 ---
 
@@ -183,6 +209,7 @@ CLI usage is documented in the [CLI Guide](docs/CLI.md). Public API functions ar
 | [Offline Guide](COBRA_OFFLINE_GUIDE.md) | Local cryptographic workflow |
 | [Web Application](WEB_APP.md) | Public web implementation |
 | [Project Provenance](docs/PROVENANCE.md) | Repository lineage and retained history |
+| [Legacy README](archive/README-bitcoin-address-generator-2025.md) | Earlier Bitcoin Address Generator scope |
 | [Security](SECURITY.md) | Security policy and disclosure |
 | [Contributing](CONTRIBUTING.md) | Contribution process |
 | [Code of Conduct](CODE_OF_CONDUCT.md) | Community participation |
