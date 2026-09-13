@@ -1,345 +1,216 @@
-# COBRA Protocol
+# COBRA
 
-**Cryptographic authority, energy-system data and compute intelligence for real-world sites.**
+<p align="center">
+  <img src="assets/cobra-hero.jpg" alt="COBRA" width="900">
+</p>
 
-[Website](https://cobra-protocol.org) · [Register a Site](https://cobra-protocol.org/uk.html) · [Provenance](docs/PROVENANCE.md) · [Technical Docs](docs/TECHNICAL.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+**Electricity, site and compute analysis.**
+
+> **Project status:** Active development · **Version:** `0.3.0-alpha`
+
+COBRA integrates electricity-system, market, site and compute data for monitoring, economic analysis and site-level decision support.
+
+The public repository contains inspectable software, reference implementations, cryptographic utilities, public interfaces and developer tooling. Hosted customer infrastructure, customer data and protected analytical components are maintained separately.
+
+[Website](https://cobra-protocol.org) · [Explorer](https://cobra-protocol.org/explorer.html) · [Research](https://cobra-protocol.org/research.html) · [Technical](docs/TECHNICAL.md) · [Provenance](docs/PROVENANCE.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python Package](https://github.com/ol-s-cloud/bitcoin-address-generator/actions/workflows/python-package.yml/badge.svg)](https://github.com/ol-s-cloud/bitcoin-address-generator/actions)
 
-> **Repository role**
->
-> This repository is the public upstream and provenance record for COBRA. It intentionally contains only code, interfaces, documentation and reference components that can be made public. Hosted customer infrastructure, customer data, proprietary intelligence, private optimisation logic and patent-sensitive implementations are maintained outside the public tree.
+---
 
-## Overview
+## System overview
 
-COBRA is an open-core energy-and-compute intelligence project built around a simple systems question:
-
-> **Given the physical state of a site, the condition of the energy system, the characteristics of its assets and the economics of operating them, what should the site do with electricity — and why?**
-
-The project combines cryptography, electricity-system data, site modelling, engineering economics, explainable decision support and selected machine-learning research. Its application domains include Bitcoin mining, AI and flexible compute, homes and communities, commercial and industrial sites, distributed generation and storage, and power-generation environments.
-
-The long-term technical pattern is:
-
-```text
-Cryptographic authority
-        ↓
-Real-world data
-        ↓
-Site + asset state
-        ↓
-Energy / compute intelligence
-        ↓
-Decision + explanation
-        ↓
-Authorised action
-        ↓
-Measured outcome
-        ↓
-Predicted vs realised performance
+```mermaid
+flowchart LR
+    A["External data<br/>Grid · Market · Weather · Network"] --> C["Data layer"]
+    B["Site data<br/>Tariff · Meter · Assets · Limits"] --> C
+    C --> D["Analysis & models"]
+    D --> E["Explorer"]
+    D --> F["COBRA Home"]
+    D --> G["COBRA Mining"]
+    D --> H["Developer interfaces"]
+    I["Cryptographic utilities"] --> H
 ```
 
-COBRA does not treat a dashboard, a data feed or a price chart as "intelligence" on its own. A feature is only considered an intelligence feature when it produces a measurable decision, prediction or explanation from real data.
+COBRA separates external observations, site-specific data and calculated outputs. Provider data is normalised before use by higher-level calculations. Missing or unavailable inputs are represented through explicit availability states.
+
+Detailed architecture is maintained in the [Technical Overview](docs/TECHNICAL.md).
 
 ---
 
-## From Bitcoin Address Generation to COBRA
+## Components
 
-This repository began in **2023** as university coursework and an independent technical exercise in Bitcoin address generation. The original work explored private-key generation, elliptic-curve cryptography, public keys, hashing and Base58Check encoding.
-
-That work then expanded into Bitcoin infrastructure and mining. Mining exposed a wider engineering problem: computation consumes significant electrical power, electricity varies in economic value over time and location, and mining equipment converts most of that electrical input into heat. That creates questions around operating windows, site constraints, thermal management, energy utilisation and whether compute should run at all under a given set of conditions.
-
-Those questions became broader than Bitcoin.
-
-COBRA evolved from:
-
-```text
-Bitcoin address generation
-        ↓
-cryptographic tools and offline operation
-        ↓
-Bitcoin network and mining economics
-        ↓
-energy-aware compute
-        ↓
-site-level energy intelligence
-        ↓
-multiple physical and computational use cases
-```
-
-The original materials have **not** been removed or rewritten out of the history. See [Project Provenance](docs/PROVENANCE.md) and the archived [Bitcoin Address Generator README](archive/README-bitcoin-address-generator-2025.md).
-
----
-
-## System Architecture
-
-COBRA is being developed as a layered system rather than a single application.
-
-```text
-                         COBRA
-                           │
-       ┌───────────────────┼───────────────────┐
-       │                   │                   │
- Cryptography         Data / APIs        Public interfaces
-       │                   │                   │
- keys / signing       grid / market        Explorer
- offline / CLI        tariffs              calculators
- provenance           weather              research
- device identity      solar / property      developer tools
-       │               Bitcoin network          │
-       └───────────────────┬───────────────────┘
-                           │
-                      Site model
-                           │
-               Energy + compute context
-                           │
-                Intelligence / simulation
-                           │
-                 Decision + explanation
-                           │
-               Outcome / validation layer
-```
-
-Public interfaces can expose reference indicators and reproducible calculations. Site-specific customer information and proprietary decision logic remain private by default.
-
----
-
-## Application Domains
-
-| Domain | COBRA question |
+| Component | Function |
 | --- | --- |
-| **Bitcoin mining** | Is this miner or fleet economically sensible to run under the site's actual power economics and current network conditions? |
-| **AI / flexible compute** | When should schedulable compute run, defer, throttle or move relative to energy availability, cost and workload constraints? |
-| **Homes** | What is the household using, what is it costing, what can move, and which interventions are economically meaningful? |
-| **Communities / microgrids** | How can local generation, storage and flexible demand be coordinated and evaluated? |
-| **Commercial / industrial sites** | Which loads are flexible, what are the operational constraints, and what actions reduce cost or improve utilisation? |
-| **Generation + storage** | How should generation, storage, export and flexible demand be represented within a common site model? |
-| **Power-generation environments** | How can energy-intensive compute or controllable loads be modelled alongside generation constraints and operating conditions? |
-| **Nuclear-energy research contexts** | How might high-availability generation, thermal constraints and flexible compute be represented in site-level energy/compute models? This is a research direction, not a claim of deployed nuclear control. |
+| **Explorer** | Public electricity, Bitcoin/network and compute-related indicators |
+| **COBRA Home** | Household and property-level energy analysis |
+| **COBRA Mining** | ASIC/site configuration, facility modelling and mining economics |
+| **Cryptographic utilities** | Bitcoin-oriented address and cryptographic tooling |
+| **Offline tools** | Local cryptographic workflows |
+| **CLI** | Developer and cryptographic command-line interface |
+| **Public APIs** | Programmatic access to released functions and data interfaces |
+| **Research interfaces** | Reproducible public technical and analytical work |
 
 ---
 
-## Data and Integration Work
+## Data sources
 
-COBRA is designed to combine public system data with consented customer/site data and verified asset specifications. Current data and integration work includes:
+COBRA uses provider-specific adapters around a common internal data model.
 
-| Source / dataset family | Role in COBRA | Data boundary |
-| --- | --- | --- |
-| **NESO** | Great Britain electricity-system conditions, regional/grid context, carbon and flexibility signals | Public/system data |
-| **Elexon / BMRS** | Balancing, market and electricity-system observations | Public/system data |
-| **Octopus Energy** | Consented customer consumption, meter and retail-tariff data | Private customer connection |
-| **European Commission JRC / PVGIS** | Solar resource and PV-yield reference modelling | Public/reference data |
-| **Energy Performance Certificates (EPC)** | Building characteristics and energy-performance context where permitted | Public/property data |
-| **Weather / environmental data** | Physical context for demand, solar and site modelling | Public/reference data |
-| **Bitcoin network and mining-market data** | Network state, mining monetisation conditions and reference economics | Public/market data |
-| **Manufacturer specifications** | Miner, appliance and equipment reference characteristics | Public/reference data |
-| **User / site inputs** | Tariffs, assets, capacity limits, operating assumptions and local constraints | Site-specific/private as applicable |
-| **CSV / local imports** | User-controlled interval and operational data for self-hosted or staged workflows | User-controlled |
+| Source | Data |
+| --- | --- |
+| **NESO** | Great Britain electricity-system conditions |
+| **Elexon** | Balancing and electricity-market data |
+| **Octopus Energy** | Consented customer tariff and consumption data |
+| **EPC** | Building energy-performance information |
+| **PVGIS** | Solar-resource and photovoltaic estimates |
+| **Bitcoin network sources** | Network and blockchain observations |
+| **Mining-market sources** | SHA-256 hashprice and related mining metrics |
+| **Manufacturer specifications** | Equipment characteristics |
+| **Site inputs** | Tariffs, capacity, assets and operating assumptions |
+| **FX sources** | Currency-normalised calculations |
 
-Not every adapter or hosted integration is released in this repository. Public release is intentional: components are reviewed for security, licensing, privacy and intellectual-property boundaries before they are moved into the open-core surface.
-
----
-
-## COBRA Indicators and Explorer
-
-The public Explorer is intended to make complex system conditions easier to inspect without confusing market context with site-specific profitability.
-
-Reference indicator families include:
-
-- **Energy Condition** — observable electricity-system state and price context.
-- **Grid Flexibility** — signals relevant to surplus, scarcity and flexible demand.
-- **Bitcoin Network** — network and mining-market conditions.
-- **Mining Economics** — reference economics where the necessary assumptions are supplied.
-- **Low-Carbon Compute** — energy/carbon context relevant to schedulable compute.
-- **Compute Window** — whether selected conditions are favourable, conditional or unfavourable for a defined workload.
-
-A public wholesale electricity price is **not** automatically a household tariff, and Bitcoin price alone is **not** a mining-profitability signal. COBRA's engineering rule is to preserve the difference between public reference data and the actual economics of a site.
+Source metadata, timestamps, units and availability states are preserved through the analysis pipeline.
 
 ---
 
-## Intelligence, Machine Learning and Validation
+## Mining reference model
 
-COBRA follows a deterministic-first approach: calculations that can be derived transparently from physical quantities, tariffs and measured data should remain inspectable before machine learning is added.
-
-Research and engineering areas include:
-
-- load and demand forecasting;
-- anomaly and state-change detection;
-- observation/data-quality assessment;
-- appliance and asset inference;
-- tariff and operating-window analysis;
-- scenario simulation for storage, generation and flexible loads;
-- economic threshold estimation;
-- explainable opportunity ranking;
-- energy-to-compute scheduling;
-- predicted-versus-realised outcome evaluation;
-- calibration and reliability of decision-support models.
-
-Machine-learning models, proprietary features, model weights, private training pipelines, advanced optimisation and control policies are not published by default.
-
-The preferred validation loop is:
+COBRA Mining combines site and market inputs including:
 
 ```text
-Observation → Model → Decision → Action → Outcome → Compare → Improve
+ASIC specification
++ quantity
++ site power limit
++ electricity rate
++ facility PUE
++ pool fee
++ operating cost
++ hashprice
++ FX
 ```
 
-That allows COBRA to distinguish between something that looked favourable in a model and something that produced measurable value in the physical system.
+Calculated outputs include active hashrate, facility power, electricity consumption, gross revenue, electricity cost, operating profit, operating margin, break-even electricity rate and site capacity.
+
+Site profitability calculations combine market information with site-specific operating assumptions.
 
 ---
 
-## Engineering Principles
+## Technical stack
 
-COBRA is being built around several non-negotiable principles:
+The public repository contains components implemented across:
 
-1. **Real data before synthetic certainty.** Missing information should be reported as unavailable rather than replaced with invented values.
-2. **Site economics before generic signals.** Public market conditions provide context; they do not replace the site's actual tariff, assets and constraints.
-3. **Explainability before automation.** A recommendation should expose the evidence and assumptions that produced it.
-4. **Deterministic where possible.** Machine learning is used where it adds measurable value, not as a label for ordinary arithmetic.
-5. **Privacy by architecture.** Customer data and credentials do not belong in public repositories.
-6. **Open-core by design.** Public components should be genuinely useful and independently deployable; proprietary hosted intelligence remains private.
-7. **Outcome validation.** Where possible, predicted value should be compared with realised value after an action.
-8. **No forced action.** "Do nothing" or "do not run" is a valid result when the economics or evidence do not justify intervention.
+- Python package and command-line tooling;
+- browser-based JavaScript, HTML and CSS;
+- Node.js server-side and API components;
+- PostgreSQL-backed hosted functionality;
+- external data-provider adapters;
+- automated Node.js and Python testing;
+- GitHub Actions continuous integration.
 
----
-
-## Geographic Scope
-
-COBRA's current real-world validation is focused primarily on **Great Britain**, where the project is working with GB electricity-system data, household energy data and UK site scenarios.
-
-**Finland** is a priority next-market study, followed by additional European countries. International expansion is deliberately adapter-based: a country is added only when its electricity-market structure, tariff semantics, data sources and regulatory boundaries can be represented correctly rather than being forced into a UK model.
-
-The long-term architecture is intended to support country-specific energy adapters behind a common site and decision interface.
+Database-backed components use server-side environment configuration. Environment variables are documented in [`.env.example`](.env.example).
 
 ---
 
-## Open Core and Self-Hosted Development
+## Engineering standards and frameworks
 
-COBRA is **open-core**, not a fully open-source hosted platform.
+COBRA uses established standards and frameworks as engineering references across information security, energy management, software assurance and AI-enabled components.
 
-The public rule is straightforward:
+| Reference | Scope |
+| --- | --- |
+| **ISO/IEC 27001:2022** | Information-security management |
+| **ISO 50001:2018** | Energy-management systems and energy-performance improvement |
+| **ISO/IEC 42001:2023** | AI management for applicable AI/ML components |
+| **NIST Cybersecurity Framework 2.0** | Cybersecurity risk management |
+| **OWASP ASVS 5.0** | Web and application security verification |
+| **IEC 62443 series** | Industrial and operational-technology cybersecurity |
 
-> If code is released here, it should be code we are comfortable allowing another developer to inspect, fork, modify and operate independently.
+These references guide engineering and governance work. Formal certification and conformity status are reported separately following assessment.
 
-Public/community components may include:
+---
 
-- cryptographic utilities and CLI tools;
-- public-data adapters;
-- documented schemas and interfaces;
-- reference engineering/economic calculations;
-- CSV and local-data tooling;
-- MQTT / Home Assistant / device-interface specifications where released;
-- local dashboards and transparent rule engines;
-- Raspberry Pi and other self-hosted community components after review.
+## Repository boundary
 
-Private components include hosted customer infrastructure, production credentials, customer data, proprietary intelligence, advanced forecasting/optimisation, private commercial systems and patent-sensitive implementation details.
+This repository is the public upstream and provenance record for COBRA.
 
-### Fork this repository
+The public repository includes public interfaces, cryptographic utilities, documented schemas, public-data integrations, reference calculations, CLI tooling and reproducible technical examples.
+
+Production credentials, customer datasets, customer infrastructure and protected analytical implementations are maintained within their respective private environments.
+
+See [Technical Overview](docs/TECHNICAL.md), [Security](SECURITY.md) and [Project Provenance](docs/PROVENANCE.md).
+
+---
+
+## Repository provenance
+
+COBRA originated from the `ol-s-cloud/bitcoin-address-generator` repository. The original cryptographic implementation, notebook and Git history remain part of the project's public development provenance.
+
+- [Project provenance](docs/PROVENANCE.md)
+- [Archived original README](archive/README-bitcoin-address-generator-2025.md)
+- [Original Bitcoin-address notebook](How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb)
+
+---
+
+## Local development
 
 ```bash
 git clone https://github.com/ol-s-cloud/bitcoin-address-generator.git
 cd bitcoin-address-generator
+npm install
+npm test
 ```
 
-The repository currently retains its **MIT licence**. Future repositories or components may use different licences; always check the licence distributed with the specific component you are using.
-
----
-
-## Current Public Repository
-
-This repository contains the project's original cryptographic lineage together with public web, CLI, documentation and other intentionally releasable components.
-
-The original Python package remains available for educational/development use:
+For Python development:
 
 ```bash
-pip install bitcoin-address-generator
+pip install -e .
 ```
 
-```python
-from bitcoin_address_generator import generate_wallet
-
-private_key, public_key, address = generate_wallet()
-print(address)
-```
-
-See the archived [legacy README](archive/README-bitcoin-address-generator-2025.md) for the original package-oriented documentation and learning resources.
-
-> The original Bitcoin address-generation package is educational/development software. Do not treat it as a production wallet or use it to protect material real-world funds without an independent security review.
+CLI usage is documented in the [CLI Guide](docs/CLI.md). Public API functions are documented in the [API Reference](docs/API.md). Offline cryptographic workflows are documented in the [Offline Guide](COBRA_OFFLINE_GUIDE.md).
 
 ---
 
-## Project Surfaces
+## Documentation
 
-| Surface | Role |
+| Reference | Scope |
 | --- | --- |
-| [**COBRA Protocol**](https://cobra-protocol.org) | Public project, Explorer, research, tools and project information |
-| **COBRA Home** | Household energy-account and site-intelligence product under staged validation |
-| **COBRA Mining** | Miner/fleet economics, facility modelling and energy-aware compute intelligence under active engineering |
-| **COBRA Explorer** | Public system/network/reference indicators |
-| **COBRA Research** | Technical research and validation work |
-| **COBRA Offline / CLI** | Local and cryptographic workflows |
-| **Self-hosted / Community** | Public components intended for local deployment as they pass disclosure and release review |
-
-Hosted product development is staged separately from the public repository so that public code remains safe to fork and private operational code remains private.
-
----
-
-## Contributing
-
-Contributions to the public/open-core surface are welcome. Please read:
-
-- [CONTRIBUTING.md](CONTRIBUTING.md)
-- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
-- [SECURITY.md](SECURITY.md)
-- [Technical Guide](docs/TECHNICAL.md)
-- [API Reference](docs/API.md)
-- [CLI Guide](docs/CLI.md)
-
-Useful contribution areas include documentation, test coverage, public-data adapters, data-quality checks, reproducible reference calculations, local/self-hosted tooling and issues found in released components.
-
-Please do **not** submit real API keys, customer data, wallet secrets, private keys, meter credentials or other sensitive information in issues or pull requests.
+| [Technical Overview](docs/TECHNICAL.md) | Architecture, data model and engineering concepts |
+| [API Reference](docs/API.md) | Public package interfaces |
+| [CLI Guide](docs/CLI.md) | Command-line tooling |
+| [Offline Guide](COBRA_OFFLINE_GUIDE.md) | Local cryptographic workflow |
+| [Web Application](WEB_APP.md) | Public web implementation |
+| [Project Provenance](docs/PROVENANCE.md) | Repository lineage and retained history |
+| [Security](SECURITY.md) | Security policy and disclosure |
+| [Contributing](CONTRIBUTING.md) | Contribution process |
+| [Code of Conduct](CODE_OF_CONDUCT.md) | Community participation |
 
 ---
 
-## Participate / Register a Site
+## References
 
-COBRA is moving from software architecture into real-world site validation. Households, energy users, mining/compute operators, generation projects, developers and researchers can follow the project at:
+Primary external references include:
 
-- **Website:** https://cobra-protocol.org
-- **UK site registration:** https://cobra-protocol.org/uk.html
-- **GitHub:** https://github.com/ol-s-cloud/bitcoin-address-generator
-
-Site registration is an expression of interest / onboarding route and does not itself imply service availability, commercial acceptance or participation in an electricity/flexibility market.
-
----
-
-## Security and Responsible Disclosure
-
-Security issues should be reported according to [SECURITY.md](SECURITY.md). Do not place secrets or exploit details that could put users at risk into a public issue.
-
-COBRA's cryptographic, energy and compute components have different safety profiles. Public reference calculations and research prototypes should not be assumed to be production control systems unless they are explicitly documented as such.
-
----
-
-## Provenance
-
-The repository deliberately retains its original lineage.
-
-- [COBRA Project Provenance](docs/PROVENANCE.md)
-- [Archived Bitcoin Address Generator README](archive/README-bitcoin-address-generator-2025.md)
-- [Original Bitcoin-address notebook](How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb)
-- Full Git commit history in this repository
-
-The evolution is part of the project: **cryptography → Bitcoin → mining → energy-aware compute → site intelligence**.
+- [National Energy System Operator](https://www.neso.energy/)
+- [Elexon](https://www.elexon.co.uk/)
+- [Octopus Energy Developer API](https://developer.octopus.energy/)
+- [European Commission JRC PVGIS](https://re.jrc.ec.europa.eu/pvg_tools/en/)
+- [Bitcoin Core](https://bitcoincore.org/)
+- [ISO/IEC 27001:2022](https://www.iso.org/standard/27001)
+- [ISO 50001:2018](https://www.iso.org/standard/69426.html)
+- [ISO/IEC 42001:2023](https://www.iso.org/standard/42001)
+- [NIST Cybersecurity Framework 2.0](https://www.nist.gov/cyberframework)
+- [OWASP ASVS](https://owasp.org/projects/asvs)
+- [IEC 62443](https://syc-se.iec.ch/deliveries/cybersecurity-guidelines/security-standards-and-best-practices/iec-62443/)
 
 ---
 
 ## License
 
-This repository is licensed under the [MIT License](LICENSE).
+This repository is distributed under the [MIT License](LICENSE).
 
-Third-party datasets, APIs and external services retain their own terms, licences and usage conditions. Inclusion as a data source or technical reference does not imply partnership, endorsement or affiliation.
+External datasets, APIs and services retain their respective licences, terms and attribution requirements.
 
 ---
 
-**COBRA by ol-s-cloud**  
-Cryptographic sovereignty · energy intelligence · compute economics · measurable outcomes
+**COBRA · ol-s-cloud**
