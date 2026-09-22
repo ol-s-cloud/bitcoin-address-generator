@@ -1,245 +1,131 @@
-# COBRA
+# Bitcoin Address Generator
 
-<p align="center">
-  <img src="assets/cobra-hero.jpg" alt="COBRA" width="900">
-</p>
-
-**Electricity, site and compute analysis.**
-
-> **Project status:** Active development · **Version:** `0.3.0-alpha`
-
-COBRA integrates electricity-system, market, site and compute data for monitoring, economic analysis and site-level decision support.
-
-The public repository contains inspectable software, reference implementations, cryptographic utilities, public interfaces and developer tooling. Hosted customer infrastructure, customer data and protected analytical components are maintained separately.
-
-> **Project lineage:** COBRA began as a university cryptography project focused on Bitcoin address generation and subsequently expanded into compute and energy intelligence. Earlier public deployments, repository paths and documentation remain available as part of the project record while current pages are progressively aligned with the present platform. See the [archived original README](archive/README-bitcoin-address-generator-2025.md), [Project Provenance](docs/PROVENANCE.md) and [Technical Overview](docs/TECHNICAL.md).
-
-[Website](https://cobra-protocol.org) · [Explorer](https://cobra-protocol.org/explorer.html) · [Research](https://cobra-protocol.org/research.html) · [Technical](docs/TECHNICAL.md) · [Legacy README](archive/README-bitcoin-address-generator-2025.md) · [Provenance](docs/PROVENANCE.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PyPI version](https://badge.fury.io/py/bitcoin-address-generator.svg)](https://badge.fury.io/py/bitcoin-address-generator)
 [![Python Package](https://github.com/ol-s-cloud/bitcoin-address-generator/actions/workflows/python-package.yml/badge.svg)](https://github.com/ol-s-cloud/bitcoin-address-generator/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
----
+## ⚠️ Educational and Development Use Only
+**This package is intended for educational and development purposes. Do not use for production or with real Bitcoin transactions.**
 
-## System overview
+## Introduction
+This repository explores the use of randomly generated hexadecimal numbers to create a bitcoin wallet address using the Elliptic Curve Digital Signature Algorithm. When Alice wants to buy a book from Bob, after all has been agreed upon, Bob needs to provide Alice with a bitcoin wallet address where the payments will be deposited. The transaction will be done on the blockchain, so Bob needs a bitcoin wallet address to receive payments. This repository covers how a bitcoin wallet address can be created from randomly generated private keys.
 
-| Layer | Current role |
-| --- | --- |
-| **External data** | Grid, market, tariff, property, weather, Bitcoin-network and mining-market inputs |
-| **Site data** | Tariffs, meters, assets, capacity limits and operating assumptions |
-| **Data layer** | Acquisition, normalisation, timestamps, units and availability state |
-| **Analysis** | Engineering calculations, economic models and site-level evaluation |
-| **Applications** | Explorer, COBRA Home and COBRA Mining |
-| **Developer interfaces** | Public APIs, CLI, local tooling and reproducible technical interfaces |
-| **Cryptographic utilities** | Bitcoin-oriented address generation, validation and offline/local workflows |
+In cryptography, the Elliptic Curve Digital Signature Algorithm (ECDSA) offers a variant of the Digital Signature Algorithm (DSA) which uses elliptic-curve cryptography.
 
-COBRA separates external observations, site-specific inputs and calculated outputs. Provider data is normalised before use by higher-level calculations. Missing or unavailable inputs are represented through explicit availability states.
+## Method
+Bob signs a hash of a message with his private key, and then Alice proves with his public key. Bob also uses a random nonce value for the signature (K)
 
-Detailed architecture is maintained in the [Technical Overview](docs/TECHNICAL.md).
+![ecdsa_new](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/3311cd8a-cebb-465e-bea8-91fcf7ffb39d)
 
----
+With ECDSA, Alice will sign a message with her private key, and then Bob will use her public key to verify that she signed the message (and that the message has not changed)
+![ecdsa](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/e062bc0a-fc16-4203-a0fa-c0844cb995df)
 
-## Developer access
+The diagram below illustrates the architecture and how the Bitcoin wallet addresses are created:
 
-### Git
+![Architecture](https://github.com/ol-s-cloud/bitcoin-address-generator/assets/134246135/5c530686-c50a-4a00-bce7-3d1be3462d99)
 
+## Features
+- Generate random private keys
+- Convert private keys to public keys using ECDSA
+- Create valid Bitcoin addresses
+- Command-line interface
+- Comprehensive validation
+- Educational examples and documentation
+
+## Setting Up Our Environment
+To achieve desired outcome, first we need to set-up the environment. For development purposes, you can use:
+1. Google Colab environment - https://colab.research.google.com/
+2. Local Python environment
+3. Package installation via pip (see Installation section)
+
+For getting randomly generated private keys, you can use:
+- Random generation within the package
+- Private keys from wallet addresses created via https://www.bitaddress.org
+- Other hex generators like https://www.browserling.com/tools/random-hex
+
+Note: For production use, always ensure secure methods of private key generation.
+
+## Python Libraries & Dependencies
+• **ECDSA Python Library** - Implementation of the Elliptic Curve Cryptography
+• **Hashlib** - Contains hash algorithms for SHA256, RIPEMD160
+• **Codecs** - For encoding and decoding
+• **Base58** - For Base58Check encoding
+
+## Installation
 ```bash
-git clone https://github.com/ol-s-cloud/bitcoin-address-generator.git
-cd bitcoin-address-generator
+pip install bitcoin-address-generator
 ```
 
-### Python / COBRA CLI
+## Quick Start
+```python
+from bitcoin_address_generator import generate_wallet
 
+# Generate new wallet
+private_key, public_key, address = generate_wallet()
+print(f"Bitcoin Address: {address}")
+```
+
+## Command Line Usage
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e .
+# Generate new address
+bitcoin-address-generator generate
 
-cobra --version
-cobra status
+# Validate address
+bitcoin-address-generator validate <address>
 ```
 
-Current CLI commands include:
+## Development Roadmap
 
-```bash
-cobra status
-cobra random --bytes 32
-cobra generate
-cobra generate --network testnet
-cobra validate <address> --network testnet
-```
+### v0.1.0 (Current)
+- Basic Bitcoin address generation
+- Command-line interface
+- Core cryptographic operations
+- Educational documentation
+- Test suite
 
-The CLI is currently `0.3.0-alpha` and testnet-first. Full usage is documented in the [CLI Guide](docs/CLI.md).
+### v0.2.0 (Planned)
+- Support for different address types (P2SH, SegWit)
+- Key encryption for secure storage
+- QR code generation for addresses
+- Bulk address generation
+- Basic transaction signing
 
-### Web / Node.js
+### v0.3.0 (Planned)
+- HD wallet support (BIP32/39/44)
+- Mnemonic phrase generation
+- Multi-signature support
+- Network validation
+- Address balance checking
 
-```bash
-npm install
-npm test
-```
-
-Database-backed routes use the server-side environment configuration documented in [`.env.example`](.env.example).
-
----
-
-## Components
-
-| Component | Function |
-| --- | --- |
-| **Explorer** | Public electricity, Bitcoin/network and compute-related indicators |
-| **COBRA Home** | Household and property-level energy analysis |
-| **COBRA Mining** | ASIC/site configuration, facility modelling and mining economics |
-| **Cryptographic utilities** | Bitcoin-oriented address and cryptographic tooling |
-| **Offline tools** | Local cryptographic workflows |
-| **CLI** | Developer and cryptographic command-line interface |
-| **Public APIs** | Programmatic access to released functions and data interfaces |
-| **Research interfaces** | Reproducible public technical and analytical work |
-
----
-
-## Data sources
-
-COBRA uses provider-specific adapters around a common internal data model.
-
-| Source | Data |
-| --- | --- |
-| **NESO** | Great Britain electricity-system conditions |
-| **Elexon** | Balancing and electricity-market data |
-| **Octopus Energy** | Consented customer tariff and consumption data |
-| **EPC** | Building energy-performance information |
-| **PVGIS** | Solar-resource and photovoltaic estimates |
-| **Bitcoin network sources** | Network and blockchain observations |
-| **Mining-market sources** | SHA-256 hashprice and related mining metrics |
-| **Manufacturer specifications** | Equipment characteristics |
-| **Site inputs** | Tariffs, capacity, assets and operating assumptions |
-| **FX sources** | Currency-normalised calculations |
-
-Source metadata, timestamps, units and availability states are preserved through the analysis pipeline.
-
----
-
-## Mining reference model
-
-COBRA Mining combines site and market inputs including:
-
-```text
-ASIC specification
-+ quantity
-+ site power limit
-+ electricity rate
-+ facility PUE
-+ pool fee
-+ operating cost
-+ hashprice
-+ FX
-```
-
-Calculated outputs include active hashrate, facility power, electricity consumption, gross revenue, electricity cost, operating profit, operating margin, break-even electricity rate and site capacity.
-
-Site profitability calculations combine market information with site-specific operating assumptions.
-
----
-
-## Technical stack
-
-The public repository contains components implemented across:
-
-- Python package and command-line tooling;
-- browser-based JavaScript, HTML and CSS;
-- Node.js server-side and API components;
-- PostgreSQL-backed hosted functionality;
-- external data-provider adapters;
-- automated Node.js and Python testing;
-- GitHub Actions continuous integration.
-
----
-
-## Engineering standards and frameworks
-
-COBRA uses established standards and frameworks as engineering references across information security, energy management, software assurance and AI-enabled components.
-
-| Reference | Scope |
-| --- | --- |
-| **ISO/IEC 27001:2022** | Information-security management |
-| **ISO 50001:2018** | Energy-management systems and energy-performance improvement |
-| **ISO/IEC 42001:2023** | AI management for applicable AI/ML components |
-| **NIST Cybersecurity Framework 2.0** | Cybersecurity risk management |
-| **OWASP ASVS 5.0** | Web and application security verification |
-| **IEC 62443 series** | Industrial and operational-technology cybersecurity |
-
-These references guide engineering and governance work. Formal certification and conformity status are reported separately following assessment.
-
----
-
-## Repository boundary
-
-This repository is the public upstream and provenance record for COBRA.
-
-The public repository includes public interfaces, cryptographic utilities, documented schemas, public-data integrations, reference calculations, CLI tooling and reproducible technical examples.
-
-Production credentials, customer datasets, customer infrastructure and protected analytical implementations are maintained within their respective private environments.
-
-See [Technical Overview](docs/TECHNICAL.md), [Security](SECURITY.md) and [Project Provenance](docs/PROVENANCE.md).
-
----
-
-## Repository provenance and previous scope
-
-COBRA originated from the `ol-s-cloud/bitcoin-address-generator` repository. The original cryptographic implementation, notebook, earlier deployments and Git history remain part of the project's public development record.
-
-Historical material includes:
-
-- [Archived Bitcoin Address Generator README](archive/README-bitcoin-address-generator-2025.md)
-- [Pre-COBRA README](archive/README-pre-COBRA-2026.md)
-- [Project Provenance](docs/PROVENANCE.md)
-- [Original Bitcoin-address notebook](How_To_Create_A_Bitcoin_Address_From_Randomly_Generated_Numbers.ipynb)
-- [Legacy technical guide](archive/TECHNICAL-bitcoin-address-generator-2025.md)
-
-Some retained public pages still reflect the earlier cryptography and Bitcoin-focused scope. These materials remain accessible for continuity and provenance while the active website, documentation and interfaces are updated around COBRA's current energy and compute work.
-
----
+### v0.4.0 (Planned)
+- Web interface
+- API endpoint support
+- Transaction history
+- Address monitoring
+- Automated testing with testnet
 
 ## Documentation
+- [Technical Guide](docs/TECHNICAL.md)
+- [API Reference](docs/API.md)
+- [Security Info](docs/SECURITY.md)
 
-| Reference | Scope |
-| --- | --- |
-| [Technical Overview](docs/TECHNICAL.md) | Architecture, data model and engineering concepts |
-| [API Reference](docs/API.md) | Public package interfaces |
-| [CLI Guide](docs/CLI.md) | Command-line tooling |
-| [Offline Guide](COBRA_OFFLINE_GUIDE.md) | Local cryptographic workflow |
-| [Web Application](WEB_APP.md) | Public web implementation |
-| [Project Provenance](docs/PROVENANCE.md) | Repository lineage and retained history |
-| [Legacy README](archive/README-bitcoin-address-generator-2025.md) | Earlier Bitcoin Address Generator scope |
-| [Security](SECURITY.md) | Security policy and disclosure |
-| [Contributing](CONTRIBUTING.md) | Contribution process |
-| [Code of Conduct](CODE_OF_CONDUCT.md) | Community participation |
+## Feedback
+If you have any feedback, please reach out to me at gs_wl889@icloud.com
 
----
+## Contributing
+Contributions are always welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to get started.
+Please adhere to this project's [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-## References
+## Love to read more? Here are some resources & references
+- [Bitcoin Technical Document](https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses)
+- [List of Addresses Prefixes](https://en.bitcoin.it/wiki/List_of_address_prefixes)
+- [Elliptic Curve Digital Signature Algorithm](https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm)
+- [ECDSA Python Library](https://pypi.org/project/ecdsa/)
+- [SEC2: Recommended Elliptic Curve Domain Parameters](https://www.secg.org/sec2-v2.pdf)
+- [Efficient and Secure ECDSA Algorithm Survey](https://www.researchgate.net/publication/331397446_Efficient_and_Secure_ECDSA_Algorithm_and_its_Applications_A_Survey)
 
-Primary external references include:
-
-- [National Energy System Operator](https://www.neso.energy/)
-- [Elexon](https://www.elexon.co.uk/)
-- [Octopus Energy Developer API](https://developer.octopus.energy/)
-- [European Commission JRC PVGIS](https://re.jrc.ec.europa.eu/pvg_tools/en/)
-- [Bitcoin Core](https://bitcoincore.org/)
-- [ISO/IEC 27001:2022](https://www.iso.org/standard/27001)
-- [ISO 50001:2018](https://www.iso.org/standard/69426.html)
-- [ISO/IEC 42001:2023](https://www.iso.org/standard/42001)
-- [NIST Cybersecurity Framework 2.0](https://www.nist.gov/cyberframework)
-- [OWASP ASVS](https://owasp.org/projects/asvs)
-- [IEC 62443](https://syc-se.iec.ch/deliveries/cybersecurity-guidelines/security-standards-and-best-practices/iec-62443/)
-
----
+## Security
+This package is for educational purposes. See [SECURITY.md](SECURITY.md) for important security considerations.
 
 ## License
-
-This repository is distributed under the [MIT License](LICENSE).
-
-External datasets, APIs and services retain their respective licences, terms and attribution requirements.
-
----
-
-**COBRA · ol-s-cloud**
+[MIT](https://choosealicense.com/licenses/mit/)

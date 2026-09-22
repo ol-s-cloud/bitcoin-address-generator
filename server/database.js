@@ -1,6 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 5;
 let sqlClient;
 let schemaReady;
 
@@ -126,6 +126,104 @@ async function prepareSchema() {
     transaction`
       create index if not exists cobra_poll_votes_option_idx
         on cobra_poll_votes (poll_id, option_id)
+    `,
+    transaction`
+      create table if not exists cobra_data_observations (
+        id bigserial primary key,
+        source_id text not null,
+        metric_code text not null,
+        region text not null,
+        observed_at timestamptz not null,
+        value double precision,
+        unit text,
+        payload jsonb not null default '{}'::jsonb,
+        ingested_at timestamptz not null default now(),
+        unique (source_id, metric_code, region, observed_at)
+      )
+    `,
+    transaction`
+      create index if not exists cobra_data_observations_metric_time_idx
+        on cobra_data_observations (metric_code, region, observed_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_data_observations_source_time_idx
+        on cobra_data_observations (source_id, observed_at desc)
+    `,
+    transaction`
+      create table if not exists cobra_plus_waitlist (
+        id bigserial primary key,
+        email text not null check (length(email) between 3 and 254),
+        organization text,
+        country text,
+        use_case text not null,
+        site_type text,
+        power_range text,
+        interests jsonb not null default '[]'::jsonb,
+        notes text,
+        source_path text not null default '/explorer-v2-terminal.html',
+        status text not null default 'waitlist'
+          check (status in ('waitlist', 'review', 'whitelisted', 'declined')),
+        contact_name text,
+        postcode text,
+        energy_supplier text,
+        smart_meter_status text,
+        connection_preference text,
+        created_at timestamptz not null default now(),
+        updated_at timestamptz not null default now()
+      )
+    `,
+    transaction`alter table cobra_plus_waitlist add column if not exists contact_name text`,
+    transaction`alter table cobra_plus_waitlist add column if not exists postcode text`,
+    transaction`alter table cobra_plus_waitlist add column if not exists energy_supplier text`,
+    transaction`alter table cobra_plus_waitlist add column if not exists smart_meter_status text`,
+    transaction`alter table cobra_plus_waitlist add column if not exists connection_preference text`,
+    transaction`
+      create unique index if not exists cobra_plus_waitlist_email_idx
+        on cobra_plus_waitlist (lower(email))
+    `,
+    transaction`
+      create index if not exists cobra_plus_waitlist_use_case_idx
+        on cobra_plus_waitlist (use_case, created_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_plus_waitlist_supplier_idx
+        on cobra_plus_waitlist (energy_supplier, smart_meter_status, created_at desc)
+    `,
+    transaction`
+      create table if not exists cobra_uk_site_registrations (
+        id bigserial primary key,
+        contact_name text,
+        email text not null check (length(email) between 3 and 254),
+        organization text,
+        segment text not null
+          check (segment in ('home', 'small_business', 'commercial_industrial', 'mining_compute', 'generation_project', 'developer_integration', 'other')),
+        postcode text,
+        energy_supplier text,
+        smart_meter_status text,
+        connection_preference text,
+        site_type text,
+        power_range text,
+        assets jsonb not null default '[]'::jsonb,
+        interests jsonb not null default '[]'::jsonb,
+        notes text,
+        source_path text not null default '/uk.html',
+        status text not null default 'registered'
+          check (status in ('registered', 'connection_ready', 'connected', 'review', 'closed')),
+        created_at timestamptz not null default now(),
+        updated_at timestamptz not null default now()
+      )
+    `,
+    transaction`
+      create index if not exists cobra_uk_site_registrations_segment_idx
+        on cobra_uk_site_registrations (segment, created_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_uk_site_registrations_supplier_idx
+        on cobra_uk_site_registrations (energy_supplier, smart_meter_status, created_at desc)
+    `,
+    transaction`
+      create index if not exists cobra_uk_site_registrations_email_idx
+        on cobra_uk_site_registrations (lower(email), created_at desc)
     `,
     transaction`
       insert into cobra_polls (slug, question)
