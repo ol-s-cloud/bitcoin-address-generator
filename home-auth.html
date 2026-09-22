@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Create or access a COBRA Home account." />
+  <meta name="theme-color" content="#f7f9f7" />
+  <title>COBRA Home — Account</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/site-ui.css" />
+  <link rel="stylesheet" href="/home-account.css" />
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="/">COBRA</a><nav aria-label="Primary navigation"></nav></header>
+  <main class="home-app-shell">
+    <section class="home-auth-wrap">
+      <div class="home-auth-copy">
+        <div class="home-app-eyebrow">COBRA HOME</div>
+        <h1>Your home.<br/><span>Your energy account.</span></h1>
+        <p>Create one COBRA identity for your home and the sites you operate. COBRA Home keeps supplier data, smart-meter history, bills, tariffs, appliances and energy assets attached to the property they belong to.</p>
+        <div class="home-product-switch" aria-label="COBRA products">
+          <span class="current">Home</span><span>Mining</span><span>Compute</span><span>Generation</span>
+        </div>
+      </div>
+
+      <section class="home-auth-card" aria-labelledby="account-title">
+        <div class="home-auth-tabs" role="tablist" aria-label="Account access">
+          <button id="createTab" type="button" role="tab" aria-selected="true" aria-controls="createForm">Create account</button>
+          <button id="loginTab" type="button" role="tab" aria-selected="false" aria-controls="loginForm">Sign in</button>
+        </div>
+
+        <form id="createForm" class="home-auth-form" aria-labelledby="createTab">
+          <h2 id="account-title">Create COBRA Home account</h2>
+          <label>Name<input id="createName" autocomplete="name" maxlength="160" /></label>
+          <label>Email<input id="createEmail" type="email" autocomplete="email" required maxlength="254" /></label>
+          <label>Password<input id="createPassword" type="password" autocomplete="new-password" required minlength="12" maxlength="128" /></label>
+          <label>Home name<input id="createSiteName" maxlength="160" value="My Home" /></label>
+          <label>UK postcode<input id="createPostcode" autocomplete="postal-code" maxlength="24" placeholder="e.g. G1 1AA" /></label>
+          <button type="submit">Create account</button>
+          <div id="createStatus" class="home-auth-status" role="status" aria-live="polite"></div>
+          <p class="home-security-note">Use a unique password of at least 12 characters. Supplier credentials, smart-meter permissions and energy data are connected separately after account creation.</p>
+        </form>
+
+        <form id="loginForm" class="home-auth-form" aria-labelledby="loginTab" hidden>
+          <h2>Sign in to COBRA</h2>
+          <label>Email<input id="loginEmail" type="email" autocomplete="email" required maxlength="254" /></label>
+          <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required maxlength="128" /></label>
+          <button type="submit">Sign in</button>
+          <div id="loginStatus" class="home-auth-status" role="status" aria-live="polite"></div>
+        </form>
+      </section>
+    </section>
+  </main>
+  <script src="/site-ui.js"></script>
+  <script src="/home-auth.js"></script>
+</body>
+</html>

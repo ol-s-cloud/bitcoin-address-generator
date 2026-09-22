@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="COBRA Home account dashboard." />
+  <meta name="theme-color" content="#f7f9f7" />
+  <title>COBRA Home — Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/site-ui.css" />
+  <link rel="stylesheet" href="/home-account.css" />
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="/">COBRA</a><nav aria-label="Primary navigation"></nav></header>
+  <main class="home-app-shell">
+    <section class="home-app-hero">
+      <div class="home-app-topline">
+        <div><div class="home-app-eyebrow">COBRA HOME</div><h1 id="homeTitle">My Home</h1></div>
+        <div class="home-app-user"><span id="homeUserEmail">Loading account…</span><button id="signOutButton" type="button">Sign out</button></div>
+      </div>
+      <p>Your household energy account, meters, bills, tariffs, appliances and generation assets in one site profile.</p>
+    </section>
+
+    <div class="home-app-grid">
+      <nav class="home-side-nav" aria-label="COBRA Home">
+        <a href="#overview" class="active">Overview</a><a href="#energy-account">Energy Account</a><a href="#devices">Devices</a><a href="#generation">Generation & Storage</a><a href="#digital-twin">Digital Twin</a><a href="#grid">Grid</a><a href="#optimise">Optimise</a><a href="/account.html">Account & Sites</a>
+      </nav>
+
+      <div class="home-dashboard">
+        <section class="home-summary-grid" id="overview">
+          <article class="home-metric"><span>Energy account</span><strong id="energyAccountValue">—</strong><small id="energyAccountNote">No supplier connected</small></article>
+          <article class="home-metric"><span>Smart meter</span><strong id="smartMeterValue">—</strong><small id="smartMeterNote">No meter data connected</small></article>
+          <article class="home-metric"><span>This month</span><strong id="monthUsageValue">—</strong><small id="monthUsageNote">Connect usage to establish a baseline</small></article>
+          <article class="home-metric"><span>COBRA opportunities</span><strong id="opportunityValue">—</strong><small id="opportunityNote">No quantified opportunities yet</small></article>
+        </section>
+
+        <section class="home-panel" id="energy-account">
+          <div class="home-app-eyebrow">ENERGY ACCOUNT</div><h2>Supplier, bills, tariff and meter history.</h2>
+          <p>The Energy Account reconciles what your supplier reports with the energy activity attached to this home.</p>
+          <div class="home-zero" id="energyAccountState"><strong>No energy account added.</strong><span>Add your supplier or data source below.</span></div>
+
+          <form id="energyAccountForm" class="home-data-form">
+            <div class="home-form-grid">
+              <label>Energy supplier<input id="energySupplier" maxlength="120" placeholder="e.g. Octopus Energy, British Gas" /></label>
+              <label>Account label<input id="energyAccountLabel" maxlength="120" placeholder="e.g. Home electricity & gas" /></label>
+              <label>Data source<select id="energySourceType"><option value="manual">Manual / bill data</option><option value="octopus">Octopus account</option><option value="smart_meter">UK smart-meter data</option><option value="csv">CSV / interval data</option><option value="device_gateway">Device gateway</option></select></label>
+              <label>Connection route<select id="energyConnectionType"><option value="manual">Manual</option><option value="octopus">Octopus</option><option value="smart_meter">Smart meter</option><option value="csv">CSV</option><option value="device_gateway">Device gateway</option></select></label>
+            </div>
+            <div class="home-form-actions"><button type="submit">Save energy account</button><span id="energyAccountStatus" class="home-inline-status"></span></div>
+          </form>
+
+          <div class="home-subsection">
+            <div class="home-subsection-head"><div><div class="home-app-eyebrow">INTERVAL DATA</div><h3>Bring half-hourly usage into this home.</h3></div><span id="intervalCount" class="home-site-pill">0 readings</span></div>
+            <p>Import a CSV containing a timestamp and energy-use column. COBRA reads the file locally in your browser and stores normalized interval values against this Home site.</p>
+            <form id="intervalImportForm" class="home-data-form compact">
+              <div class="home-form-grid">
+                <label>CSV file<input id="intervalFile" type="file" accept=".csv,text/csv,text/plain" required /></label>
+                <label>Fuel<select id="intervalFuel"><option value="electricity">Electricity</option><option value="gas">Gas</option></select></label>
+                <label>Direction<select id="intervalDirection"><option value="import">Import / consumption</option><option value="export">Export</option><option value="generation">Generation</option></select></label>
+              </div>
+              <div class="home-form-actions"><button type="submit">Import interval data</button><span id="intervalImportStatus" class="home-inline-status"></span></div>
+              <small class="home-form-note">Recognised timestamp labels include interval_start, timestamp, start and datetime. Recognised energy labels include consumption, consumption_kwh, usage, quantity_kwh and kwh.</small>
+            </form>
+          </div>
+
+          <div class="home-subsection">
+            <div class="home-subsection-head"><div><div class="home-app-eyebrow">TARIFF</div><h3>Your actual retail rate.</h3></div><span id="tariffCount" class="home-site-pill">0 tariffs</span></div>
+            <div id="tariffList" class="home-record-list"></div>
+            <form id="tariffForm" class="home-data-form compact">
+              <div class="home-form-grid">
+                <label>Fuel<select id="tariffFuel"><option value="electricity">Electricity</option><option value="gas">Gas</option></select></label>
+                <label>Tariff name<input id="tariffName" maxlength="180" placeholder="e.g. Flexible Octopus" /></label>
+                <label>Rate type<select id="tariffRateType"><option value="flat">Flat</option><option value="tou">Time of use</option><option value="dynamic">Dynamic</option><option value="unknown">Unknown</option></select></label>
+                <label>Unit rate p/kWh<input id="tariffUnitRate" type="number" step="0.001" inputmode="decimal" /></label>
+                <label>Standing charge p/day<input id="tariffStandingCharge" type="number" step="0.001" inputmode="decimal" /></label>
+              </div>
+              <div class="home-form-actions"><button type="submit">Add tariff</button><span id="tariffStatus" class="home-inline-status"></span></div>
+            </form>
+          </div>
+
+          <div class="home-subsection">
+            <div class="home-subsection-head"><div><div class="home-app-eyebrow">BILLS</div><h3>What your supplier charged.</h3></div><span id="billCount" class="home-site-pill">0 bills</span></div>
+            <div id="billList" class="home-record-list"></div>
+            <form id="billForm" class="home-data-form compact">
+              <div class="home-form-grid">
+                <label>Period start<input id="billPeriodStart" type="date" /></label><label>Period end<input id="billPeriodEnd" type="date" /></label><label>Total bill £<input id="billTotal" type="number" step="0.01" inputmode="decimal" /></label><label>Electricity kWh<input id="billElectricityKwh" type="number" step="0.001" inputmode="decimal" /></label><label>Gas kWh<input id="billGasKwh" type="number" step="0.001" inputmode="decimal" /></label>
+              </div>
+              <div class="home-form-actions"><button type="submit">Add bill</button><span id="billStatus" class="home-inline-status"></span></div>
+            </form>
+          </div>
+        </section>
+
+        <section class="home-panel" id="devices">
+          <div class="home-app-eyebrow">DEVICES</div><h2>Appliance Passports and connected loads.</h2>
+          <p>Register the appliances that matter most. Manufacturer specifications and measured consumption remain separate so nominal ratings are never presented as observed household use.</p>
+          <div class="home-subsection-head"><span id="applianceCount" class="home-site-pill">0 appliances</span></div><div id="applianceList" class="home-record-list"></div>
+          <form id="applianceForm" class="home-data-form">
+            <input id="applianceId" type="hidden" />
+            <div class="home-form-grid">
+              <label>Category<select id="applianceCategory" required><option value="washing_machine">Washing machine</option><option value="tumble_dryer">Tumble dryer</option><option value="dishwasher">Dishwasher</option><option value="fridge_freezer">Fridge / freezer</option><option value="oven">Oven</option><option value="water_heater">Water heater</option><option value="computer_server">Computer / server</option><option value="other">Other</option></select></label>
+              <label>Appliance name<input id="applianceName" maxlength="160" placeholder="e.g. Kitchen washer" /></label><label>Manufacturer<input id="applianceManufacturer" maxlength="120" placeholder="e.g. Bosch" /></label><label>Model<input id="applianceModel" maxlength="160" /></label><label>GTIN / barcode<input id="applianceGtin" maxlength="40" inputmode="numeric" /></label><label>Rated power W<input id="appliancePower" type="number" step="1" inputmode="numeric" /></label><label>Annual energy kWh<input id="applianceAnnualEnergy" type="number" step="0.01" inputmode="decimal" /></label><label>Energy / cycle kWh<input id="applianceCycleEnergy" type="number" step="0.001" inputmode="decimal" /></label>
+              <label>Connectivity<select id="applianceConnectivity"><option value="none">None</option><option value="manual">Manual</option><option value="matter">Matter</option><option value="mqtt">MQTT</option><option value="home_assistant">Home Assistant</option><option value="manufacturer_api">Manufacturer API</option><option value="cobra">COBRA</option></select></label><label>Specification source<input id="applianceSpecSource" maxlength="240" placeholder="Manufacturer / energy label / manual" /></label><label class="home-check"><input id="applianceFlexible" type="checkbox" /> Flexible load</label>
+            </div>
+            <div class="home-form-actions"><button id="applianceSubmit" type="submit">Add appliance</button><button id="applianceCancel" class="secondary" type="button" hidden>Cancel edit</button><span id="applianceStatus" class="home-inline-status"></span></div>
+          </form>
+        </section>
+
+        <section class="home-panel" id="generation">
+          <div class="home-app-eyebrow">GENERATION & STORAGE</div><h2>Solar, battery, EV, wind and other systems.</h2>
+          <p>Keep generation, storage and flexible energy assets attached to the same home so import, self-consumption, charging and export can be analysed together.</p>
+          <div class="home-subsection-head"><span id="assetCount" class="home-site-pill">0 assets</span></div><div id="assetList" class="home-record-list"></div>
+          <form id="assetForm" class="home-data-form">
+            <div class="home-form-grid">
+              <label>Asset type<select id="assetType"><option value="solar">Solar</option><option value="battery">Battery</option><option value="ev">EV</option><option value="ev_charger">EV charger</option><option value="heat_pump">Heat pump</option><option value="wind">Wind</option><option value="generator">Generator</option><option value="other">Other</option></select></label><label>Name<input id="assetName" maxlength="160" /></label><label>Manufacturer<input id="assetManufacturer" maxlength="120" /></label><label>Model<input id="assetModel" maxlength="160" /></label><label>Power capacity kW<input id="assetCapacityKw" type="number" step="0.01" inputmode="decimal" /></label><label>Energy capacity kWh<input id="assetCapacityKwh" type="number" step="0.01" inputmode="decimal" /></label><label>Connectivity<input id="assetConnectivity" maxlength="80" placeholder="e.g. Matter, API, local gateway" /></label>
+            </div>
+            <div class="home-form-actions"><button type="submit">Add asset</button><span id="assetStatus" class="home-inline-status"></span></div>
+          </form>
+        </section>
+
+        <section class="home-panel" id="digital-twin"><div class="home-app-eyebrow">HOME DIGITAL TWIN</div><h2>Current state and scenario model.</h2><p>The Home Digital Twin is anchored to meter history, tariff, Appliance Passports and energy assets. Estimated, supplier-reported and measured values remain explicitly labelled.</p><div class="home-zero" id="twinState"><strong>Waiting for site data.</strong><span>Energy and appliance records establish the first home state.</span></div></section>
+        <section class="home-panel" id="grid"><div class="home-app-eyebrow">GRID</div><h2>Your home in the electricity system.</h2><p>COBRA uses your Home site's postcode to place household consumption beside official regional grid conditions. Grid conditions inform timing; your own tariff remains the authoritative retail price.</p><div class="home-zero" id="gridState"><strong>Loading regional grid context…</strong><span>National Energy System Operator data.</span></div></section>
+        <section class="home-panel" id="optimise"><div class="home-app-eyebrow">OPTIMISE</div><h2>Reduce cost. Shift load. Increase autonomy.</h2><p>COBRA quantifies an opportunity only when the required inputs are available.</p><div id="opportunityList" class="home-record-list"></div><div class="home-zero" id="optimiseState"><strong>No quantified opportunities yet.</strong><span>Meter history and tariff data establish the household baseline.</span></div></section>
+      </div>
+    </div>
+  </main>
+  <script src="/site-ui.js"></script><script src="/home-dashboard.js"></script><script src="/home-csv-import.js"></script><script src="/home-grid.js"></script>
+</body>
+</html>

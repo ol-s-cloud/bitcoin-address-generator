@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Manage COBRA account identity, product access and sites." />
+  <meta name="theme-color" content="#f7f9f7" />
+  <title>COBRA — Account & Sites</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/site-ui.css" />
+  <link rel="stylesheet" href="/home-account.css" />
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="/">COBRA</a><nav aria-label="Primary navigation"></nav></header>
+  <main class="home-app-shell">
+    <section class="home-app-hero">
+      <div class="home-app-topline">
+        <div><div class="home-app-eyebrow">COBRA ACCOUNT</div><h1>Identity & sites.</h1></div>
+        <div class="home-app-user"><span id="accountEmail">Loading…</span><button id="accountSignOut" type="button">Sign out</button></div>
+      </div>
+      <p>One COBRA identity can own or access multiple sites and products. Home, Mining, Compute and Generation remain separate operating surfaces under the same account.</p>
+    </section>
+
+    <div class="home-app-grid">
+      <nav class="home-side-nav" aria-label="Account sections">
+        <a href="/home-dashboard.html">COBRA Home</a>
+        <a href="#sites" class="active">Sites</a>
+        <a href="#products">Product access</a>
+        <a href="#security">Security</a>
+      </nav>
+      <div class="home-dashboard">
+        <section class="home-panel" id="sites">
+          <div class="home-app-eyebrow">SITES</div>
+          <h2>Properties and operating locations.</h2>
+          <p>Every meter, tariff, appliance, generation asset and operating decision will be attached to the site that produced it.</p>
+          <div id="accountSites" class="home-account-list"></div>
+        </section>
+
+        <section class="home-panel" id="products">
+          <div class="home-app-eyebrow">PRODUCT ACCESS</div>
+          <h2>Separate products. Shared identity.</h2>
+          <div id="accountProducts" class="home-account-list"></div>
+        </section>
+
+        <section class="home-panel" id="security">
+          <div class="home-app-eyebrow">SECURITY</div>
+          <h2>Session and account boundary.</h2>
+          <p>Authentication uses a server-side session token stored in an HttpOnly cookie. Supplier credentials, wallet secrets and smart-meter permissions are not part of the core identity record.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+  <script src="/site-ui.js"></script>
+  <script src="/account.js"></script>
+</body>
+</html>
