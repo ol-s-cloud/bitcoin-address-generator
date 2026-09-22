@@ -337,3 +337,56 @@ export async function pollState() {
   }
   return { polls };
 }
+
+
+export async function registerCobraPlusWaitlist(input) {
+  const sql = database();
+  const rows = await sql`
+    insert into cobra_plus_waitlist (
+      email, organization, country, use_case, site_type, power_range,
+      interests, notes, source_path, contact_name, postcode,
+      energy_supplier, smart_meter_status, connection_preference
+    ) values (
+      ${input.email}, ${input.organization}, ${input.country}, ${input.useCase},
+      ${input.siteType}, ${input.powerRange}, ${JSON.stringify(input.interests || [])}::jsonb,
+      ${input.notes}, ${input.sourcePath}, ${input.contactName}, ${input.postcode},
+      ${input.energySupplier}, ${input.smartMeterStatus}, ${input.connectionPreference}
+    )
+    on conflict (lower(email)) do update set
+      organization = excluded.organization,
+      country = excluded.country,
+      use_case = excluded.use_case,
+      site_type = excluded.site_type,
+      power_range = excluded.power_range,
+      interests = excluded.interests,
+      notes = excluded.notes,
+      source_path = excluded.source_path,
+      contact_name = excluded.contact_name,
+      postcode = excluded.postcode,
+      energy_supplier = excluded.energy_supplier,
+      smart_meter_status = excluded.smart_meter_status,
+      connection_preference = excluded.connection_preference,
+      updated_at = now()
+    returning id, status
+  `;
+  return { reference: `CBR-PLUS-${rows[0].id}`, status: rows[0].status };
+}
+
+export async function registerUkSite(input) {
+  const sql = database();
+  const rows = await sql`
+    insert into cobra_uk_site_registrations (
+      contact_name, email, organization, segment, postcode, energy_supplier,
+      smart_meter_status, connection_preference, site_type, power_range,
+      assets, interests, notes, source_path
+    ) values (
+      ${input.contactName}, ${input.email}, ${input.organization}, ${input.segment},
+      ${input.postcode}, ${input.energySupplier}, ${input.smartMeterStatus},
+      ${input.connectionPreference}, ${input.siteType}, ${input.powerRange},
+      ${JSON.stringify(input.assets || [])}::jsonb, ${JSON.stringify(input.interests || [])}::jsonb,
+      ${input.notes}, ${input.sourcePath}
+    )
+    returning id, status
+  `;
+  return { reference: `CBR-UK-${rows[0].id}`, status: rows[0].status };
+}
