@@ -1,21 +1,9 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    { "source": "/explorer-v2.html", "destination": "/explorer", "permanent": true },
-    { "source": "/explorer-v2-terminal.html", "destination": "/intelligence", "permanent": true },
-    { "source": "/power-terminal.html", "destination": "/power", "permanent": true },
-    { "source": "/calculators.html", "destination": "/calculators", "permanent": true },
-    { "source": "/plus.html", "destination": "/plus", "permanent": true },
-    { "source": "/services.html", "destination": "/services", "permanent": true },
-    { "source": "/uk.html", "destination": "/uk", "permanent": true },
-    { "source": "/explorer.html", "destination": "/explorer-legacy", "permanent": true },
-    { "source": "/docs.html", "destination": "/docs", "permanent": true }
-  ],
   "rewrites": [
-    { "source": "/explorer", "destination": "/explorer-v2.html" },
-    { "source": "/intelligence", "destination": "/explorer-v2-terminal.html" },
-    { "source": "/power", "destination": "/power-terminal.html" },
-    { "source": "/explorer-legacy", "destination": "/explorer.html" }
+    { "source": "/intelligence", "destination": "/explorer-v2-terminal" },
+    { "source": "/power", "destination": "/power-terminal" },
+    { "source": "/explorer-legacy", "destination": "/explorer" }
   ]
 }
