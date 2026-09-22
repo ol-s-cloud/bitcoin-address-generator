@@ -390,3 +390,29 @@ export async function registerUkSite(input) {
   `;
   return { reference: `CBR-UK-${rows[0].id}`, status: rows[0].status };
 }
+
+
+export async function publicObservationHistory({ metricCode, region = "GB", hours = 24, limit = 96 }) {
+  const sql = database();
+  const safeHours = Math.max(1, Math.min(168, Number(hours) || 24));
+  const safeLimit = Math.max(2, Math.min(500, Number(limit) || 96));
+  const allowedMetrics = new Set([
+    "market_index_price",
+    "transmission_system_demand",
+    "generation_mix",
+    "carbon_intensity",
+    "system_imbalance_price",
+    "weather_conditions",
+    "bitcoin_network_state"
+  ]);
+  if (!allowedMetrics.has(metricCode)) throw new Error("unsupported_public_metric");
+  return sql`
+    select metric_code, region, observed_at, value, unit
+    from cobra_data_observations
+    where metric_code = ${metricCode}
+      and region = ${region}
+      and observed_at >= now() - (${safeHours} * interval '1 hour')
+    order by observed_at asc
+    limit ${safeLimit}
+  `;
+}
