@@ -23,7 +23,7 @@ test("low carbon compute classifies low intensity", () => {
 });
 
 test("compute window requires enough component evidence", () => {
-  const indicators = derivePublicIndicators({ marketPricePerMwh: 55, surplusMw: 10000, demandMw: 22000, grossMarginPct: 20, carbonIntensity: 50, averageBlockMinutes: 9, fastestFeeSatVb: 2 });
+  const indicators = derivePublicIndicators({ marketPricePerMwh: 55, surplusMw: 10000, demandMw: 22000, gridFlexibilityComparable: true, grossMarginPct: 20, carbonIntensity: 50, averageBlockMinutes: 9, fastestFeeSatVb: 2 });
   assert.equal(indicators.computeWindow.available, true);
   assert.equal(indicators.computeWindow.state, "OPEN");
 });
@@ -40,4 +40,17 @@ test("missing MID value never becomes a zero-price mining signal", () => {
   assert.equal(result.indicators.energyCondition.available, false);
   assert.equal(result.indicators.miningEconomics.available, false);
   assert.equal(result.indicators.computeWindow.available, false);
+});
+
+test("forward surplus is not mixed with current demand", () => {
+  const result = derivePublicIndicatorsFromMetrics({
+    market_index_price: { value: 80 },
+    forecast_surplus: { value: 12000 },
+    transmission_system_demand: { value: 28000 },
+    carbon_intensity: { value: 150 },
+    bitcoin_network_state: { averageBlockMinutes: 10, fastestFeeSatVb: 2 },
+  }, { grossMarginPct: 5 });
+  assert.equal(result.indicators.gridFlexibility.available, false);
+  assert.equal(result.indicators.gridFlexibility.state, "UNAVAILABLE");
+  assert.equal(result.indicators.computeWindow.details.componentCount, 3);
 });
