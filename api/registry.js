@@ -56,10 +56,7 @@ async function getRegistry(request, response) {
 }
 
 async function recordCreation(request, response) {
-  if (request.body?.action === "cobra_plus_waitlist" || request.body?.action === "cobra_uk_registration") {
-    return recordRegistration(request, response);
-  }
-  if (rejectLargeBody(request)) {
+  if (rejectLargeBody(request, 16384)) {
     return response.status(413).json({ error: "payload_too_large" });
   }
 
@@ -68,6 +65,14 @@ async function recordCreation(request, response) {
     body = parseJsonBody(request);
   } catch {
     return response.status(400).json({ error: "invalid_json" });
+  }
+
+  if (body?.action === "cobra_plus_waitlist" || body?.action === "cobra_uk_registration") {
+    return recordRegistrationBody(body, response);
+  }
+
+  if (rejectLargeBody(request)) {
+    return response.status(413).json({ error: "payload_too_large" });
   }
   if (!body || Array.isArray(body) || typeof body !== "object") {
     return response.status(400).json({ error: "invalid_payload" });
@@ -153,10 +158,7 @@ async function recordCreation(request, response) {
 }
 
 
-async function recordRegistration(request, response) {
-  if (rejectLargeBody(request, 16384)) return response.status(413).json({ error: "payload_too_large" });
-  let body;
-  try { body = parseJsonBody(request); } catch { return response.status(400).json({ error: "invalid_json" }); }
+async function recordRegistrationBody(body, response) {
   const email = String(body.email || "").trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
     return response.status(400).json({ error: "invalid_email" });
