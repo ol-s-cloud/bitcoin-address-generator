@@ -35,16 +35,18 @@
 
   const coreNavigation = [
     ["/", "Home"],
-    ["/docs.html", "Docs"],
-    ["/explorer-v2-terminal.html", "Explorer"],
+    ["/explorer", "Explorer"],
+    ["/intelligence", "Intelligence"],
+    ["/power", "Power"],
+    ["/calculators", "Calculators"],
+    ["/docs", "Docs"],
     ["/research.html", "Research"],
     ["/offline.html", "Offline"],
     ["/cli.html", "CLI"],
-    ["/plus.html", "COBRA+"],
+    ["/plus", "COBRA+"],
+    ["/services", "Services"],
+    ["/uk", "UK"],
     ["/store.html", "Store"],
-    ["/services.html", "Services"],
-    ["/calculators.html", "Calculators"],
-    ["/uk.html", "UK"],
   ];
   const githubUrl = "https://github.com/ol-s-cloud/bitcoin-address-generator";
   const currentPath = location.pathname.replace(/index\.html$/, "").replace(/\/$/, "") || "/";
@@ -122,16 +124,16 @@
           <p>Energy-aware compute and electrical intelligence by ol-s-cloud.</p>
         </div>
         <div class="cobra-footer-col"><strong>PRODUCT</strong>
-          <a href="/explorer-v2-terminal.html">Explorer</a><a href="/plus.html">COBRA+</a><a href="/uk.html">UK Homes & Businesses</a><a href="/store.html">Store</a><a href="/services.html">Services</a><a href="/calculators.html">Calculators</a>
+          <a href="/explorer">Explorer</a><a href="/intelligence">Intelligence</a><a href="/power">Power</a><a href="/plus">COBRA+</a><a href="/uk">UK Homes & Businesses</a><a href="/store.html">Store</a><a href="/services">Services</a><a href="/calculators">Calculators</a>
         </div>
         <div class="cobra-footer-col"><strong>CRYPTOGRAPHY</strong>
-          <a href="/#tools">Create</a><a href="/offline.html">Offline</a><a href="/cli.html">CLI</a><a href="/docs.html">Docs</a><a href="${githubUrl}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a href="/#tools">Create</a><a href="/offline.html">Offline</a><a href="/cli.html">CLI</a><a href="/docs">Docs</a><a href="${githubUrl}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
         </div>
         <div class="cobra-footer-col"><strong>INTELLIGENCE</strong>
-          <a href="/explorer-v2-terminal.html">Bitcoin & Mining</a><a href="/explorer-v2-terminal.html">Power & Grid</a><a href="/explorer-v2-terminal.html">Compute</a><a href="/explorer-v2-terminal.html">Generation</a><a href="/uk.html">Home & Business</a>
+          <a href="/intelligence">Bitcoin & Mining</a><a href="/power">Power & Grid</a><a href="/intelligence">Compute</a><a href="/power">Generation</a><a href="/uk">Home & Business</a>
         </div>
         <div class="cobra-footer-col"><strong>BUILD & RESEARCH</strong>
-          <a href="/research.html">Research</a><a href="/#developers">Build on COBRA</a><a href="/SECURITY.md">Security</a><a href="/terms.html">Terms</a><a href="/calculators.html">Models & Calculators</a>
+          <a href="/research.html">Research</a><a href="/#developers">Build on COBRA</a><a href="/SECURITY.md">Security</a><a href="/terms.html">Terms</a><a href="/calculators">Models & Calculators</a>
         </div>
       </div>
       <div class="cobra-footer-bottom"><span>COBRA by ol-s-cloud · First roll out 2023 · Last Updated 2026 · v1.0.0.1</span><span>Public references and manufacturer names do not imply partnership unless stated.</span></div>`;
@@ -142,7 +144,7 @@
 })();
 
 (() => {
-  if (!location.pathname.endsWith("/explorer-v2-terminal.html")) return;
+  if (!["/explorer-v2-terminal.html", "/explorer-v2-terminal", "/intelligence"].includes(location.pathname)) return;
   ["/explorer-v2-applications.css", "/explorer-v2-live-depth.css", "/explorer-v2-plus.css"].forEach((href) => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
