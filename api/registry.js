@@ -3,6 +3,8 @@ import {
   database,
   ensureSchema,
   registryState,
+  registerCobraPlusWaitlist,
+  registerUkSite,
 } from "../server/database.js";
 import { isMainnetP2pkhAddress } from "../server/bitcoin-address.js";
 import {
@@ -54,6 +56,9 @@ async function getRegistry(request, response) {
 }
 
 async function recordCreation(request, response) {
+  if (request.body?.action === "cobra_plus_waitlist" || request.body?.action === "cobra_uk_registration") {
+    return recordRegistration(request, response);
+  }
   if (rejectLargeBody(request)) {
     return response.status(413).json({ error: "payload_too_large" });
   }
@@ -145,4 +150,45 @@ async function recordCreation(request, response) {
     network: "bitcoin-mainnet",
     ...state,
   });
+}
+
+
+async function recordRegistration(request, response) {
+  if (rejectLargeBody(request, 16384)) return response.status(413).json({ error: "payload_too_large" });
+  let body;
+  try { body = parseJsonBody(request); } catch { return response.status(400).json({ error: "invalid_json" }); }
+  const email = String(body.email || "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
+    return response.status(400).json({ error: "invalid_email" });
+  }
+  const clean = (value, max = 160) => {
+    const text = String(value || "").trim();
+    return text ? text.slice(0, max) : null;
+  };
+  const list = (value) => Array.isArray(value) ? value.map(v => clean(v, 80)).filter(Boolean).slice(0, 32) : [];
+  if (body.action === "cobra_plus_waitlist") {
+    const useCase = clean(body.useCase, 80);
+    if (!useCase) return response.status(400).json({ error: "use_case_required" });
+    const result = await registerCobraPlusWaitlist({
+      email, organization: clean(body.organization), country: clean(body.country, 80),
+      useCase, siteType: clean(body.siteType, 80), powerRange: clean(body.powerRange, 80),
+      interests: list(body.interests), notes: clean(body.notes, 1500),
+      sourcePath: clean(body.sourcePath, 240) || "/plus",
+      contactName: clean(body.contactName), postcode: clean(body.postcode, 24),
+      energySupplier: clean(body.energySupplier, 120), smartMeterStatus: clean(body.smartMeterStatus, 80),
+      connectionPreference: clean(body.connectionPreference, 80)
+    });
+    return response.status(201).json({ registered: true, ...result });
+  }
+  const allowedSegments = new Set(["home","small_business","commercial_industrial","mining_compute","generation_project","developer_integration","other"]);
+  const segment = allowedSegments.has(body.segment) ? body.segment : "other";
+  const result = await registerUkSite({
+    contactName: clean(body.contactName), email, organization: clean(body.organization), segment,
+    postcode: clean(body.postcode, 24), energySupplier: clean(body.energySupplier, 120),
+    smartMeterStatus: clean(body.smartMeterStatus, 80), connectionPreference: clean(body.connectionPreference, 80),
+    siteType: clean(body.siteType, 160), powerRange: clean(body.powerRange, 80),
+    assets: list(body.assets), interests: list(body.interests), notes: clean(body.notes, 1500),
+    sourcePath: clean(body.sourcePath, 240) || "/uk"
+  });
+  return response.status(201).json({ registered: true, ...result });
 }
