@@ -61,6 +61,40 @@ test("market price connector emits normalized COBRA metric", async () => {
   assert.equal(result.metric.providers.length, 2);
 });
 
+test("market price connector skips newer zero-volume MID periods", async () => {
+  const result = await getElexonMarketPrice({
+    now: new Date("2099-01-01T02:00:00Z"),
+    fetcher: async () => ({
+      latencyMs: 10,
+      fetchedAt: "2099-01-01T02:00:01.000Z",
+      data: { data: [
+        { startTime: "2099-01-01T01:30:00Z", dataProvider: "N2EXMIDP", settlementDate: "2099-01-01", settlementPeriod: 4, price: 0, volume: 0 },
+        { startTime: "2099-01-01T01:00:00Z", dataProvider: "N2EXMIDP", settlementDate: "2099-01-01", settlementPeriod: 3, price: 80, volume: 50 },
+      ] },
+    }),
+  });
+  assert.equal(result.health.status, "operational");
+  assert.equal(result.metric.value, 80);
+  assert.equal(result.metric.observedAt, "2099-01-01T01:00:00.000Z");
+  assert.equal(result.metric.latestReportedAt, "2099-01-01T01:30:00.000Z");
+});
+
+test("market price connector rejects a window containing only zero-volume MID", async () => {
+  const result = await getElexonMarketPrice({
+    now: new Date("2099-01-01T02:00:00Z"),
+    fetcher: async () => ({
+      latencyMs: 10,
+      fetchedAt: "2099-01-01T02:00:01.000Z",
+      data: { data: [
+        { startTime: "2099-01-01T01:30:00Z", dataProvider: "N2EXMIDP", settlementDate: "2099-01-01", settlementPeriod: 4, price: 0, volume: 0 },
+      ] },
+    }),
+  });
+  assert.equal(result.health.status, "unavailable");
+  assert.equal(result.metric, null);
+  assert.equal(result.health.lastError, "elexon_mid_no_positive_volume");
+});
+
 test("normalizes and emits Elexon demand", async () => {
   assert.equal(
     normalizeDemandRow({ startTime: "2099-01-01T01:30:00Z", demand: 25000 })?.value,
