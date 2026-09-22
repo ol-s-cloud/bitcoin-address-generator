@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { derivePublicIndicators, energyCondition, gridFlexibility, miningEconomics, lowCarbonCompute } from "../lib/indicators/public.js";
+import { derivePublicIndicators, derivePublicIndicatorsFromMetrics, energyCondition, gridFlexibility, miningEconomics, lowCarbonCompute } from "../lib/indicators/public.js";
 
 test("energy condition uses transparent V1 bands", () => {
   assert.equal(energyCondition(45).state, "VERY_FAVOURABLE");
@@ -26,4 +26,18 @@ test("compute window requires enough component evidence", () => {
   const indicators = derivePublicIndicators({ marketPricePerMwh: 55, surplusMw: 10000, demandMw: 22000, grossMarginPct: 20, carbonIntensity: 50, averageBlockMinutes: 9, fastestFeeSatVb: 2 });
   assert.equal(indicators.computeWindow.available, true);
   assert.equal(indicators.computeWindow.state, "OPEN");
+});
+
+test("missing MID value never becomes a zero-price mining signal", () => {
+  const result = derivePublicIndicatorsFromMetrics({
+    market_index_price: { value: null },
+    forecast_surplus: { value: 10000 },
+    transmission_system_demand: { value: 22000 },
+    carbon_intensity: { value: 150 },
+    bitcoin_network_state: { priceGbp: 65000, hashRateGh: 900000000000, btcMined24h: 450, averageBlockMinutes: 10, fastestFeeSatVb: 2 },
+  });
+  assert.equal(result.inputs.marketPricePerMwh, null);
+  assert.equal(result.indicators.energyCondition.available, false);
+  assert.equal(result.indicators.miningEconomics.available, false);
+  assert.equal(result.indicators.computeWindow.available, false);
 });
